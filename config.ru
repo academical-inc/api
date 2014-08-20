@@ -1,2 +1,2 @@
-require './web'
-run Sinatra::Application
+require './api'
+run Academical::Api
