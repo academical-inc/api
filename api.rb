@@ -8,6 +8,8 @@ $: << File.expand_path('../', __FILE__)
 Dotenv.load
 
 # Requires
+require 'sinatra/base'
+require 'sinatra/reloader'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
@@ -16,6 +18,10 @@ require 'app/helpers'
 
 module Academical
   class Api < Sinatra::Application
+    configure :development do
+      register Sinatra::Reloader
+    end
+
     configure do
       disable :method_override
       disable :static
