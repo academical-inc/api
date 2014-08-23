@@ -1,25 +1,31 @@
 require 'rubygems'
-require 'bundler'
+require 'bundler/setup'
 
 # Set up load paths
-Bundler.require
+Bundler.require(:default)
 $: << File.expand_path('../', __FILE__)
 
 Dotenv.load
 
-# Requires
-require 'sinatra/base'
+# Require gems
 require 'sinatra/reloader'
 require 'active_support/core_ext/string'
+require 'active_support/core_ext/numeric'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
-require 'app/helpers'
 
+
+# Bootstrap config
 module Academical
   class Api < Sinatra::Application
     configure :development do
       register Sinatra::Reloader
+    end
+
+    configure :production do
+      set :haml, { :ugly=>true }
+      set :clean_trace, true
     end
 
     configure do
@@ -37,13 +43,8 @@ module Academical
   end
 end
 
-# Routes
-require 'app/routes/base'
-require 'app/routes/schools'
+# Require helpers, models and routes
+require 'app/models'
+require 'app/helpers'
+require 'app/routes'
 
-module Academical
-  class Api
-    use Routes::Base
-    use Routes::Schools
-  end
-end
