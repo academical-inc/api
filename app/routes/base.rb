@@ -10,9 +10,6 @@ module Academical
 
       helpers Helpers
 
-      get '/' do
-        haml :index
-      end
     end
   end
 end
