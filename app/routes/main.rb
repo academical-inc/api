@@ -1,11 +1,9 @@
 module Academical
-  module Routes
-    class Main < Base
+  class Api < Sinatra::Application
 
-      get '/' do
-        haml :index
-      end
-
+    get '/' do
+      haml :index
     end
+
   end
 end

@@ -1,15 +1,14 @@
 module Academical
-  module Routes
-    class Base < Sinatra::Application
-      configure do
-        set :views, 'app/views'
-        set :root, Api.root
+  class Api < Sinatra::Application
 
-        disable :static
+    before do
+      halt 406 unless request.accept? 'application/json'
+      next if request.get?
+      begin
+        params[:json] = JSON.parse(request.body.read)
+      rescue JSON::ParserError
       end
-
-      helpers Helpers
-
     end
+
   end
 end

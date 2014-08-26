@@ -9,12 +9,14 @@ Dotenv.load
 
 # Require gems
 require 'sinatra/reloader'
+require 'sinatra/json'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/numeric'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
 
+require 'app/helpers'
 
 # Bootstrap config
 module Academical
@@ -29,9 +31,12 @@ module Academical
     end
 
     configure do
+      Mongoid.load!('config/mongoid.yml')
       disable :method_override
       disable :static
       disable :sessions
+
+      set :views, 'app/views'
 
       set :httponly     => true,
           :secure       => production?,
@@ -39,12 +44,14 @@ module Academical
           :secret       => ENV['SESSION_SECRET']
     end
 
+    helpers Sinatra::JSON
+    helpers Helpers
+
     use Rack::Deflater
   end
 end
 
 # Require helpers, models and routes
 require 'app/models'
-require 'app/helpers'
 require 'app/routes'
 
