@@ -6,14 +6,17 @@ module Academical
       include Mongoid::Document
       include Mongoid::Timestamps
 
-      field :phone
-      field :custom, type: Hash
-      field :departments_list, type: Array
-      field :active_modules, type: Array
-      field :urls, type: Hash
-      field :links, type: Hash
+      field :name
+      field :contact_info, type: Hash, default: {}
+      field :active_modules, type: Array, default: []
+      field :departments_list, type: Array, default: []
+      field :urls, type: Hash, default: {}
+      field :links, type: Hash, default: {}
+      field :custom, type: Hash, default: {}
 
-      after_create :update_links
+      before_create :update_links
+      validates_presence_of :name
+
 
       def update_links
         base_url = "/schools/#{self._id}"
@@ -22,7 +25,6 @@ module Academical
         self.links[:sections] = "#{base_url}/sections"
         self.links[:students] = "#{base_url}/students"
         self.links[:schedules] = "#{base_url}/schedules"
-        save!
       end
 
     end
