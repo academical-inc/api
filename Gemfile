@@ -7,6 +7,7 @@ gem 'activesupport', require: 'active_support'
 gem 'haml'
 gem 'dotenv'
 gem 'mongoid'
+gem 'rake'
 
 group :development, :test do
   gem 'thin'
@@ -15,6 +16,7 @@ group :development, :test do
   gem 'rack-test'
   gem 'database_cleaner'
   gem 'factory_girl'
+  gem 'webmock', :require => false
   # gem 'simplecov'
   # gem 'ffaker'
   # gem 'webmock', :require => false
