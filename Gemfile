@@ -14,7 +14,6 @@ group :development, :test do
   gem 'byebug'
   gem 'rspec'
   gem 'rack-test'
-  gem 'database_cleaner'
   gem 'factory_girl'
   gem 'webmock', :require => false
   # gem 'simplecov'
