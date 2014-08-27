@@ -7,15 +7,24 @@ module Academical
       include Mongoid::Timestamps
 
       field :name
-      field :contact_info, type: Hash, default: {}
+      field :locale
       field :active_modules, type: Array, default: []
-      field :departments_list, type: Array, default: []
       field :urls, type: Hash, default: {}
-      field :links, type: Hash, default: {}
       field :custom, type: Hash, default: {}
+      field :links, type: Hash, default: {}
+      embeds_one :contact_info
+      embeds_one :location
+      embeds_many :departments
+      embeds_many :app_uis
+      embeds_many :assets, class_name: "SchoolAssets"
+      embeds_many :terms, class_name: "SchoolTerm" do
+        def latest_term
+          max(:start_date)
+        end
+      end
 
       before_create :update_links
-      validates_presence_of :name
+      validates_presence_of :name, :locale, :departments, :terms
 
 
       def update_links
