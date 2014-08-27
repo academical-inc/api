@@ -25,3 +25,6 @@ config/secrets.yml
 
 # dotenv
 .env
+
+# OSX
+.DS_Store
