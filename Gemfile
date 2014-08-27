@@ -7,3 +7,15 @@ gem 'activesupport', require: 'active_support'
 gem 'haml'
 gem 'dotenv'
 gem 'mongoid'
+
+group :development, :test do
+  gem 'thin'
+  gem 'byebug'
+  gem 'rspec'
+  gem 'rack-test'
+  gem 'database_cleaner'
+  gem 'factory_girl'
+  # gem 'simplecov'
+  # gem 'ffaker'
+  # gem 'webmock', :require => false
+end
