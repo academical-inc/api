@@ -4,13 +4,9 @@ development:
       database: academical_dev
       hosts:
         - localhost:27017
-      optons:
-        safe: true
 test:
   sessions:
     default:
       database: academical_test
       hosts:
         - localhost:27017
-      options:
-        safe: true
