@@ -8,6 +8,7 @@ gem 'haml'
 gem 'dotenv'
 gem 'mongoid'
 gem 'rake'
+gem 'i18n'
 
 group :development, :test do
   gem 'thin'

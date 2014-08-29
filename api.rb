@@ -31,7 +31,9 @@ module Academical
     end
 
     configure do
+      I18n.enforce_available_locales = true
       Mongoid.load!('config/mongoid.yml')
+
       disable :method_override
       disable :static
       disable :sessions
