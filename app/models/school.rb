@@ -19,7 +19,7 @@ module Academical
       embeds_many :assets, class_name: "SchoolAssets"
       embeds_many :terms, class_name: "SchoolTerm" do
         def latest_term
-          max(:start_date)
+          desc(:start_date).limit(1).first
         end
       end
 
