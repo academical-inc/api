@@ -21,6 +21,8 @@ module Academical
           desc(:start_date).limit(1).first
         end
       end
+      has_many :teachers
+      has_many :students
 
       index({name: 1}, {name: "name_index"})
       index({"terms.start_date"=> 1}, {name: "terms_index"})
