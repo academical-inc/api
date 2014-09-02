@@ -4,13 +4,13 @@ module Academical
 
       include Mongoid::Document
       include Mongoid::Timestamps
+      include Linkable
 
       field :name
       field :locale
-      field :active_modules, type: Array, default: []
-      field :urls, type: Hash, default: {}
-      field :custom, type: Hash, default: {}
-      field :links, type: Hash, default: {}
+      field :custom, type: Hash
+      field :active_modules, type: Array
+      field :urls, type: Hash
       embeds_one :contact_info
       embeds_one :location
       embeds_one :assets, class_name: "SchoolAssets"
@@ -22,17 +22,13 @@ module Academical
         end
       end
 
-      before_create :update_links
+      index({name: 1}, {name: "name_index"})
+      index({"terms.start_date"=> 1}, {name: "terms_index"})
+
       validates_presence_of :name, :locale, :departments, :terms
 
-
-      def update_links
-        base_url = "/schools/#{self._id}"
-        self.links[:self] = base_url
-        self.links[:teachers] = "#{base_url}/teachers"
-        self.links[:sections] = "#{base_url}/sections"
-        self.links[:students] = "#{base_url}/students"
-        self.links[:schedules] = "#{base_url}/schedules"
+      def linked_fields
+        [:teachers, :sections, :students, :schedules]
       end
 
     end
