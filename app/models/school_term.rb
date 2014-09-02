@@ -1,6 +1,5 @@
 module Academical
   module Models
-
     class SchoolTerm
 
       include Mongoid::Document
