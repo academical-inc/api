@@ -16,7 +16,6 @@ require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
 
-require 'app/helpers'
 
 # Bootstrap config
 module Academical
@@ -47,13 +46,14 @@ module Academical
     end
 
     helpers Sinatra::JSON
-    helpers Helpers
 
     use Rack::Deflater
   end
 end
 
 # Require helpers, models and routes
+require 'app/exceptions'
+require 'app/helpers'
 require 'app/models'
 require 'app/routes'
 
