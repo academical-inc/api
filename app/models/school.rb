@@ -27,7 +27,7 @@ module Academical
       index({name: 1}, {name: "name_index"})
       index({"terms.start_date"=> 1}, {name: "terms_index"})
 
-      validates_presence_of :name, :locale, :departments, :terms
+      validates_presence_of :name, :locale, :departments, :terms, :assets
 
       def linked_fields
         [:teachers, :sections, :students, :schedules]
