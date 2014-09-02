@@ -6,7 +6,7 @@ describe SchoolTerm do
     let(:term) { build(:school_term) }
 
     it 'should instantiate a SchoolTerm' do
-      expect(term.class.name).to eq("#{base_model_name}SchoolTerm")
+      expect(term.class.name.demodulize).to eq("SchoolTerm")
     end
   end
 

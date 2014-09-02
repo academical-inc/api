@@ -35,10 +35,6 @@ RSpec.configure do |config|
     Academical::Api
   end
 
-  def base_model_name
-    "Academical::Models::"
-  end
-
 end
 
 FactoryGirl.find_definitions
