@@ -1,32 +1,13 @@
 require 'spec_helper'
 
 describe School do
-
-  def assert_links(school)
-    _id = school._id
-    expect(school.links[:self]).to eq("/schools/#{_id}")
-    expect(school.links[:teachers]).to eq("/schools/#{_id}/teachers")
-    expect(school.links[:sections]).to eq("/schools/#{_id}/sections")
-    expect(school.links[:students]).to eq("/schools/#{_id}/students")
-    expect(school.links[:schedules]).to eq("/schools/#{_id}/schedules")
-  end
+  it_behaves_like Linkable, [:teachers, :sections, :students, :schedules]
 
   describe 'instantiation' do
     let(:school) { build(:school) }
 
     it 'should instantiate a School' do
-      expect(school.class.name).to eq("#{base_model_name}School")
-    end
-  end
-
-  describe '#update_links' do
-    let!(:_id) { "4f8583b5e5a4e46a64000002" }
-    let(:school) { build(:school, _id: _id) }
-
-    it 'should update the links hash correctly' do
-      expect(school.links).to eq({})
-      school.update_links
-      assert_links school
+      expect(school.class.name.demodulize).to eq("School")
     end
   end
 
@@ -39,47 +20,21 @@ describe School do
     end
   end
 
-  describe 'callbacks' do
-    let(:school) { create(:school) }
-
-    context 'before creation' do
-      it 'should update the links' do
-        assert_links(school)
-      end
-    end
-  end
-
   describe 'validations' do
-    context 'when name is missing' do
-      let(:school) { build(:school, name: nil) }
+    let!(:school) { build(:school) }
 
-      it 'should not be valid' do
-        expect(school).not_to be_valid
-      end
+    it 'should not be valid when departments is missing' do
+      school.departments = []
+      expect(school).not_to be_valid
+      school.departments = [ build(:department, name: "") ]
+      expect(school).not_to be_valid
     end
 
-    context 'when locale is missing' do
-      let(:school) { build(:school, locale: nil) }
-
-      it 'should not be valid' do
-        expect(school).not_to be_valid
-      end
-    end
-
-    context 'when departments is missing' do
-      let(:school) { build(:school, departments: nil) }
-
-      it 'should not be valid' do
-        expect(school).not_to be_valid
-      end
-    end
-
-    context 'when terms is missing' do
-      let(:school) { build(:school, terms: nil) }
-
-      it 'should not be valid' do
-        expect(school).not_to be_valid
-      end
+    it 'should not be valid when terms is missing' do
+      school.terms = []
+      expect(school).not_to be_valid
+      school.terms = [ build(:school_term, name: "") ]
+      expect(school).not_to be_valid
     end
   end
 end
