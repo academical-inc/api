@@ -1,6 +1,5 @@
 module Academical
   module Models
-
     class School
 
       include Mongoid::Document
@@ -14,9 +13,9 @@ module Academical
       field :links, type: Hash, default: {}
       embeds_one :contact_info
       embeds_one :location
-      embeds_many :departments
+      embeds_one :assets, class_name: "SchoolAssets"
       embeds_many :app_uis
-      embeds_many :assets, class_name: "SchoolAssets"
+      embeds_many :departments
       embeds_many :terms, class_name: "SchoolTerm" do
         def latest_term
           desc(:start_date).limit(1).first
@@ -37,6 +36,5 @@ module Academical
       end
 
     end
-
   end
 end
