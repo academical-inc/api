@@ -4,6 +4,9 @@ module Academical
 
       include Mongoid::Document
 
+      # Overriding _id since this will only be an embedded document
+      field :_id, type: String, default: nil
+
       field :address
       field :city
       field :state
