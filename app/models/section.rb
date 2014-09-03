@@ -24,8 +24,9 @@ module Academical
       belongs_to :school, index: true
       has_and_belongs_to_many :teachers, index: true
 
-      validates_presence_of :name, :credits, :seats, :course, :term, :events,
-                            :departments, :school, :teachers, :section_id
+      validate :course_name_is_correct
+      validates_presence_of :name, :credits, :seats, :course, :term,
+                            :section_id, :departments, :school
 
       index({name: 1})
       index({school: 1, name: 1})
@@ -33,10 +34,15 @@ module Academical
       index({:school=> 1, "departments.name"=> 1})
       index({:school=> 1, "departments.faculty_name"=> 1}, {sparse: true})
       index({:school=> 1, "course.code"=> 1})
-      index({:school=> 1, "events.days_of_week"=> 1})
-      index({:school=> 1, "events.start_time"=> 1})
-      index({:school=> 1, "events.end_time"=> 1})
-      index({:school=> 1, "events.location"=> 1})
+      index({:school=> 1, "events.days_of_week"=> 1}, {sparse: true})
+      index({:school=> 1, "events.start_time"=> 1}, {sparse: true})
+      index({:school=> 1, "events.end_time"=> 1}, {sparse: true})
+      index({:school=> 1, "events.location"=> 1}, {sparse: true})
+
+      def course_name_is_correct
+        errors.add("course.name", "can't be different from section name") \
+          if course.name != name
+      end
 
       def linked_fields
         [:teachers, :students, :schedules]
