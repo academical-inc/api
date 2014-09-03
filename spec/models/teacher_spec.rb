@@ -12,15 +12,14 @@ describe Teacher do
   end
 
   describe 'validations' do
-    let!(:teacher) { build(:teacher) }
 
     it 'should not be valid when the name is missing' do
-      teacher.name = {}
+      teacher = build(:teacher, name: {})
       expect(teacher).not_to be_valid
     end
 
     it 'should be invaid when part of the name is missing' do
-      teacher.name = build(:name, first: nil)
+      teacher = build(:teacher, name: build(:name, first: nil))
       expect(teacher).not_to be_valid
     end
   end
