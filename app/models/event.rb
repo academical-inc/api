@@ -4,9 +4,6 @@ module Academical
 
       include Mongoid::Document
 
-      # Overriding _id since this will only be an embedded document
-      field :_id, type: String, default: nil
-
       field :starts_on, type: Date
       field :ends_on, type: Date
       field :days_of_week, type: String
