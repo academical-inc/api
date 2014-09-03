@@ -16,7 +16,6 @@ require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
 
-
 # Bootstrap config
 module Academical
   class Api < Sinatra::Application
