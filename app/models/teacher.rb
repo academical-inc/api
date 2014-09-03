@@ -11,8 +11,7 @@ module Academical
       field :teacher_number
       embeds_one :name
       belongs_to :school, index: true
-
-      index({name: 1}, {unique: true, name: "name_index"})
+      has_and_belongs_to_many :sections, index: true
 
       validates_presence_of :name
 

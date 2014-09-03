@@ -23,9 +23,9 @@ module Academical
       end
       has_many :teachers
       has_many :students
+      has_many :sections
 
       index({name: 1}, {name: "name_index"})
-      index({"terms.start_date"=> 1}, {name: "terms_index"})
 
       validates_presence_of :name, :locale, :departments, :terms, :assets
 
