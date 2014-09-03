@@ -6,8 +6,8 @@ module Academical
       include Mongoid::Timestamps
       include Linkable
 
-      field :name
-      field :locale
+      field :name, type: String
+      field :locale, type: String
       field :custom, type: Hash
       field :active_modules, type: Array
       field :urls, type: Hash
