@@ -24,6 +24,8 @@ module Academical
       belongs_to :school, index: true
       has_and_belongs_to_many :teachers, index: true
 
+      before_create :update_teacher_names
+
       validate :course_name_is_correct
       validates_presence_of :name, :credits, :seats, :course, :term,
                             :section_id, :departments, :school
@@ -38,6 +40,11 @@ module Academical
       index({:school=> 1, "events.start_time"=> 1}, {sparse: true})
       index({:school=> 1, "events.end_time"=> 1}, {sparse: true})
       index({:school=> 1, "events.location"=> 1}, {sparse: true})
+
+
+      def update_teacher_names
+        self.teacher_names = teachers.map { |teacher| teacher.full_name }
+      end
 
       def course_name_is_correct
         errors.add("course.name", "can't be different from section name") \
