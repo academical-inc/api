@@ -15,6 +15,10 @@ module Academical
 
       validates_presence_of :name
 
+      def full_name
+        name.full_name
+      end
+
       def linked_fields
         [:sections, :students, :school]
       end
