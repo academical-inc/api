@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+ENV['RACK_ENV'] = ARGV[0] || "development"
+
+require 'irb'
+require File.expand_path '../../api.rb', __FILE__
+
+IRB.start
