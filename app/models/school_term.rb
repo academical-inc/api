@@ -9,17 +9,13 @@ module Academical
       field :end_date, type: Date
 
       validates_presence_of :name, :start_date, :end_date
-      validate :check_dates_are_correct
+      validate :dates_are_correct
 
       embedded_in :school, inverse_of: :terms
 
-      def dates_correct?
-        start_date < end_date
-      end
-
-      def check_dates_are_correct
-        errors.add(:start_date, "can't be greater than end_date") \
-          if not dates_correct?
+      def dates_are_correct
+        errors.add(:start_date, "can't be greater than or equal to end_date") \
+          if start_date >= end_date
       end
 
     end
