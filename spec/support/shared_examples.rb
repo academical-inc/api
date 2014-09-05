@@ -25,11 +25,12 @@ shared_examples_for Linkable do |links|
   end
 
   describe 'linkable model callbacks' do
-    let(:model) { create(factory_name) }
+    let(:model) { build(factory_name) }
 
     context 'before creation' do
       it 'should update the links' do
-        assert_model_links model, class_name_for_url, links
+        expect(model).to receive :update_links
+        model.save
       end
     end
   end
