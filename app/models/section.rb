@@ -6,13 +6,14 @@ module Academical
       include Mongoid::Timestamps
       include Linkable
 
-      field :name, type: String
+      field :course_name, type: String
+      field :course_description, type: String
+      field :course_code, type: String
       field :section_id, type: String
       field :teacher_names, type: Array
       field :custom, type: Hash
       field :credits, type: Float
       field :seats, type: Hash
-      embeds_one :course
       embeds_one :term, class_name: "SchoolTerm"
       embeds_many :events
       embeds_many :departments
@@ -26,16 +27,15 @@ module Academical
 
       before_create :update_teacher_names
 
-      validate :course_name_is_correct
-      validates_presence_of :name, :credits, :seats, :course, :term,
-                            :section_id, :departments, :school
+      validates_presence_of :course_name, :credits, :seats, :course, :term,
+                            :section_id, :departments, :school, :course_code
 
-      index({name: 1})
-      index({school: 1, name: 1})
+      index({course_name: 1})
+      index({school: 1, course_name: 1})
+      index({school: 1, course_code: 1})
       index({school: 1, section_id: 1}, {unique: true})
       index({:school=> 1, "departments.name"=> 1})
       index({:school=> 1, "departments.faculty_name"=> 1}, {sparse: true})
-      index({:school=> 1, "course.code"=> 1})
       index({:school=> 1, "events.days_of_week"=> 1}, {sparse: true})
       index({:school=> 1, "events.start_time"=> 1}, {sparse: true})
       index({:school=> 1, "events.end_time"=> 1}, {sparse: true})
@@ -44,11 +44,6 @@ module Academical
 
       def update_teacher_names
         self.teacher_names = teachers.map { |teacher| teacher.full_name }
-      end
-
-      def course_name_is_correct
-        errors.add("course.name", "can't be different from section name") \
-          if course.name != name
       end
 
       def linked_fields
