@@ -4,6 +4,7 @@ require 'bundler/setup'
 # Set up load paths
 Bundler.require(:default)
 $: << File.expand_path('../', __FILE__)
+$: << File.expand_path('../lib', __FILE__)
 
 Dotenv.load
 
@@ -15,6 +16,9 @@ require 'active_support/core_ext/numeric'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
+
+# Require from lib
+require 'utils'
 
 # Bootstrap config
 module Academical
