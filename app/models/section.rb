@@ -27,8 +27,8 @@ module Academical
 
       before_create :update_teacher_names
 
-      validates_presence_of :course_name, :credits, :seats, :course, :term,
-                            :section_id, :departments, :school, :course_code
+      validates_presence_of :course_name, :credits, :seats, :term, :course_code,
+                            :section_id, :departments, :school
 
       index({course_name: 1})
       index({school: 1, course_name: 1})
