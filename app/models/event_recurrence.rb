@@ -4,9 +4,8 @@ module Academical
 
       include Mongoid::Document
 
-      DAYS  = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
-      FREQS = ["YEARLY", "MONTHLY", "WEEKLY", "DAILY", "HOURLY", "MINUTELY",
-               "SECONDLY"]
+      DAYS  = DateUtils.days_to_s
+      FREQS = DateUtils.freqs_to_s
       ISO_FORMAT = "%Y%m%dT%H%M%SZ"
 
       field :freq, type: String
