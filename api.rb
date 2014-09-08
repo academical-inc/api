@@ -18,6 +18,7 @@ require 'active_support/core_ext/hash'
 require 'active_support/json'
 
 # Require from lib
+require 'exceptions'
 require 'utils'
 
 # Bootstrap config
@@ -55,7 +56,6 @@ module Academical
 end
 
 # Require helpers, models and routes
-require 'app/exceptions'
 require 'app/helpers'
 require 'app/models'
 require 'app/routes'

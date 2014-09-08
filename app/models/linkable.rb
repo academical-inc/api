@@ -18,7 +18,7 @@ module Academical
       end
 
       def linked_fields
-        raise Exceptions::MethodMissingError, "Must implement #linked_fields"
+        raise MethodMissingError, "Must implement #linked_fields"
       end
 
       def link_to_self
