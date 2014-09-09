@@ -24,6 +24,7 @@ module Academical
       has_many :teachers
       has_many :students
       has_many :sections
+      has_many :schedules
 
       index({name: 1}, {name: "name_index"})
 

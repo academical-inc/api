@@ -4,13 +4,15 @@ module Academical
 
       include Mongoid::Document
 
+      field :name, type: String
+      field :description, type: String
       field :start_dt, type: DateTime
       field :end_dt, type: DateTime
       field :location, type: String
       field :timezone, type: String
       embeds_one :recurrence, class_name: "EventRecurrence"
-
       embedded_in :section
+      embedded_in :schedule
 
       validates_presence_of :start_dt, :end_dt, :location
       validate :recurrence_end_date_is_valid

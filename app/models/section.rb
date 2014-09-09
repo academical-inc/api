@@ -23,6 +23,7 @@ module Academical
                  inverse_of: :corequisites,
                  index: true
       belongs_to :school, index: true
+      has_and_belongs_to_many :schedules, index: true
       has_and_belongs_to_many :prerequisites, class_name: "Section", index: true
       has_and_belongs_to_many :teachers, index: true
 
