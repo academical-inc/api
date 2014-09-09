@@ -5,6 +5,7 @@ FactoryGirl.define do
     email "user1@gmail.com"
     last_login Date.new(2015, 1, 1)
     login_provider "Google"
+    school { build(:school) }
   end
 
 end
