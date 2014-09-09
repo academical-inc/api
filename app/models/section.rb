@@ -23,6 +23,7 @@ module Academical
                  inverse_of: :corequisites,
                  index: true
       belongs_to :school, index: true
+      has_and_belongs_to_many :prerequisites, class_name: "Section", index: true
       has_and_belongs_to_many :teachers, index: true
 
       before_create :update_teacher_names
@@ -36,9 +37,9 @@ module Academical
       index({school: 1, section_id: 1}, {unique: true})
       index({:school=> 1, "departments.name"=> 1})
       index({:school=> 1, "departments.faculty_name"=> 1}, {sparse: true})
-      index({:school=> 1, "events.days_of_week"=> 1}, {sparse: true})
-      index({:school=> 1, "events.start_time"=> 1}, {sparse: true})
-      index({:school=> 1, "events.end_time"=> 1}, {sparse: true})
+      index({:school=> 1, "events.recurrence.days_of_week"=> 1}, {sparse: true})
+      index({:school=> 1, "events.start_dt"=> 1}, {sparse: true})
+      index({:school=> 1, "events.end_dt"=> 1}, {sparse: true})
       index({:school=> 1, "events.location"=> 1}, {sparse: true})
 
 
