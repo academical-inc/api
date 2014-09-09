@@ -15,8 +15,9 @@ module Academical
       field :dob, type: Date
       embeds_one :location
       embeds_one :name
-      has_many :schedules
       belongs_to :school, index: true
+      belongs_to :registered_schedule, class_name: "Schedule", inverse_of: nil
+      has_many   :schedules
 
       index({username: 1}, {unique: true, name: "username_index"})
       index({email: 1}, {unique: true, name: "email_index"})
@@ -26,7 +27,7 @@ module Academical
       validates_format_of :email, :with => /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/
 
       def linked_fields
-        [:school, :schedules, :teachers, :sections]
+        [:school, :schedules, :teachers, :sections, :registered_schedule]
       end
 
     end
