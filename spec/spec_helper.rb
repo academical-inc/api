@@ -5,7 +5,7 @@ require File.expand_path '../../api.rb', __FILE__
 require 'rspec'
 require 'rack/test'
 require 'factory_girl'
-require 'byebug'
+require 'pry'
 require 'database_cleaner'
 
 RSpec.configure do |config|
