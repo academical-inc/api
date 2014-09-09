@@ -17,6 +17,7 @@ namespace :db do
     School.create_indexes
     Student.create_indexes
     Section.create_indexes
+    Schedule.create_indexes
 
   end
 end
