@@ -30,7 +30,7 @@ module Academical
       private
 
       def generate_instances
-        if has_recurrence?
+        if self.has_recurrence?
           instances = []
           freq = self.recurrence.freq
           days = self.recurrence.days_of_week
@@ -82,10 +82,6 @@ module Academical
           errors.add("recurrence.repeat_until", \
                      "can't be different from event's start time")
         end
-      end
-
-      def has_recurrence?
-        not self.recurrence.blank?
       end
 
     end
