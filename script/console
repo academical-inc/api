@@ -2,7 +2,10 @@
 
 ENV['RACK_ENV'] = ARGV[0] || "development"
 
-require 'irb'
+require 'pry'
 require File.expand_path '../../api.rb', __FILE__
 
-IRB.start
+require 'factory_girl'
+
+FactoryGirl.find_definitions
+binding.pry

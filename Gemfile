@@ -12,7 +12,7 @@ gem 'i18n'
 
 group :development, :test do
   gem 'thin'
-  gem 'byebug'
+  gem 'pry'
   gem 'rspec'
   gem 'rack-test'
   gem 'database_cleaner'
@@ -20,5 +20,4 @@ group :development, :test do
   gem 'webmock', :require => false
   # gem 'simplecov'
   # gem 'ffaker'
-  # gem 'webmock', :require => false
 end
