@@ -35,6 +35,24 @@ describe DateUtils do
     end
   end
 
+  describe '.advance_dates' do
+    let(:incr) { DateUtils.date_increment(DateUtils::WEEKLY) }
+    let(:sdt) { DateTime.new(2015,1,15,11,0) }
+    let(:edt) { DateTime.new(2015,1,15,12,30) }
+    let(:dt_untl) { sdt + 3.weeks }
+
+    it 'should advance the dates correctly given the increment' do
+      expected = [
+        [sdt, edt],
+        [sdt + 1.week, edt + 1.week],
+        [sdt + 2.weeks, edt + 2.weeks],
+        [dt_untl, edt + 3.weeks]
+      ]
+      expect{|b| DateUtils.advance_dates sdt, edt, dt_untl, incr, &b}\
+        .to yield_successive_args(*expected)
+    end
+  end
+
   describe '.dt_day_included_in' do
     let(:dt) { DateTime.now }
     let(:days) { [DateUtils::MO, DateUtils::WE, DateUtils::FR] }

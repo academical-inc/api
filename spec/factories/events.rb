@@ -7,7 +7,7 @@ FactoryGirl.define do
     location "Somewhere on earth"
 
     trait :with_recurrence do
-      recurrence { build(:event_recurrence, start_dt: start_dt) }
+      recurrence { build(:event_recurrence, :with_days, start_dt: start_dt) }
     end
 
     trait :with_section do

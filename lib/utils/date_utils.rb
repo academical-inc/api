@@ -21,7 +21,7 @@ module Academical
       SECONDLY = :SECONDLY
 
       DAYS  = [MO, TU, WE, TH, FR, SA, SU]
-      FREQS = [YEARLY, MONTHLY, WEEKLY, DAILY, HOURLY, MINUTELY, SECONDLY]
+      FREQS = [YEARLY, MONTHLY, WEEKLY, DAILY]
 
       def self.freqs_to_s
         FREQS.map { |freq| freq.to_s }
@@ -34,6 +34,14 @@ module Academical
       def self.same_time?(t1, t2)
         t1, t2 = t1.utc, t2.utc
         t1.hour == t2.hour and t1.min == t2.min and t1.sec == t2.sec
+      end
+
+      def self.advance_dates(dt_start, dt_end, dt_until, incr, &block)
+        while dt_start <= dt_until
+          block.call(dt_start, dt_end)
+          dt_start += incr
+          dt_end   += incr
+        end
       end
 
       def self.date_increment(freq)
@@ -58,6 +66,7 @@ module Academical
       end
 
       def self.dt_day_included_in(dt, days)
+        days = days.map { |day| day.to_sym }
         case
         when dt.monday?
           days.include? MO
