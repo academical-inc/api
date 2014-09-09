@@ -9,9 +9,9 @@ module Academical
       ISO_FORMAT = "%Y%m%dT%H%M%SZ"
 
       field :freq, type: String
-      field :rr,  as: :rule, type: String
-      field :dow, as: :days_of_week, type: Array
-      field :ru,  as: :repeat_until, type: DateTime
+      field :rule, type: String
+      field :days_of_week, type: Array
+      field :repeat_until, type: DateTime
       embedded_in :event
 
       before_create :update_rule
