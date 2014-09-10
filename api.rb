@@ -19,6 +19,9 @@ require 'active_support/json'
 require 'i18n/backend/fallbacks'
 require 'logger'
 
+# Initializers
+require 'config/initializers'
+
 # Require from lib
 require 'exceptions'
 require 'utils'
@@ -50,7 +53,7 @@ module Academical
     end
 
     configure do
-      Mongoid.load!('config/mongoid.yml')
+      Mongoid.load!('config/db/mongoid.yml')
       Mongoid.logger = Logger.new("#{root}/log/#{environment}.db.log")
     end
 
