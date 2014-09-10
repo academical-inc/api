@@ -25,6 +25,33 @@ require 'utils'
 # Bootstrap config
 module Academical
   class Api < Sinatra::Application
+
+    configure do
+      disable :method_override
+      disable :static
+      disable :sessions
+
+      set :root, Bundler.root.to_s
+      set :views, 'app/views'
+
+      set :httponly     => true,
+          :secure       => production?,
+          :expire_after => 31557600, # 1 year
+          :secret       => ENV['SESSION_SECRET']
+    end
+
+    configure do
+      I18n.enforce_available_locales = true
+      I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
+      I18n.load_path = Dir[File.join(root, 'config/locales', '*.yml')]
+      I18n.available_locales = [:en, :es]
+      I18n.backend.load_translations
+    end
+
+    configure do
+      Mongoid.load!('config/mongoid.yml')
+    end
+
     configure :development do
       register Sinatra::Reloader
     end
@@ -32,26 +59,6 @@ module Academical
     configure :production do
       set :haml, { :ugly=>true }
       set :clean_trace, true
-    end
-
-    configure do
-      I18n.enforce_available_locales = true
-      I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
-      I18n.load_path = Dir[File.join(settings.root, 'locales', '*.yml')]
-      I18n.backend.load_translations
-
-      Mongoid.load!('config/mongoid.yml')
-
-      disable :method_override
-      disable :static
-      disable :sessions
-
-      set :views, 'app/views'
-
-      set :httponly     => true,
-          :secure       => production?,
-          :expire_after => 31557600, # 1 year
-          :secret       => ENV['SESSION_SECRET']
     end
 
     helpers Sinatra::JSON
