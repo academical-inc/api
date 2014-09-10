@@ -16,6 +16,7 @@ require 'active_support/core_ext/numeric'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
+require 'i18n/backend/fallbacks'
 
 # Require from lib
 require 'exceptions'
@@ -35,6 +36,10 @@ module Academical
 
     configure do
       I18n.enforce_available_locales = true
+      I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
+      I18n.load_path = Dir[File.join(settings.root, 'locales', '*.yml')]
+      I18n.backend.load_translations
+
       Mongoid.load!('config/mongoid.yml')
 
       disable :method_override
