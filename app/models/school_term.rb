@@ -4,7 +4,7 @@ module Academical
 
       include Mongoid::Document
 
-      field :name
+      field :name, type: String
       field :start_date, type: Date
       field :end_date, type: Date
 
