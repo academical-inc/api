@@ -23,6 +23,10 @@ describe School do
   describe 'validations' do
     let!(:school) { build(:school) }
 
+    it 'should be valid with default values' do
+      expect(school).to be_valid
+    end
+
     it 'should not be valid when departments is missing' do
       school.departments = []
       expect(school).not_to be_valid

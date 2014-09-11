@@ -7,6 +7,7 @@ module Academical
       include Linkable
 
       field :name, type: String
+      field :nickname, type: String
       field :locale, type: String
       field :custom, type: Hash
       field :active_modules, type: Array
@@ -14,7 +15,7 @@ module Academical
       embeds_one :contact_info
       embeds_one :location
       embeds_one :assets, class_name: "SchoolAssets"
-      embeds_many :app_uis
+      embeds_one :app_ui
       embeds_many :departments
       embeds_many :terms, class_name: "SchoolTerm" do
         def latest_term
@@ -26,9 +27,11 @@ module Academical
       has_many :sections
       has_many :schedules
 
-      index({name: 1}, {name: "name_index"})
+      index({name: 1}, {unique: true})
+      index({nickname: 1}, {unique: true})
 
-      validates_presence_of :name, :locale, :departments, :terms, :assets
+      validates_presence_of :name, :nickname, :locale, :departments, :terms,
+                            :assets, :app_ui
 
       def linked_fields
         [:teachers, :sections, :students, :schedules]
