@@ -36,6 +36,7 @@ module Academical
       index({school: 1, course_name: 1})
       index({school: 1, course_code: 1})
       index({school: 1, section_id: 1}, {unique: true})
+      index({:school=> 1, "term.name"=> 1})
       index({:school=> 1, "departments.name"=> 1})
       index({:school=> 1, "departments.faculty_name"=> 1}, {sparse: true})
       index({:school=> 1, "events.recurrence.days_of_week"=> 1}, {sparse: true})
