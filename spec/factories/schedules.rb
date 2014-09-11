@@ -5,8 +5,8 @@ FactoryGirl.define do
     total_credits 6.0
     total_sections 2
     term { build(:school_term) }
-    school { build(:school) }
     student { build(:student) }
+    school { student.school }
 
     trait :with_events do
       personal_events { build_list(:event, 3, name: "My event") }
