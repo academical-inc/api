@@ -6,6 +6,7 @@ require 'rspec'
 require 'rack/test'
 require 'factory_girl'
 require 'pry'
+require 'byebug'
 require 'database_cleaner'
 
 RSpec.configure do |config|

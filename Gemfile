@@ -13,6 +13,7 @@ gem 'i18n'
 group :development, :test do
   gem 'thin'
   gem 'pry'
+  gem 'byebug'
   gem 'rspec'
   gem 'rack-test'
   gem 'database_cleaner'
