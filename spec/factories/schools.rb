@@ -11,6 +11,8 @@ FactoryGirl.define do
              build(:school_term, year: 2014)] }
     assets { build(:school_assets) }
     app_ui { build(:app_ui) }
+
+    initialize_with { School.find_or_create_by(name: name) }
   end
 
 end
