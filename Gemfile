@@ -19,6 +19,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_girl'
   gem 'webmock', :require => false
+  # gem 'better_errors'
   # gem 'simplecov'
   # gem 'ffaker'
 end
