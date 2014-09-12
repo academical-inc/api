@@ -26,7 +26,7 @@ module Academical
                             :school
       validates_format_of :email, :with => /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/
 
-      def linked_fields
+      def self.linked_fields
         [:school, :schedules, :teachers, :sections, :registered_schedule]
       end
 

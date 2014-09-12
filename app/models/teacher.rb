@@ -19,7 +19,7 @@ module Academical
         name.full_name
       end
 
-      def linked_fields
+      def self.linked_fields
         [:sections, :students, :school]
       end
 

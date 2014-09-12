@@ -33,7 +33,7 @@ module Academical
       validates_presence_of :name, :nickname, :locale, :departments, :terms,
                             :assets, :app_ui
 
-      def linked_fields
+      def self.linked_fields
         [:teachers, :sections, :students, :schedules]
       end
 

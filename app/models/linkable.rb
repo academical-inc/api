@@ -12,12 +12,12 @@ module Academical
       def update_links
         base_url = link_to_self
         links[:self] = base_url
-        linked_fields.each do |linked_field|
+        self.class.linked_fields.each do |linked_field|
           links[linked_field] = "#{base_url}/#{linked_field}"
         end
       end
 
-      def linked_fields
+      def self.linked_fields
         raise MethodMissingError, "Must implement #linked_fields"
       end
 

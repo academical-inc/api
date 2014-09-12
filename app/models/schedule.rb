@@ -27,7 +27,7 @@ module Academical
       index({school: 1, total_sections: 1})
       index({:school=>1, "personal_events.name"=>1}, {sparse: true})
 
-      def linked_fields
+      def self.linked_fields
         [:student, :sections, :school]
       end
 
