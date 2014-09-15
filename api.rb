@@ -68,6 +68,7 @@ module Academical
 
     helpers Sinatra::JSON
 
+    use Rack::Parser
     use Rack::Deflater
   end
 end
