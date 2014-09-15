@@ -4,7 +4,6 @@ require 'bundler/setup'
 # Set up load paths
 Bundler.require(:default)
 $: << File.expand_path('../', __FILE__)
-$: << File.expand_path('../lib', __FILE__)
 
 Dotenv.load
 
@@ -23,8 +22,8 @@ require 'logger'
 require 'config/initializers'
 
 # Require from lib
-require 'exceptions'
-require 'utils'
+require 'lib/exceptions'
+require 'lib/utils'
 
 # Bootstrap config
 module Academical
