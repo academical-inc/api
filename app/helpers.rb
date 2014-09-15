@@ -3,4 +3,3 @@ helpers.each do |helper|
   require helper
 end
 
-Academical::Api.helpers Academical::Helpers::SchoolHelpers
