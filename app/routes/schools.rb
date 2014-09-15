@@ -2,18 +2,26 @@ module Academical
   module Routes
     class Schools < Base
 
-    get '/schools/:id' do
-      json 'school' => params[:id]
-    end
+      helpers Academical::Helpers::SchoolHelpers
 
-    post '/schools' do
-      puts params[:json]
-      json create_school(params[:json])
-    end
+      get '/schools' do
+        json schools
+      end
 
+      @base_school_route = '/schools/:school_id'
+      get @base_school_route do
+        json school
+      end
 
+      School.linked_fields.each do |field|
+        get "#{@base_school_route}/#{field}" do
+          json school.send(field.to_sym)
+        end
+      end
 
-
+      post '/schools' do
+        json create_school(params[:data])
+      end
 
     end
   end
