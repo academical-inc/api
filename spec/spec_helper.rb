@@ -32,7 +32,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  def api
+  def app
     Academical::Api
   end
 
