@@ -30,17 +30,15 @@ module Academical
   class Api < Sinatra::Application
 
     configure do
+      set :root, Bundler.root.to_s
+
       disable :method_override
       disable :static
       disable :sessions
+    end
 
-      set :root, Bundler.root.to_s
-      set :views, 'app/views'
-
-      set :httponly     => true,
-          :secure       => production?,
-          :expire_after => 31557600, # 1 year
-          :secret       => ENV['SESSION_SECRET']
+    configure :development do
+      register Sinatra::Reloader
     end
 
     configure do
@@ -57,17 +55,6 @@ module Academical
       Mongoid.include_root_in_json = :data
       Mongoid.logger = Logger.new("#{root}/log/#{environment}.db.log")
     end
-
-    configure :development do
-      register Sinatra::Reloader
-    end
-
-    configure :production do
-      set :haml, { :ugly=>true }
-      set :clean_trace, true
-    end
-
-    helpers Sinatra::JSON
 
     use Rack::Parser
     use Rack::Deflater
