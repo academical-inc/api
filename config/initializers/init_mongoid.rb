@@ -1,11 +1,12 @@
 # Monkeypatching BSON::Object
 module BSON
   class ObjectId
-    # These aliases override default JSON representation of an ObjectId
-    # Spits a string id '540f51de6d61632c74020000', instead of
+    # This overrides default JSON representation of an ObjectId
+    # Outputs a string id '540f51de6d61632c74020000', instead of
     # { "$oid": '540f51de6d61632c74020000' }
-    alias :to_json :to_s
-    alias :as_json :to_s
+    def as_json(*args)
+      to_s
+    end
   end
 end
 
