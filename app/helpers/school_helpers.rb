@@ -8,13 +8,11 @@ module Academical
       end
 
       def school(id: params[:school_id])
-        @school ||= School.find(id) || halt(404, "Not Found! :)")
+        @school ||= School.find(id)
       end
 
-      def create_school(params)
-        School.create! params
-      rescue Mongoid::Errors::Validations
-        halt 400, json({:status => "failed"})
+      def create_school(data: params[:data])
+        School.create! data
       end
 
     end
