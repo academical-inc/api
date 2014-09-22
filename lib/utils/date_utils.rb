@@ -1,6 +1,6 @@
 module Academical
   module Utils
-    class DateUtils
+    module DateUtils
 
       # Days of the week
       MO = :MO
@@ -23,20 +23,22 @@ module Academical
       DAYS  = [MO, TU, WE, TH, FR, SA, SU]
       FREQS = [YEARLY, MONTHLY, WEEKLY, DAILY]
 
-      def self.freqs_to_s
+      module_function
+
+      def freqs_to_s
         FREQS.map { |freq| freq.to_s }
       end
 
-      def self.days_to_s
+      def days_to_s
         DAYS.map { |day| day.to_s }
       end
 
-      def self.same_time?(t1, t2)
+      def same_time?(t1, t2)
         t1, t2 = t1.utc, t2.utc
         t1.hour == t2.hour and t1.min == t2.min and t1.sec == t2.sec
       end
 
-      def self.advance_dates(dt_start, dt_end, dt_until, incr, &block)
+      def advance_dates(dt_start, dt_end, dt_until, incr, &block)
         while dt_start <= dt_until
           block.call(dt_start, dt_end)
           dt_start += incr
@@ -44,7 +46,7 @@ module Academical
         end
       end
 
-      def self.date_increment(freq)
+      def date_increment(freq)
         case freq.to_sym
         when YEARLY
           1.year
@@ -65,7 +67,7 @@ module Academical
         end
       end
 
-      def self.dt_day_included_in(dt, days)
+      def dt_day_included_in(dt, days)
         days = days.map { |day| day.to_sym }
         case
         when dt.monday?
