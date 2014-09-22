@@ -19,7 +19,7 @@ module Academical
 
       helpers Sinatra::JSON
       helpers ResponseUtils
-      helpers Helpers::CommonHelpers
+      helpers CommonHelpers
 
       error do
         dump_errors! env['sinatra.error']

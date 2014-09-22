@@ -3,3 +3,4 @@ helpers.each do |helper|
   require helper
 end
 
+include Academical::Helpers

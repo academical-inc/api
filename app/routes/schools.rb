@@ -2,7 +2,7 @@ module Academical
   module Routes
     class Schools < Base
 
-      helpers Helpers::SchoolHelpers
+      helpers SchoolHelpers
 
       get '/schools' do
         json_response schools
