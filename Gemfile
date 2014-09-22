@@ -10,6 +10,7 @@ gem 'dotenv'
 gem 'mongoid'
 gem 'rake'
 gem 'i18n'
+gem 'rack-contrib'
 
 group :development, :test do
   gem 'thin'
