@@ -1,8 +1,10 @@
 module Academical
   module Utils
-    class ResponseUtils
+    module ResponseUtils
 
-      def self.error_hash(prod, dev, ex: nil, message:nil, errors: {})
+      module_function
+
+      def error_hash(prod, dev, ex: nil, message:nil, errors: {})
         message = if not message.blank?
           message
         elsif not ex.blank? and not prod
@@ -21,7 +23,7 @@ module Academical
         response_hash
       end
 
-      def self.success_hash(data)
+      def success_hash(data)
         response_hash = if data.respond_to?(:key?)
           if data.key?(:data) or data.key?("data")
             data

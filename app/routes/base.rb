@@ -18,6 +18,7 @@ module Academical
       end
 
       helpers Sinatra::JSON
+      helpers ResponseUtils
       helpers Helpers::CommonHelpers
 
       error do
