@@ -11,7 +11,7 @@ module Academical
         @school ||= School.find(id)
       end
 
-      def create_school(data: params[:data])
+      def create_school(data: extract!(:data))
         School.create! data
       end
 

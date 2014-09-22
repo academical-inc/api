@@ -2,8 +2,9 @@ module Academical
   module Helpers
     module CommonHelpers
 
-      def extract!()
-        # TODO
+      def extract!(key, hash: params)
+        raise ParameterMissingError, key if not hash.key? key.to_s
+        hash[key]
       end
 
       def json_error(code, ex: env['sinatra.error'], message: nil, errors: {})
