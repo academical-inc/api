@@ -51,7 +51,6 @@ module Academical
 
     configure do
       Mongoid.load!('config/db/mongoid.yml')
-      Mongoid.include_root_in_json = :data
       Mongoid.logger = Logger.new("#{root}/log/#{environment}.db.log")
     end
 
