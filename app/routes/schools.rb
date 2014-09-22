@@ -20,7 +20,7 @@ module Academical
       end
 
       post '/schools' do
-        json_response create_school
+        json_response create_school, code: 201
       end
 
     end
