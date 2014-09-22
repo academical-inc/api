@@ -108,7 +108,6 @@ describe ResponseUtils do
 
       it 'should return a hash with the "data" root key' do
         hash = utls.success_hash data
-        binding.pry
         expect(hash).to have_key(:data)
       end
     end
