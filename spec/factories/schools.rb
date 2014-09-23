@@ -3,7 +3,7 @@ FactoryGirl.define do
   factory :school do
 
     name "Universidad de los Andes"
-    nickname "uniandes"
+    nickname { name.underscore.gsub(" ", "_") }
     locale "es"
 
     departments { build_list(:department, 5) }
