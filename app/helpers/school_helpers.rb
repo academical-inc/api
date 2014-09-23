@@ -2,16 +2,17 @@ module Academical
   module Helpers
     module SchoolHelpers
 
-      def schools(where: nil)
-        School.all if where.blank?
+      module_function
+
+      def schools(where=nil)
         School.where(where)
       end
 
-      def school(id: params[:school_id])
-        @school ||= School.find(id)
+      def school(id=extract!(:school_id))
+        School.find(id)
       end
 
-      def create_school(data: extract!(:data))
+      def create_school(data=extract!(:data))
         School.create! data
       end
 
