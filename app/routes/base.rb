@@ -33,6 +33,10 @@ module Academical
         json_error 404, message: "The resource was not found"
       end
 
+      error Mongoid::Errors::UnknownAttribute do
+        json_error 400, message: "The provided data is invalid"
+      end
+
       error Mongoid::Errors::Validations do
         json_error 400, message: "The provided data is incomplete or malformed"
       end
