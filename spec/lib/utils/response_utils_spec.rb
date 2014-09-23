@@ -61,16 +61,26 @@ describe ResponseUtils do
       expect(hash[:success]).to be(true)
     end
 
-    context 'when data is iterable' do
+    it 'should always contain a "data" root key' do
+      create_list(:student, 2)
+      [ {a: "a"},
+        {"data"=>"a"},
+        5,
+        "informationz!",
+        [9, 9],
+        Student.first,
+        Student.all
+      ].each do |el|
+        hash = utls.success_hash(el)
+        expect(hash).to have_key(:data)
+      end
+    end
+
+    context 'when data is iterable of models' do
       let(:data) {
         create_list(:student, 2)
         Student.all
       }
-
-      it 'should return array with "data" root key' do
-        hash = utls.success_hash data
-        expect(hash).to have_key(:data)
-      end
 
       it 'all elements of data should have "data" root key' do
         hash = utls.success_hash data
@@ -83,33 +93,15 @@ describe ResponseUtils do
     context 'when data is a hash' do
       let(:data) { {field1: "info1"} }
 
-      it 'should always add "data" root key' do
-        hash = utls.success_hash data
-        expect(hash).to have_key(:data)
-      end
-
       it 'should not add "data" root key if already present' do
-        cor_data = {data: data}
-        hash = utls.success_hash cor_data
-        expect(hash).to have_key(:data)
-        expect(hash[:data]).not_to have_key(:data)
-        cor_data = {"data" => data}
-        hash = utls.success_hash cor_data
-        expect(hash).to have_key("data")
-        expect(hash["data"]).not_to have_key(:data)
+        [ {data: data}, {"data" => data} ].each do |hash_data|
+          hash = utls.success_hash hash_data
+          expect(hash).to have_key(:data)
+          expect(hash[:data]).not_to have_key(:data)
+          expect(hash[:data]).not_to have_key("data")
+        end
       end
     end
 
-    context 'when data is not an iterable or a hash' do
-      let(:data) {
-        create(:student)
-        Student.first
-      }
-
-      it 'should return a hash with the "data" root key' do
-        hash = utls.success_hash data
-        expect(hash).to have_key(:data)
-      end
-    end
   end
 end

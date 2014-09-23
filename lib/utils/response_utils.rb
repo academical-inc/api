@@ -26,7 +26,7 @@ module Academical
       def success_hash(data)
         response_hash = if data.respond_to?(:key?)
           if data.key?(:data) or data.key?("data")
-            data
+            data.symbolize_keys
           else
             {data: data}
           end
@@ -34,9 +34,16 @@ module Academical
           {data: data.as_json(root: :data)}
         else
           data.as_json root: :data
-        end.merge({success: true})
+        end
 
-        response_hash
+        hash_is_valid = begin
+          response_hash.fetch(:data)
+        rescue
+          false
+        end
+
+        response_hash = {data: response_hash} unless hash_is_valid
+        response_hash.merge({success: true})
       end
 
     end
