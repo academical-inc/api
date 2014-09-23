@@ -4,7 +4,12 @@ module Academical
 
       module_function
 
-      def extract!(key, hash: params)
+      def contains?(key, hash=params)
+        hash.symbolize_keys!
+        hash.key? key.to_sym
+      end
+
+      def extract!(key, hash=params)
         hash.symbolize_keys!
         key = key.to_sym
         raise ParameterMissingError, key if not hash.key? key
