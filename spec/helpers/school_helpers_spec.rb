@@ -12,19 +12,38 @@ describe SchoolHelpers do
 
   describe '.schools' do
 
-    it 'should return an empty result set when no schools present' do
-      School.delete_all
-      expect(helper.schools.length).to eq(0)
+    context 'when not querying for count' do
+      it 'should return an empty result set when no schools present' do
+        School.delete_all
+        expect(helper.schools(count: false).length).to eq(0)
+      end
+
+      it 'should return all schools when no where clause provided' do
+        expect(helper.schools(count: false).length).to eq(2)
+      end
+
+      it 'should return correct result set based on where clause' do
+        res = helper.schools(where: {name: "Rosario"}, count: false)
+        expect(res.length).to eq(1)
+        expect(res[0]).to eq(rosario)
+      end
     end
 
-    it 'should return all schools when no where clause provided' do
-      expect(helper.schools.length).to eq(2)
-    end
+    context 'when querying for count' do
+      it 'should return correct count when empty' do
+        School.delete_all
+        expect(helper.schools(count: true)).to eq(0)
+      end
 
-    it 'should return correct result set based on where clause' do
-      res = helper.schools({name: "Rosario"})
-      expect(res.length).to eq(1)
-      expect(res[0]).to eq(rosario)
+      it 'should return correct count when querying all schools' do
+        expect(helper.schools(count: true)).to eq(2)
+      end
+
+      it 'should return correct count based on where clause' do
+        res = helper.schools(where: {name: "Rosario"}, count: true)
+        expect(res).to eq(1)
+      end
+
     end
   end
 
@@ -46,7 +65,7 @@ describe SchoolHelpers do
 
     it 'should create a new school correctly' do
       n_s = helper.create_school data
-      expect(helper.schools.length).to eq(3)
+      expect(helper.schools(count: false).length).to eq(3)
       expect(n_s).to be
       expect{helper.school(n_s.id)}.not_to raise_error
     end
