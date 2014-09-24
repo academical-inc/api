@@ -3,8 +3,35 @@ module Academical
     module Linkable
 
       # USAGE:
-      # Every class that includes this module must implement the class method
-      # .linked_fields
+      # Every Document Model that includes this module must implement
+      # the class method .linked_fields
+      # It must return fields which the model can respond to, and api endpoints
+      # will be generated from these fields
+      #
+      # Examples:
+      #
+      #   class Model
+      #     include Mongoid::Document
+      #     include Linkable
+      #
+      #     field :field1
+      #     field :unlinked_field1
+      #
+      #     def field2
+      #       value
+      #     end
+      #
+      #     def unlinked_field2
+      #       value
+      #     end
+      #
+      #     def self.linked_fields
+      #       [:field1, :field2]
+      #     end
+      #   end
+      #
+      #   Model.new.respond_to? :field1 # => true
+      #   Model.new.respond_to? :field2 # => true
 
       def self.included(receiver)
         receiver.extend ClassMethods
@@ -31,6 +58,15 @@ module Academical
       module ClassMethods
         module_function
 
+        # Returns a list of fields the model responds to and which represent
+        # links from the model which will be generated into API endpoints.
+        # Refer to the documentation of this module for further explanation
+        #
+        # Example:
+        #
+        #   model.linked_fields
+        #   # => [:field1, :field2]
+        #
         def linked_fields
           raise MethodMissingError, "Must implement #linked_fields"
         end
