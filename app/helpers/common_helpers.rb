@@ -4,6 +4,14 @@ module Academical
 
       module_function
 
+      def result(res, count)
+        if count == true
+          res.count
+        else
+          res
+        end
+      end
+
       def contains?(key, hash=params)
         hash.symbolize_keys!
         hash.key? key.to_sym

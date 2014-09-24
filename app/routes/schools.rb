@@ -15,7 +15,7 @@ module Academical
 
       School.linked_fields.each do |field|
         get "#{@base_school_route}/#{field}" do
-          json_response school.send(field.to_sym)
+          json_response school_rel(field)
         end
       end
 
