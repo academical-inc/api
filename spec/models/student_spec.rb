@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe Student do
-  it_behaves_like Linkable, [:school, :schedules, :teachers, :sections,
-                             :registered_schedule]
+  it_behaves_like Linkable, [:school, :schedules, :registered_schedule]
 
   describe 'instantiation' do
     let(:student) { build(:student) }

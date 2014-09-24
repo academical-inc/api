@@ -24,6 +24,18 @@ shared_examples_for Linkable do |links|
     end
   end
 
+  describe 'validations' do
+    let(:model) { build(factory_name) }
+
+    it \
+    '.linked_fields should be actual model relations' do
+      described_class.linked_fields.each do |field|
+        expect(model.respond_to?(field.to_sym)).to be(true),
+          "#{field} not present in #{described_class}"
+      end
+    end
+  end
+
   describe 'linkable model callbacks' do
     let(:model) { build(factory_name) }
 

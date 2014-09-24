@@ -49,8 +49,12 @@ module Academical
         self.teacher_names = teachers.map { |teacher| teacher.full_name }
       end
 
+      def students
+        # TODO
+      end
+
       def self.linked_fields
-        [:teachers, :students, :schedules]
+        [:teachers, :students, :schedules, :school]
       end
 
     end

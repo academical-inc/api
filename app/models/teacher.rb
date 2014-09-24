@@ -20,7 +20,7 @@ module Academical
       end
 
       def self.linked_fields
-        [:sections, :students, :school]
+        [:sections, :school]
       end
 
     end
