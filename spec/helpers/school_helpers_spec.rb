@@ -6,6 +6,9 @@ describe SchoolHelpers do
   let(:rosario) { build(:school, name: "Rosario") }
 
   before(:each) do
+    allow(SchoolHelpers).to receive(:get_result) { |*args|
+      CommonHelpers.get_result(*args)
+    }
     andes.save!
     rosario.save!
   end

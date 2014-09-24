@@ -3,6 +3,34 @@ require 'spec_helper'
 describe CommonHelpers do
   let(:helper) { CommonHelpers }
 
+  describe '.get_result' do
+    before(:each) do
+      create_list(:student, 2)
+    end
+    let(:all) { Student.all }
+    let(:one) { Student.first }
+
+    context 'when result is iterable' do
+      it 'should return the count when requested' do
+        expect(helper.get_result(all, true)).to eq(2)
+      end
+
+      it 'should return the result when requested' do
+        expect(helper.get_result(all, false)).to eq(all)
+      end
+    end
+
+    context 'when result is single' do
+      it 'should return the count when requested' do
+        expect(helper.get_result(one, true)).to eq(1)
+      end
+
+      it 'should return the result when requested' do
+        expect(helper.get_result(one, false)).to eq(one)
+      end
+    end
+  end
+
   describe '.contains?' do
     let(:hash) { {field: "value"} }
 

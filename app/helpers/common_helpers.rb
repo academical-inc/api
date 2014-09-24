@@ -4,9 +4,9 @@ module Academical
 
       module_function
 
-      def result(res, count)
+      def get_result(res, count)
         if count == true
-          res.count
+          if res.respond_to? :count then res.count else 1 end
         else
           res
         end

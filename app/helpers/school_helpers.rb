@@ -6,7 +6,7 @@ module Academical
 
       def schools(where: nil, count: contains?(:count))
         res = School.where(where)
-        result(res, count)
+        get_result(res, count)
       end
 
       def school(id=extract!(:school_id))
@@ -15,7 +15,7 @@ module Academical
 
       def school_rel(field, id: extract!(:school_id), count: contains?(:count))
         res = school(id).send(field.to_sym)
-        result(res, count)
+        get_result(res, count)
       end
 
       def create_school(data=extract!(:data))
