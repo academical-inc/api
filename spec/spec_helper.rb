@@ -8,11 +8,13 @@ require 'factory_girl'
 require 'pry'
 require 'byebug'
 require 'database_cleaner'
+require 'spec/support/helpers'
 
 RSpec.configure do |config|
 
   config.include Rack::Test::Methods
   config.include FactoryGirl::Syntax::Methods
+  config.include Helpers
 
   config.mock_with :rspec
   config.expect_with :rspec do |c|
