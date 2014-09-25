@@ -68,6 +68,7 @@ describe ResponseUtils do
         5,
         "informationz!",
         [9, 9],
+        nil,
         Student.first,
         Student.all
       ].each do |el|
