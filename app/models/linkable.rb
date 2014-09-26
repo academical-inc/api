@@ -33,12 +33,11 @@ module Academical
       #   Model.new.respond_to? :field1 # => true
       #   Model.new.respond_to? :field2 # => true
 
-      def self.included(receiver)
-        receiver.extend ClassMethods
-        receiver.class_eval do
-          field :links, type: Hash, default: {}
-          before_create :update_links
-        end
+      extend ActiveSupport::Concern
+
+      included do
+        field :links, type: Hash, default: {}
+        before_create :update_links
       end
 
       def update_links
@@ -56,6 +55,7 @@ module Academical
       end
 
       module ClassMethods
+
         module_function
 
         # Returns a list of fields the model responds to and which represent
