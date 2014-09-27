@@ -50,7 +50,7 @@ module Academical
     end
 
     configure do
-      Mongoid.load!('config/db/mongoid.yml')
+      Mongoid.load!('config/mongoid.yml')
       Mongoid.logger = Logger.new("#{root}/log/#{environment}.db.log")
     end
 

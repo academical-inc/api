@@ -12,7 +12,7 @@ namespace :db do
       exit
     end
 
-    Mongoid.load!('config/db/mongoid.yml', args[:environment].to_sym)
+    Mongoid.load!('config/mongoid.yml', args[:environment].to_sym)
 
     School.remove_indexes
     School.create_indexes
