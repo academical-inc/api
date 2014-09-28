@@ -22,6 +22,10 @@ module Academical
         School.create! data
       end
 
+      def upsert_school(data=extract!(:data))
+        # TODO
+      end
+
     end
   end
 end

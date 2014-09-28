@@ -1,4 +1,5 @@
 require 'app/routes/base'
+require 'app/routes/model_routes'
 routes = Dir[File.expand_path('../routes/**/*.rb', __FILE__)]
 routes.each do |route|
   require route
