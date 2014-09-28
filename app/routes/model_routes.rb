@@ -14,11 +14,11 @@ module Academical
       # following routes for the model and performs the corresponding action
       # according to the semantics of http methods:
       #
-      # - get /dummymodels
-      # - get /dummymodels/:model_id
-      # - get /dummymodels/:model_id/{linked_field} for every linked_field
-      # - post /dummymodels
-      # - put /dummymodels
+      # - get /dummy_models
+      # - get /dummy_models/:model_id
+      # - get /dummy_models/:model_id/{linked_field} for every linked_field
+      # - post /dummy_models
+      # - put /dummy_models
       #
       # Examples:
       #
