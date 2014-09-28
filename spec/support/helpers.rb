@@ -27,7 +27,7 @@ module Helpers
     json[:data]
   end
 
-  def json_error(code=404)
+  def json_error(code)
     expect_status code
     json = expect_correct_json
 
@@ -43,8 +43,8 @@ module Helpers
     json
   end
 
-  def expect_correct_model(model_id)
-    expect(json_response["id"]).to eq(model_id.to_s)
+  def expect_correct_model(model_id, code=200)
+    expect(json_response(code)["id"]).to eq(model_id.to_s)
   end
 
   def expect_correct_models(ids)
@@ -60,8 +60,35 @@ module Helpers
     end
   end
 
+  def expect_model_to_be_created(model_class, model_id, &block)
+    expect{block.call}.to change(model_class, :count).by(1)
+    expect_correct_model model_id, 201
+  end
+
   def expect_not_found
-    expect(json_error).to eq("The resource was not found")
+    expect(json_error(404)).to eq("The resource was not found")
+  end
+
+  def expect_unknown_field_error
+    expect(json_error(422)).to eq(
+      "The data for the resource contains an unknown field"
+    )
+  end
+
+  def expect_validation_error
+    expect(json_error(422)).to eq(
+      "The data for the resource is incomplete or invalid"
+    )
+  end
+
+  def expect_missing_parameter_error(key=:data)
+    expect(json_error(400)).to eq(
+      "The parameter '#{key}' is missing from the request"
+    )
+  end
+
+  def expect_invalid_json_error
+    expect(json_error(400)).to eq("Problems parsing JSON")
   end
 
 end
