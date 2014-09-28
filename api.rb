@@ -54,11 +54,11 @@ module Academical
       Mongoid.logger = Logger.new("#{root}/log/#{environment}.db.log")
     end
 
-    use Rack::BounceFavicon
-    use Rack::Parser
-    use Rack::Deflater
   end
 end
+
+# Require middleware config
+require 'app/middleware'
 
 # Require helpers, models and routes
 require 'app/helpers'
