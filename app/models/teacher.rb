@@ -13,7 +13,7 @@ module Academical
       belongs_to :school, index: true
       has_and_belongs_to_many :sections, index: true
 
-      validates_presence_of :name
+      validates_presence_of :name, :school
 
       def full_name
         name.full_name
