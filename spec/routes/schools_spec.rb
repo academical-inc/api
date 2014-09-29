@@ -97,53 +97,114 @@ describe Academical::Routes::Schools do
     end
   end
 
-  describe 'post /schools' do
+  context 'creation and update' do
     let(:school) { build(:school) }
-    let(:school_hash) { school.as_json }
+    let(:school_hash) {
+      h = school.as_json
+      h.delete("id")
+      h
+    }
+    let(:incomplete) {
+      s = school_hash.dup
+      s.delete("name")
+      {data: s}.to_json
+    }
+    let(:unknown) { {data: {names: "others"}}.to_json }
     let(:payload) { {data: school_hash}.to_json }
 
-    it 'should create the school' do
-      expect_model_to_be_created School, school.id do
-        post_json '/schools', payload
+    describe 'post /schools' do
+
+      it 'should create the school' do
+        expect_model_to_be_created School do
+          post_json '/schools', payload
+        end
+      end
+
+      it 'should fail when payload does not have correct data key' do
+        post_json '/schools', school_hash.to_json
+        expect_missing_parameter_error
+      end
+
+      it 'should fail when required school data is incomplete' do
+        post_json '/schools', incomplete
+        expect_validation_error
+      end
+
+      it 'should fail when school data is unknown' do
+        post_json '/schools', unknown
+        expect_unknown_field_error
+      end
+
+    end
+
+    describe 'put /schools' do
+
+      it 'should fail when payload does not have correct data key' do
+        put_json '/schools', school_hash.to_json
+        expect_missing_parameter_error
+      end
+
+      context 'when school does not exist' do
+
+        it 'should create the school' do
+          expect_model_to_be_created School do
+            put_json '/schools', payload
+          end
+        end
+
+        it 'should fail when required school data is incomplete' do
+          put_json '/schools', incomplete
+          expect_validation_error
+        end
+
+        it 'should fail when school data is unknown' do
+          put_json '/schools', unknown
+          expect_unknown_field_error
+        end
+      end
+
+      context 'when school already exists' do
+        before(:each) do
+          school.save!
+        end
+        let!(:modified) {
+          modified = school_hash.dup
+          modified["name"] = "The University"
+          modified
+        }
+        let(:to_update) { {name: modified["name"]} }
+
+        it 'should update the school when specifying id in url' do
+          expect_model_to_be_updated School, school.id, to_update do
+            put_json "/schools/#{school.id}", {data: modified}.to_json
+          end
+        end
+
+        it 'should update the school when specifying id in json body' do
+          modified["id"] = school.id.to_s
+          expect_model_to_be_updated School, school.id, to_update do
+            put_json '/schools', {data: modified}.to_json
+          end
+        end
+
+        it\
+        'should update the school when only providing fields to update and id in url'\
+        do
+          expect_model_to_be_updated School, school.id, to_update do
+            put_json "/schools/#{school.id}", {data: to_update}.to_json
+          end
+        end
+
+        it\
+        'should update the school when only providing fields to update and id in body'\
+        do
+          expect_model_to_be_updated School, school.id, to_update do
+            put_json '/schools', {data: to_update.merge(id: school.id.to_s)}\
+              .to_json
+          end
+        end
+
       end
     end
-
-    it 'should fail when payload does not have correct data key' do
-      post_json '/schools', school_hash.to_json
-      expect_missing_parameter_error
-    end
-
-    it 'should fail when required school data is incomplete' do
-      incomplete = {data: school_hash.dup.delete(:name)}.to_json
-      post_json '/schools', incomplete
-      expect_validation_error
-    end
-
-    it 'should fail when school data is unknown' do
-      post_json '/schools', {data: {names: "others"}}.to_json
-      expect_unknown_field_error
-    end
-
   end
-
-  describe 'put /schools' do
-
-    it 'should create the school if it does not exist' do
-
-    end
-
-    it 'shuld update the school if it already exists' do
-
-    end
-
-    it 'should fail if school data is invalid' do
-
-    end
-
-    it 'should fail if school data is incomplete or unknown' do
-
-    end
-
-  end
-
 end
