@@ -27,13 +27,6 @@ describe Academical::Routes::ModelRoutes do
     end
   end
 
-  describe '.model_helpers' do
-
-    it 'should return the correct helpers class' do
-      expect(route_class.model_helpers).to eq(DummyModelHelpers)
-    end
-  end
-
   describe '.model_collection' do
 
     it 'should return the correct model uri collection e.g. dummy_models' do
@@ -41,17 +34,17 @@ describe Academical::Routes::ModelRoutes do
     end
   end
 
-  describe '.model_singular' do
-
-    it 'should return the correct singular model' do
-      expect(route_class.model_singular).to eq(:dummy_model)
-    end
-  end
-
   describe '.model_base_route' do
 
     it 'should return the correct model base route' do
-      expect(route_class.model_base_route).to eq("/dummy_models/:dummy_model_id")
+      expect(route_class.model_base_route).to eq("/dummy_models/:resource_id")
+    end
+  end
+
+  describe '.model_update_route' do
+
+    it 'should return the correct model base route' do
+      expect(route_class.model_update_route).to eq("/dummy_models/?:resource_id?")
     end
   end
 

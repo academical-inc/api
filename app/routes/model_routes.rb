@@ -41,34 +41,28 @@ module Academical
 
       included do
 
-        helpers model_helpers
+        helpers ResourceHelpers
 
         get "/#{model_collection}" do
-          json_response send(self.class.model_collection)
+          json_response resources
         end
 
         get model_base_route do
-          json_response send(self.class.model_singular)
+          json_response resource
         end
 
         model.linked_fields.each do |field|
           get "#{model_base_route}/#{field}" do
-            json_response send(
-              "#{self.class.model_singular}_rel".to_sym, field
-            )
+            json_response resource_rel(field)
           end
         end
 
         post "/#{model_collection}" do
-          json_response send(
-            "create_#{self.class.model_singular}".to_sym
-          ), code: 201
+          json_response create_resource, code: 201
         end
 
-        put "/#{model_collection}/?:#{model_singular}_id?" do
-          res, code = send(
-            "upsert_#{self.class.model_singular}".to_sym
-          )
+        put model_update_route do
+          res, code = upsert_resource
           json_response res, code: code
         end
       end
@@ -85,20 +79,16 @@ module Academical
           @model_name ||= model.name.demodulize
         end
 
-        def model_helpers
-          @model_helpers ||= "#{model_name}Helpers".constantize
-        end
-
         def model_collection
           @model_collection ||= model_name.underscore.pluralize.to_sym
         end
 
-        def model_singular
-          @model_singular ||= model_name.underscore.singularize.to_sym
+        def model_base_route
+          @model_base_route ||= "/#{model_collection}/:resource_id"
         end
 
-        def model_base_route
-          @model_base_route ||= "/#{model_collection}/:#{model_singular}_id"
+        def model_update_route
+          @model_update_route ||= "/#{model_collection}/?:resource_id?"
         end
 
       end
