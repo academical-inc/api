@@ -13,6 +13,8 @@ module Academical
     use Routes::Schools
     use Routes::Teachers
     use Routes::Students
+    use Routes::Sections
+    use Routes::Schedules
 
   end
 end
