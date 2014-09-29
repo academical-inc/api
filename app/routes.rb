@@ -11,6 +11,7 @@ module Academical
     # Include Routes
     use Routes::Main
     use Routes::Schools
+    use Routes::Teachers
 
   end
 end
