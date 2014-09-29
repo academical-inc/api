@@ -22,8 +22,15 @@ module Academical
         School.create! data
       end
 
-      def upsert_school(data=extract!(:data))
-        # TODO
+      def upsert_school(data=extract!(:data), id=extract(:school_id))
+        id ||= data["id"]
+        if School.where(id: id).exists?
+          s = school(id)
+          s.update_attributes! data
+          [s, 200]
+        else
+          [create_school(data), 201]
+        end
       end
 
     end

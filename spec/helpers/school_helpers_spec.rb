@@ -87,4 +87,32 @@ describe SchoolHelpers do
     end
   end
 
+  describe '.upsert_school' do
+
+    context 'when school does not exist' do
+
+      it 'should create a new school correctly' do
+        data = {school: "data"}
+        expect(helper).to receive(:create_school).with(data)
+        _, code = helper.upsert_school data, nil
+        expect(code).to eq(201)
+      end
+    end
+
+    context 'when school already exists' do
+      let(:modified) {
+        andes.name = "modified"
+        andes.as_json
+      }
+
+      it 'should update the school correctly' do
+        expect(helper).to receive(:school).with(andes.id.to_s).and_call_original\
+          .at_least(:once)
+        _, code = helper.upsert_school(modified, andes.id.to_s)
+        expect(helper.school(andes.id.to_s).name).to eq(modified["name"])
+        expect(code).to eq(200)
+      end
+    end
+  end
+
 end
