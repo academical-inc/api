@@ -46,6 +46,26 @@ describe CommonHelpers do
     end
   end
 
+  describe '.extract' do
+    let(:hash) { {field: "value"} }
+    let(:str_hash) { {"field" => "value"} }
+
+    it 'should return nil when key is missing from hash' do
+      expect(helper.extract(:invalid, hash)).to be_nil
+      expect(helper.extract("invalid", hash)).to be_nil
+    end
+
+    it 'should return the correct value from the hash given a symbol key' do
+      expect(helper.extract(:field, hash)).to eq("value")
+      expect(helper.extract(:field, str_hash)).to eq("value")
+    end
+
+    it 'should return the correct value from the hash given a string key' do
+      expect(helper.extract("field", hash)).to eq("value")
+      expect(helper.extract("field", str_hash)).to eq("value")
+    end
+  end
+
   describe '.extract!' do
     let(:hash) { {field: "value"} }
     let(:str_hash) { {"field" => "value"} }

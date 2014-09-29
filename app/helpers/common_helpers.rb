@@ -17,6 +17,12 @@ module Academical
         hash.key? key.to_sym
       end
 
+      def extract(key, hash=params)
+        hash.symbolize_keys!
+        key = key.to_sym
+        hash[key]
+      end
+
       def extract!(key, hash=params)
         hash.symbolize_keys!
         key = key.to_sym
