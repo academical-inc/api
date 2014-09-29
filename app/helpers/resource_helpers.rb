@@ -2,6 +2,14 @@ module Academical
   module Helpers
     module ResourceHelpers
 
+      # USAGE:
+      # *You should not include this module directly*
+      # This module is intended to be added to Sinatra Helpers via the helpers
+      # function by the module 'ModelRoutes', and assumes the existance of the
+      # class method .model
+      # 'ModelRoutes' is included by Routes classes for a specific model.
+      # Refer to the documentation for 'ModelRoutes' for further reference.
+
       module_function
 
       def resources(where: nil, count: contains?(:count))
