@@ -1,8 +1,14 @@
 module Helpers
 
+  HEADERS = { 'CONTENT_TYPE' => 'application/json',
+              'ACCEPT' => 'application/json' }.freeze
+
   def post_json(*args)
-    post(*args, { 'CONTENT_TYPE' => 'application/json',
-                  'ACCEPT' => 'application/json' })
+    post(*args, HEADERS)
+  end
+
+  def put_json(*args)
+    put(*args, HEADERS)
   end
 
   def expect_status(code)
@@ -44,7 +50,9 @@ module Helpers
   end
 
   def expect_correct_model(model_id, code=200)
-    expect(json_response(code)["id"]).to eq(model_id.to_s)
+    json = json_response code
+    expect(json["id"]).to eq(model_id.to_s)
+    json
   end
 
   def expect_correct_models(ids)
@@ -60,9 +68,17 @@ module Helpers
     end
   end
 
-  def expect_model_to_be_created(model_class, model_id, &block)
+  def expect_model_to_be_created(model_class, &block)
     expect{block.call}.to change(model_class, :count).by(1)
-    expect_correct_model model_id, 201
+    expect(json_response(201)).to have_key("id")
+  end
+
+  def expect_model_to_be_updated(model_class, model_id, fields, &block)
+    expect{block.call}.to change(model_class, :count).by(0)
+    json = expect_correct_model model_id
+    fields.each_pair do |key, value|
+      expect(json[key.to_s]).to eq(value)
+    end
   end
 
   def expect_not_found
