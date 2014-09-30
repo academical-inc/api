@@ -15,7 +15,7 @@ module Academical
       field :credits, type: Float
       field :seats, type: Hash
       embeds_one :term, class_name: "SchoolTerm"
-      embeds_many :events
+      embeds_many :events, cascade_callbacks: true
       embeds_many :departments
       has_many :corequisites, class_name: "Section", inverse_of: :corequisite_of
       belongs_to :corequisite_of,
