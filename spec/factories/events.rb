@@ -1,8 +1,8 @@
 FactoryGirl.define do
 
   factory :event do
-    start_dt DateTime.new(2015,1,15,11,0)
-    end_dt DateTime.new(2015,1,15,12,30)
+    start_dt DateTime.new(2015,1,15,11,0).utc
+    end_dt DateTime.new(2015,1,15,12,30).utc
 
     location "Somewhere on earth"
 

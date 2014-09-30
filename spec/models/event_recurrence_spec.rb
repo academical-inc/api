@@ -10,6 +10,15 @@ describe EventRecurrence do
     end
   end
 
+  describe '#repeat_until' do
+    let!(:rec) { build(:event_recurrence,
+                       event: build(:event, :with_section)) }
+
+    it 'should be in utc' do
+      expect(rec.repeat_until.utc?).to be(true)
+    end
+  end
+
   describe '#update_rule' do
     let(:repeat_until) { DateTime.new(2015,5,15,11,0)\
                          .utc.strftime(EventRecurrence::ISO_FORMAT) }

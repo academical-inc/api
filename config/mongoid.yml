@@ -4,9 +4,15 @@ development:
       database: academical_dev
       hosts:
         - localhost:27017
+  options:
+    use_activesupport_time_zone: false
+    use_utc: true
 test:
   sessions:
     default:
       database: academical_test
       hosts:
         - localhost:27017
+  options:
+    use_activesupport_time_zone: false
+    use_utc: true

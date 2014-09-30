@@ -18,6 +18,22 @@ describe Event do
     end
   end
 
+  describe '#start_dt' do
+    let(:event) { create(:event, :with_section) }
+
+    it 'should be utc' do
+      expect(event.start_dt.utc?).to be(true)
+    end
+  end
+
+  describe '#end_dt' do
+    let(:event) { create(:event, :with_section) }
+
+    it 'should be utc' do
+      expect(event.end_dt.utc?).to be(true)
+    end
+  end
+
   describe '#expand' do
     let!(:event) { build(:event, :with_recurrence) }
 
