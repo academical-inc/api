@@ -40,7 +40,8 @@ describe EventRecurrence do
 
   describe 'callbacks' do
     describe 'before creation' do
-      let!(:rec) { build(:event_recurrence) }
+      let!(:rec) { build(:event_recurrence,
+                         event: build(:event, :with_section)) }
 
       it 'should update the RRULE' do
         expect(rec).to receive :update_rule

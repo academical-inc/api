@@ -6,8 +6,6 @@ FactoryGirl.define do
       start_dt DateTime.new(2015,1,15,11,0).utc
     end
 
-    event { build(:event, :with_section) }
-
     freq "WEEKLY"
     repeat_until { (start_dt + 4.months).utc }
 

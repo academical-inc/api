@@ -19,7 +19,7 @@ FactoryGirl.define do
     school { build(:school) }
 
     trait :with_events do
-      events { build_list(:event, 3) }
+      events { build_list(:event, 3, :with_recurrence) }
     end
 
     trait :with_teachers do
