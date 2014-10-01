@@ -38,9 +38,9 @@ module Academical
         end
       end
 
-      def as_json(options={})
+      def serializable_hash(options = nil)
         attrs = super(options)
-        attrs["expanded"] = @expanded if not @expanded.blank?
+        attrs["expanded"] = @expanded.as_json if not @expanded.blank?
         attrs
       end
 
@@ -77,7 +77,7 @@ module Academical
 
           instances
         else
-          [self]
+          nil
         end
       end
 

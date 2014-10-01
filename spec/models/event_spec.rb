@@ -55,8 +55,8 @@ describe Event do
     end
   end
 
-  describe '#as_json' do
-    let!(:event) { build(:event) }
+  describe '#serializable_hash' do
+    let!(:event) { build(:event, :with_recurrence) }
 
     it 'should add @expanded instance var to hash representation if present' do
       event.expand
@@ -74,7 +74,7 @@ describe Event do
 
     it 'should return the same event when no recurrence present' do
       event.recurrence = nil
-      expect(event.send(:generate_instances)).to eq([event])
+      expect(event.send(:generate_instances)).to be_nil
     end
 
     it 'should generate the correct events for the present recurrence' do
