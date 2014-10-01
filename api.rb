@@ -37,8 +37,8 @@ module Academical
       disable :sessions
     end
 
-    configure :development do
-      register Sinatra::Reloader
+    configure do
+      Time.zone = "UTC"
     end
 
     configure do
@@ -52,6 +52,10 @@ module Academical
     configure do
       Mongoid.load!('config/mongoid.yml')
       Mongoid.logger = Logger.new("#{root}/log/#{environment}.db.log")
+    end
+
+    configure :development do
+      register Sinatra::Reloader
     end
 
   end
