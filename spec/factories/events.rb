@@ -5,6 +5,7 @@ FactoryGirl.define do
     end_dt DateTime.new(2015,1,15,12,30).utc
 
     location "Somewhere on earth"
+    timezone "America/Bogota"
 
     trait :with_recurrence do
       recurrence { build(:event_recurrence, :with_days, start_dt: start_dt) }

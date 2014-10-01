@@ -14,8 +14,9 @@ describe EventRecurrence do
     let!(:rec) { build(:event_recurrence,
                        event: build(:event, :with_section)) }
 
-    it 'should be in utc' do
-      expect(rec.repeat_until.utc?).to be(true)
+    it 'should be in correct timezone' do
+      expect(rec.repeat_until.utc_offset).to\
+        eq(ActiveSupport::TimeZone.new(rec.event.timezone).utc_offset)
     end
   end
 

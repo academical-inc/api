@@ -108,15 +108,8 @@ module Academical
       end
 
       def build_instance_from_self(sdt, edt)
-        Event.new(start_dt: sdt, end_dt: edt, location: self.location)
-      end
-
-      def recurrence_end_date_is_valid
-        if has_recurrence? and \
-            not DateUtils.same_time?(self.start_dt, self.recurrence.repeat_until)
-          errors.add("recurrence.repeat_until", \
-                     "can't be different from event's start time")
-        end
+        Event.new(start_dt: sdt, end_dt: edt, location: self.location,
+                 timezone: self.timezone)
       end
 
     end

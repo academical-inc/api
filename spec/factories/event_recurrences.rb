@@ -9,6 +9,8 @@ FactoryGirl.define do
     freq "WEEKLY"
     repeat_until { (start_dt + 4.months).utc }
 
+    event { build(:event) }
+
     trait :with_days do
       days_of_week ["MO", "WE"]
     end

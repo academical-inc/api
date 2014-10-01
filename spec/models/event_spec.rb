@@ -4,10 +4,11 @@ describe Event do
   let(:sdt) { DateTime.new(2015,1,14,11,0) }  # Wednesday
   let(:edt) { DateTime.new(2015,1,14,12,30) } # Wednesday
 
-  def match_event_instance_to(built, sdt, edt, location)
+  def match_event_instance_to(built, sdt, edt, location, timezone)
     expect(built.start_dt).to eq(sdt)
     expect(built.end_dt).to   eq(edt)
     expect(built.location).to eq(location)
+    expect(built.timezone).to eq(timezone)
   end
 
   describe 'instantiation' do
@@ -21,16 +22,18 @@ describe Event do
   describe '#start_dt' do
     let(:event) { create(:event, :with_section) }
 
-    it 'should be utc' do
-      expect(event.start_dt.utc?).to be(true)
+    it 'should be in the correct timezone' do
+      expect(event.start_dt.utc_offset).to\
+        eq(ActiveSupport::TimeZone.new(event.timezone).utc_offset)
     end
   end
 
   describe '#end_dt' do
     let(:event) { create(:event, :with_section) }
 
-    it 'should be utc' do
-      expect(event.end_dt.utc?).to be(true)
+    it 'should be in the correct timezone' do
+      expect(event.end_dt.utc_offset).to\
+        eq(ActiveSupport::TimeZone.new(event.timezone).utc_offset)
     end
   end
 
@@ -88,7 +91,8 @@ describe Event do
       result = event.send(:generate_instances)
       expect(result.length).to eq(expected_dates.length)
       result.each_with_index do |ev_inst, i|
-        match_event_instance_to ev_inst, *expected_dates[i], event.location
+        match_event_instance_to ev_inst, *expected_dates[i], event.location,
+          event.timezone
       end
     end
   end
@@ -218,7 +222,7 @@ describe Event do
 
     it 'should build an instance with the appropriate start/end datetimes' do
       built = event.send(:build_instance_from_self, sdt, edt)
-      match_event_instance_to built, sdt, edt, "Somewhere"
+      match_event_instance_to built, sdt, edt, "Somewhere", event.timezone
     end
   end
 
@@ -231,6 +235,17 @@ describe Event do
 
     it 'should be invalid if start time and repeat until date time are diff' do
       event.recurrence.repeat_until = DateTime.new(2015,5,15,12,0)
+      expect(event).not_to be_valid
+    end
+
+    it 'should be invalid if timezone is invalid' do
+      event.timezone = "Invalid"
+      expect(event).not_to be_valid
+      expect(event.recurrence).to be_valid
+    end
+
+    it 'should be invalid if timezone is not present' do
+      event.timezone = nil
       expect(event).not_to be_valid
     end
   end
