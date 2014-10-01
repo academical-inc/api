@@ -6,8 +6,8 @@ module Academical
 
       field :name, type: String
       field :description, type: String
-      field :start_dt, type: DateTime
-      field :end_dt, type: DateTime
+      field :start_dt, type: Time
+      field :end_dt, type: Time
       field :location, type: String
       field :timezone, type: String
       embeds_one :recurrence, class_name: "EventRecurrence",
@@ -15,17 +15,51 @@ module Academical
       embedded_in :section
       embedded_in :schedule
 
-      validates_presence_of :start_dt, :end_dt, :location
-      validate :recurrence_end_date_is_valid
+      validates_presence_of :start_dt, :end_dt, :location, :timezone
+      validate :recurrence_end_date_is_valid, :timezone_is_valid
 
       def expand
         @expanded ||= generate_instances
+      end
+
+      def start_dt
+        if timezone_is_valid
+          super.in_time_zone(self.timezone)
+        else
+          super
+        end
+      end
+
+      def end_dt
+        if timezone_is_valid
+          super.in_time_zone(self.timezone)
+        else
+          super
+        end
       end
 
       def as_json(options={})
         attrs = super(options)
         attrs["expanded"] = @expanded if not @expanded.blank?
         attrs
+      end
+
+      def recurrence_end_date_is_valid
+        if has_recurrence? and \
+            not DateUtils.same_time?(self.start_dt, self.recurrence.repeat_until)
+          errors.add("recurrence.repeat_until", \
+                     "can't be different from event's start time")
+        end
+      end
+
+      def timezone_is_valid
+        if self.timezone.blank? or \
+            ActiveSupport::TimeZone.new(self.timezone).blank?
+          errors.add(:timezone, "must be a valid timezone")
+          false
+        else
+          true
+        end
       end
 
       private

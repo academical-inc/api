@@ -11,7 +11,7 @@ module Academical
       field :freq, type: String
       field :rule, type: String
       field :days_of_week, type: Array
-      field :repeat_until, type: DateTime
+      field :repeat_until, type: Time
       embedded_in :event
 
       before_create :update_rule
@@ -19,6 +19,14 @@ module Academical
       validate :days_of_week_is_valid
       validates_inclusion_of :freq, in: FREQS
       validates_presence_of :freq, :repeat_until
+
+      def repeat_until
+        if event.timezone_is_valid
+          super.in_time_zone(event.timezone)
+        else
+          super
+        end
+      end
 
       def days_of_week_is_valid
         if not days_of_week.blank?
