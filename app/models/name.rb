@@ -4,10 +4,10 @@ module Academical
 
       include Mongoid::Document
 
-      field :first
-      field :middle
-      field :last
-      field :other
+      field :first, type: String
+      field :middle, type: String
+      field :last, type: String
+      field :other, type: String
 
       embedded_in :student
       embedded_in :teacher

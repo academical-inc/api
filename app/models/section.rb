@@ -4,6 +4,7 @@ module Academical
 
       include Mongoid::Document
       include Mongoid::Timestamps
+      include IndexedDocument
       include Linkable
 
       field :course_name, type: String
