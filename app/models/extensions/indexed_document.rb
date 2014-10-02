@@ -7,13 +7,13 @@ module Academical
       module ClassMethods
 
         def unique_fields
-          fields = Set.new
+          fields = []
           self.index_specifications.each do |spec|
             if spec.options[:unique] == true
-              fields = fields.union spec.fields
+              fields.concat spec.fields
             end
           end
-          fields
+          fields.uniq
         end
 
       end

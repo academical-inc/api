@@ -23,7 +23,7 @@ describe IndexedDocument do
 
     it 'should return the correct unique fields based on the mongoid indexes' do
       expect(DummyDoc.unique_fields).to\
-        eq([:field1, :field2, :field3, :field4].to_set)
+        eq([:field1, :field2, :field3, :field4])
     end
   end
 
