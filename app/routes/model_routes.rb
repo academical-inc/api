@@ -58,12 +58,12 @@ module Academical
         end
 
         post "/#{model_collection}" do
-          json_response create_resource, code: 201
-        end
-
-        put model_update_route do
           res, code = upsert_resource
           json_response res, code: code
+        end
+
+        put model_base_route do
+          json_response update_resource
         end
       end
 
@@ -85,10 +85,6 @@ module Academical
 
         def model_base_route
           @model_base_route ||= "/#{model_collection}/:resource_id"
-        end
-
-        def model_update_route
-          @model_update_route ||= "/#{model_collection}/?:resource_id?"
         end
 
       end

@@ -29,16 +29,38 @@ module Academical
 
       def create_resource(data=extract!(:data))
         self.class.model.create! data
+      rescue Moped::Errors::OperationFailure => ex
+        raise Mongoid::Errors::DuplicateKey.new(
+          ex, self.class.model.unique_fields
+        )
       end
 
-      def upsert_resource(data=extract!(:data), id=extract(:resource_id))
-        id ||= data["id"]
-        if self.class.model.where(id: id).exists?
-          r = resource(id)
+      def update_resource(data=extract!(:data), id=extract!(:resource_id))
+        r = resource(id)
+        r.update_attributes! data
+        r
+      rescue Moped::Errors::OperationFailure => ex
+        raise Mongoid::Errors::DuplicateKey.new(
+          ex, self.class.model.unique_fields
+        )
+      end
+
+      def upsert_resource(data=extract!(:data))
+        remove_key(:id, data)
+
+        begin
+          [create_resource(data), 201]
+        rescue Mongoid::Errors::DuplicateKey => ex
+          query = {}
+          ex.fields do |field|
+            query[field] = extract!(field, data)
+          end
+
+          # This query should never fail because we already know that a document
+          # with those fields already exists in the database
+          r = self.class.model.find_by query
           r.update_attributes! data
           [r, 200]
-        else
-          [create_resource(data), 201]
         end
       end
 

@@ -41,11 +41,4 @@ describe Academical::Routes::ModelRoutes do
     end
   end
 
-  describe '.model_update_route' do
-
-    it 'should return the correct model base route' do
-      expect(route_class.model_update_route).to eq("/dummy_models/?:resource_id?")
-    end
-  end
-
 end
