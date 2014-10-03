@@ -3,12 +3,20 @@ module Helpers
   HEADERS = { 'CONTENT_TYPE' => 'application/json',
               'ACCEPT' => 'application/json' }.freeze
 
-  def post_json(*args)
-    post(*args, HEADERS)
+  def payload(hash, root: :data)
+    if root
+      {"#{root}" => hash}.to_json
+    else
+      hash.to_json
+    end
   end
 
-  def put_json(*args)
-    put(*args, HEADERS)
+  def post_json(path, *args)
+    post path, payload(*args), HEADERS
+  end
+
+  def put_json(path, *args)
+    put path, payload(*args), HEADERS
   end
 
   def expect_status(code)
@@ -70,18 +78,22 @@ module Helpers
 
   def expect_model_to_be_created(model_class, &block)
     expect{block.call}.to change(model_class, :count).by(1)
-    expect(json_response(201)).to have_key("id")
+    json = json_response(201)
+    expect(json).to have_key("id")
+    expect{model_class.find(json["id"])}.not_to raise_error
   end
 
   def expect_model_to_be_updated(model_class, model_id, fields, &block)
     expect{block.call}.to change(model_class, :count).by(0)
     json = expect_correct_model model_id
+    from_db = model_class.find(model_id)
     fields.each_pair do |key, value|
+      expect(from_db.send(key.to_sym)).to eq(value)
       expect(json[key.to_s]).to eq(value)
     end
   end
 
-  def expect_not_found
+  def expect_not_found_error
     expect(json_error(404)).to eq("The resource was not found")
   end
 
@@ -105,6 +117,12 @@ module Helpers
 
   def expect_invalid_json_error
     expect(json_error(400)).to eq("Problems parsing JSON")
+  end
+
+  def expect_duplicate_error(fields)
+    expect(json_error(422)).to eq(
+      "A resource with the unique fields #{fields} already exists"
+    )
   end
 
 end

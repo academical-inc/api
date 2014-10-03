@@ -46,7 +46,7 @@ describe Academical::Routes::Schools do
 
       it 'should return 404 not found when school does not exist' do
         get "/schools/12345"
-        expect_not_found
+        expect_not_found_error
       end
 
     end
@@ -97,114 +97,117 @@ describe Academical::Routes::Schools do
     end
   end
 
-  context 'creation and update' do
+  context 'creation and updating' do
     let(:school) { build(:school) }
     let(:school_hash) {
       h = school.as_json
-      h.delete("id")
-      h
+      h.except "id"
     }
-    let(:incomplete) {
-      s = school_hash.dup
-      s.delete("name")
-      {data: s}.to_json
+    let(:modified) {
+      modified = school_hash.dup
+      modified["name"] = "The University"
+      modified
     }
-    let(:unknown) { {data: {names: "others"}}.to_json }
-    let(:payload) { {data: school_hash}.to_json }
+    let(:incomplete) { school_hash.except "locale" }
+    let(:unknown) { {names: "others"} }
+    let(:to_update) { {name: modified["name"]} }
 
     describe 'post /schools' do
 
-      it 'should create the school' do
-        expect_model_to_be_created School do
-          post_json '/schools', payload
+      context 'when school does not exist' do
+
+        it 'should create the school' do
+          expect_model_to_be_created School do
+            post_json '/schools', school_hash
+          end
+        end
+      end
+
+      context 'when a school with same values for uniq fields already exists' do
+
+        it 'should update said school' do
+          school.save!
+          expect_model_to_be_updated School, school.id, to_update do
+            post_json "/schools", modified
+          end
         end
       end
 
       it 'should fail when payload does not have correct data key' do
-        post_json '/schools', school_hash.to_json
+        post_json '/schools', school_hash, root: false
         expect_missing_parameter_error
+      end
+
+      it 'should fail when school data is invalid' do
+        post_json '/schools', school_hash.merge({name: nil})
       end
 
       it 'should fail when required school data is incomplete' do
         post_json '/schools', incomplete
+        expect_validation_error
+        post_json '/schools', modified.except("locale")
         expect_validation_error
       end
 
       it 'should fail when school data is unknown' do
         post_json '/schools', unknown
         expect_unknown_field_error
+        post_json '/schools', modified.merge(unknown)
+        expect_unknown_field_error
       end
 
     end
 
-    describe 'put /schools' do
+    describe 'put /schools/:school_id' do
+      let(:update_path) { "/schools/#{school.id}" }
 
-      it 'should fail when payload does not have correct data key' do
-        put_json '/schools', school_hash.to_json
-        expect_missing_parameter_error
+      it 'should fail if school does not exist' do
+        put_json update_path, school_hash
+        expect_not_found_error
       end
 
-      context 'when school does not exist' do
+      context 'when school exists' do
+        before(:each) do
+          school.save!
+        end
 
-        it 'should create the school' do
-          expect_model_to_be_created School do
-            put_json '/schools', payload
+        it 'should update the school when entire resource provided' do
+          expect_model_to_be_updated School, school.id, to_update do
+            put_json update_path, modified
           end
         end
 
-        it 'should fail when required school data is incomplete' do
-          put_json '/schools', incomplete
+        it 'should update the school when specific fields provided' do
+          expect_model_to_be_updated School, school.id, to_update do
+            put_json update_path, to_update
+          end
+        end
+
+        it\
+        'should fail when data to update must be unique and already exists in the db'\
+        do
+          create(:school, name: "Rosario")
+          put_json update_path, {name: "Rosario"}
+          expect_duplicate_error School.unique_fields
+        end
+
+        it 'should fail when school data is invalid' do
+          put_json update_path, {name: nil}
           expect_validation_error
         end
 
         it 'should fail when school data is unknown' do
-          put_json '/schools', unknown
+          put_json update_path, unknown
           expect_unknown_field_error
         end
+
+        it 'should fail when payload does not have correct data key' do
+          put_json update_path, school_hash, root: false
+          expect_missing_parameter_error
+        end
       end
 
-      context 'when school already exists' do
-        before(:each) do
-          school.save!
-        end
-        let!(:modified) {
-          modified = school_hash.dup
-          modified["name"] = "The University"
-          modified
-        }
-        let(:to_update) { {name: modified["name"]} }
 
-        it 'should update the school when specifying id in url' do
-          expect_model_to_be_updated School, school.id, to_update do
-            put_json "/schools/#{school.id}", {data: modified}.to_json
-          end
-        end
-
-        it 'should update the school when specifying id in json body' do
-          modified["id"] = school.id.to_s
-          expect_model_to_be_updated School, school.id, to_update do
-            put_json '/schools', {data: modified}.to_json
-          end
-        end
-
-        it\
-        'should update the school when only providing fields to update and id in url'\
-        do
-          expect_model_to_be_updated School, school.id, to_update do
-            put_json "/schools/#{school.id}", {data: to_update}.to_json
-          end
-        end
-
-        it\
-        'should update the school when only providing fields to update and id in body'\
-        do
-          expect_model_to_be_updated School, school.id, to_update do
-            put_json '/schools', {data: to_update.merge(id: school.id.to_s)}\
-              .to_json
-          end
-        end
-
-      end
     end
   end
 end
