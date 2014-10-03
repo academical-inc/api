@@ -31,6 +31,20 @@ describe CommonHelpers do
     end
   end
 
+  describe '.remove_key' do
+    let(:hash) { {field: "value"} }
+
+    it 'should remove the key regardless of string or symbol' do
+      expect(helper.remove_key(:field, hash)).to eq({})
+      expect(helper.remove_key("field", hash)).to eq({})
+    end
+
+    it 'should not remove the key if it is not present' do
+      expect(helper.remove_key(:f, hash)).to eq(hash)
+      expect(helper.remove_key(:f, hash)).to eq(hash)
+    end
+  end
+
   describe '.contains?' do
     let(:hash) { {field: "value"} }
 

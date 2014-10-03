@@ -12,6 +12,11 @@ module Academical
         end
       end
 
+      def remove_key(key, hash=params)
+        hash.symbolize_keys!
+        hash.except key.to_sym
+      end
+
       def contains?(key, hash=params)
         hash.symbolize_keys!
         hash.key? key.to_sym
@@ -38,8 +43,7 @@ module Academical
 
       def json_response(data, code: 200)
         response_hash = success_hash data
-        status code
-        json response_hash
+        halt code, json(response_hash)
       end
 
     end
