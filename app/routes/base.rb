@@ -25,6 +25,10 @@ module Academical
         json_error 500
       end
 
+      not_found do
+        json_error 404, message: "The requested path is unknown"
+      end
+
       error ParameterMissingError do
         json_error 400
       end

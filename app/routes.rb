@@ -16,6 +16,11 @@ module Academical
     use Routes::Sections
     use Routes::Schedules
 
+    # Re raise Sinatra::NotFound to be caught inside Routes
+    not_found do
+      raise env['sinatra.error']
+    end
+
   end
 end
 
