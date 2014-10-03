@@ -97,6 +97,10 @@ module Helpers
     expect(json_error(404)).to eq("The resource was not found")
   end
 
+  def expect_invalid_path_error
+    expect(json_error(404)).to eq("The requested path is unknown")
+  end
+
   def expect_unknown_field_error
     expect(json_error(422)).to eq(
       "The data for the resource contains an unknown field"

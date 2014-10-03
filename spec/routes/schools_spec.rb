@@ -161,6 +161,11 @@ describe Academical::Routes::Schools do
     describe 'put /schools/:school_id' do
       let(:update_path) { "/schools/#{school.id}" }
 
+      it 'should fail if id not provided in url' do
+        put_json '/schools', school_hash
+        expect_invalid_path_error
+      end
+
       it 'should fail if school does not exist' do
         put_json update_path, school_hash
         expect_not_found_error
