@@ -44,6 +44,11 @@ describe Academical::Routes::Schools do
         expect_correct_model school.id
       end
 
+      it 'should return the correct school when using school nickname' do
+        get "/schools/#{school.nickname}"
+        expect_correct_model school.id
+      end
+
       it 'should return 404 not found when school does not exist' do
         get "/schools/12345"
         expect_not_found_error
