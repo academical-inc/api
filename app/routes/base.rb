@@ -37,6 +37,10 @@ module Academical
         json_error 404, message: "The resource was not found"
       end
 
+      error Mongoid::Errors::DuplicateKey do
+        json_error 422
+      end
+
       error Mongoid::Errors::UnknownAttribute do
         json_error 422,
           message: "The data for the resource contains an unknown field"

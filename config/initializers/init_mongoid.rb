@@ -30,3 +30,30 @@ module Mongoid::Document
     hash
   end
 end
+
+# Adds a useful Mongoid Exception when trying to insert documents with duplicate
+# data which should be unique
+module Mongoid::Errors
+  class DuplicateKey < StandardError
+
+    attr_reader :fields
+
+    def initialize(ex, fields)
+      @ex = ex
+      raise @ex if not is_duplicate_key_error?
+      @fields = fields
+    end
+
+    def is_duplicate_key_error?
+      if @ex.respond_to? :details
+        [11000, 11001].include?(@ex.details['code'])
+      else
+        false
+      end
+    end
+
+    def to_s
+      "A resource with the unique fields #{@fields} already exists"
+    end
+  end
+end
