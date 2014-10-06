@@ -1,8 +1,10 @@
 FactoryGirl.define do
 
+  sequence(:school_name) { |n| "University #{n}" }
+
   factory :school do
 
-    name "Universidad de los Andes"
+    name { generate :school_name }
     nickname { name.underscore.gsub(" ", "_") }
     locale "es"
 

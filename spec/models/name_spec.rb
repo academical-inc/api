@@ -11,7 +11,8 @@ describe Name do
   end
 
   describe '#full_name' do
-    let!(:name) { build(:name) }
+    let!(:name) { build(:name,
+                        first: "John", middle: "Sebastian", last: "Doe") }
 
     it 'should return the correct name' do
       expect(name.full_name).to eq "John Sebastian Doe"

@@ -41,4 +41,5 @@ RSpec.configure do |config|
 end
 
 FactoryGirl.find_definitions
-require 'spec/support/shared_examples'
+Dir["spec/support/**/*.rb"].sort.each { |f| require f }
+

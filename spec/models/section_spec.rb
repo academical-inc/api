@@ -16,8 +16,8 @@ describe Section do
 
     it 'should update the teacher names correctly' do
       section.update_teacher_names
-      expect(section.teacher_names).to eq(["John Sebastian Doe",
-                                           "John Sebastian Doe"])
+      expect(section.teacher_names).to eq(["John_2 Paul_2 Doe_2",
+                                           "John_3 Paul_3 Doe_3"])
     end
   end
 
