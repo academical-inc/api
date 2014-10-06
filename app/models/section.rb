@@ -50,6 +50,12 @@ module Academical
         self.teacher_names = teachers.map { |teacher| teacher.full_name }
       end
 
+      def expand_events
+        events.each do |event|
+          event.expand
+        end
+      end
+
       def students
         # TODO
       end

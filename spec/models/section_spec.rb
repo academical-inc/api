@@ -11,6 +11,25 @@ describe Section do
     end
   end
 
+  describe '#students' do
+    # TODO
+  end
+
+  describe '#expand_events' do
+    let(:section) { build(:section, :with_events) }
+
+    it 'should call expand on all of its events' do
+      section.events.each do |event|
+        expect(event).to receive(:expand)
+      end
+      section.expand_events
+    end
+
+    it 'should return correct as_json representation with expanded events' do
+      # TODO
+    end
+  end
+
   describe '#update_teacher_names' do
     let(:section) { build(:section, :with_teachers) }
 

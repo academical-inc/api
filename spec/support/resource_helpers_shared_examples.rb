@@ -101,7 +101,7 @@ shared_examples_for "resource_helpers_for" do |model|
   end
 
   describe '.update_resource' do
-
+    # TODO
   end
 
   describe '.upsert_resource' do
