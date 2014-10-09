@@ -1,10 +1,7 @@
 development:
   sessions:
     default:
-      database: academical_dev
-      hosts:
-        - localhost:27017
-test:
+      uri: <%= ENV['MONGOLAB_URI'] %>
   sessions:
     default:
       database: academical_test
