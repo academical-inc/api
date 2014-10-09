@@ -6,6 +6,7 @@ FactoryGirl.define do
     course_name "Algebra"
     course_code "MATH1205"
     section_id
+    section_number "1"
     credits 3.0
     seats {
       {
@@ -23,7 +24,7 @@ FactoryGirl.define do
     end
 
     trait :with_teachers do
-      teachers { build_list(:teacher, 2) }
+      teachers { create_list(:teacher, 2, school: school) }
     end
 
     trait :with_teacher_names do
