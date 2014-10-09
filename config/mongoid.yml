@@ -2,6 +2,7 @@ development:
   sessions:
     default:
       uri: <%= ENV['MONGOLAB_URI'] %>
+test:
   sessions:
     default:
       database: academical_test
