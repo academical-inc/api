@@ -42,8 +42,9 @@ module Academical
       end
 
       error Mongoid::Errors::UnknownAttribute do
+        field = env['sinatra.error'].attr_name
         json_error 422,
-          message: "The data for the resource contains an unknown field"
+          message: "The resource contains an unknown field: #{field}"
       end
 
       error Mongoid::Errors::Validations do

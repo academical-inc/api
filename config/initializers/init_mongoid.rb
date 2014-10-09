@@ -57,3 +57,17 @@ module Mongoid::Errors
     end
   end
 end
+
+# Monkeypatches UnknownAttribute error to be able to access the attribute that
+# is unknown and display in error messages
+class Mongoid::Errors::UnknownAttribute
+
+  attr_reader :attr_name
+
+  def initialize(klass, name)
+    @attr_name = name
+    super(
+      compose_message("unknown_attribute", { klass: klass.name, name: name })
+    )
+  end
+end
