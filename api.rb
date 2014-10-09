@@ -51,7 +51,6 @@ module Academical
 
     configure do
       Mongoid.load!('config/mongoid.yml')
-      Mongoid.logger = Logger.new("#{root}/log/#{environment}.db.log")
     end
 
     configure :development do
