@@ -83,6 +83,10 @@ module Academical
           @model_collection ||= model_name.underscore.pluralize.to_sym
         end
 
+        def model_singular
+          @model_singular ||= model_name.underscore.singularize.to_sym
+        end
+
         def model_base_route
           @model_base_route ||= "/#{model_collection}/:resource_id"
         end

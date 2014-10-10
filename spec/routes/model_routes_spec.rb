@@ -34,6 +34,13 @@ describe Academical::Routes::ModelRoutes do
     end
   end
 
+  describe '.model_singular' do
+
+    it 'should return the correct model in singular e.g. dummy_model' do
+      expect(route_class.model_singular).to eq(:dummy_model)
+    end
+  end
+
   describe '.model_base_route' do
 
     it 'should return the correct model base route' do
