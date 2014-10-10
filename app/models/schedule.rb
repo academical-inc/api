@@ -23,6 +23,7 @@ module Academical
       index({name: 1})
       index({total_credits: 1})
       index({total_sections: 1})
+      index({share_id: 1})
       index({school: 1, name:1})
       index({school: 1, total_credits: 1})
       index({school: 1, total_sections: 1})
