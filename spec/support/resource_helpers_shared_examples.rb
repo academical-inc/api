@@ -2,7 +2,7 @@
 shared_examples_for "resource_helpers_for" do |model|
   let(:helper) { ResourceHelpers }
   let(:factory) { model.name.demodulize.underscore.to_sym }
-  let(:resource_list) { build_list(factory, 2) }
+  let!(:resource_list) { create_list(factory, 2) }
   let(:r1) { resource_list[0] }
   let(:r2) { resource_list[1] }
   let(:query_data) {
@@ -17,7 +17,6 @@ shared_examples_for "resource_helpers_for" do |model|
       CommonHelpers.remove_key(*args)
     }
     allow(ResourceHelpers.class).to receive(:model) { model }
-    resource_list.each { |res| res.save! }
   end
 
   describe '.resources' do
