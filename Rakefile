@@ -14,14 +14,21 @@ namespace :db do
 
     Mongoid.load!('config/mongoid.yml', args[:environment].to_sym)
 
-    School.remove_indexes
-    School.create_indexes
-    Student.remove_indexes
-    Student.create_indexes
-    Section.remove_indexes
-    Section.create_indexes
-    Schedule.remove_indexes
-    Schedule.create_indexes
+    begin
+      School.remove_indexes
+      Student.remove_indexes
+      Section.remove_indexes
+      Schedule.remove_indexes
+      Teacher.remove_indexes
+    rescue => ex
+      puts "Indexes don't exist. Skipping index removal."
+    ensure
+      School.create_indexes
+      Student.create_indexes
+      Section.create_indexes
+      Schedule.create_indexes
+      Teacher.create_indexes
+    end
 
   end
 end
