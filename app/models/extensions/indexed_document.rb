@@ -10,7 +10,8 @@ module Academical
           fields = []
           self.index_specifications.each do |spec|
             if spec.options[:unique] == true
-              fields.concat spec.fields
+              vals = spec.fields.map { |f| f.to_s.split(".").first.to_sym }
+              fields.concat vals
             end
           end
           fields.uniq
