@@ -12,7 +12,7 @@ describe Schedule do
   end
 
   describe 'validations' do
-    let(:schedule) { build(:schedule, :with_events, :with_sections) }
+    let(:schedule) { build(:schedule) }
 
     it 'should be valid with default values' do
       expect(schedule).to be_valid

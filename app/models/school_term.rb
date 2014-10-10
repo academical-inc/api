@@ -14,8 +14,14 @@ module Academical
       embedded_in :school, inverse_of: :terms
 
       def dates_are_correct
-        errors.add(:start_date, "can't be greater than or equal to end_date") \
-          if start_date >= end_date
+        if start_date.blank?
+          errors.add(:start_date, "can't be blank")
+        elsif end_date.blank?
+          errors.add(:end_date, "can't be blank")
+        else
+          errors.add(:start_date, "can't be greater than or equal to end_date") \
+            if start_date >= end_date
+        end
       end
 
     end

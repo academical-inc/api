@@ -12,15 +12,28 @@ describe SchoolTerm do
 
   describe 'validations' do
 
+    it 'should be valid whith default values' do
+      term = build(:school_term)
+      expect(term).to be_valid
+    end
+
     it 'should not be valid when dates are not correct' do
       term = build(:school_term, invalid:true)
       expect(term).not_to be_valid
     end
 
-    it 'should be valid when dates are correct' do
+    it 'should not be valid when start_date is nil' do
       term = build(:school_term)
-      expect(term).to be_valid
+      term.start_date = nil
+      expect(term).not_to be_valid
     end
+
+    it 'should not be valid when end_date is nil' do
+      term = build(:school_term)
+      term.end_date = nil
+      expect(term).not_to be_valid
+    end
+
   end
 
 end

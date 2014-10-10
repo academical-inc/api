@@ -7,13 +7,7 @@ FactoryGirl.define do
     term { build(:school_term) }
     student { build(:student) }
     school { student.school }
-
-    trait :with_events do
-      personal_events { build_list(:event, 3, name: "My event") }
-    end
-
-    trait :with_sections do
-      sections { build_list(:section, 2) }
-    end
+    personal_events { build_list(:event, 3, name: "My event") }
+    sections { build_list(:section, 2) }
   end
 end
