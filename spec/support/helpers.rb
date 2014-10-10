@@ -50,6 +50,10 @@ module Helpers
     json[:message]
   end
 
+  def expect_nil
+    expect(json_response).to be_nil
+  end
+
   def expect_collection(length)
     json = json_response
     expect(json).to be_kind_of(Enumerable)
@@ -101,9 +105,9 @@ module Helpers
     expect(json_error(404)).to eq("The requested path is unknown")
   end
 
-  def expect_unknown_field_error
+  def expect_unknown_field_error(field)
     expect(json_error(422)).to eq(
-      "The data for the resource contains an unknown field"
+      "The resource contains an unknown field: #{field}"
     )
   end
 
@@ -127,6 +131,15 @@ module Helpers
     expect(json_error(422)).to eq(
       "A resource with the unique fields #{fields} already exists"
     )
+  end
+
+  def get_factory_for(model, field)
+    field_class_name = model.relations[field.to_s][:class_name]
+    if not field_class_name.blank?
+      field_class_name.demodulize.underscore.to_sym
+    else
+      field.to_s.singularize.underscore.to_sym
+    end
   end
 
 end
