@@ -4,7 +4,7 @@ module Academical
 
       module_function
 
-      def error_hash(prod, dev, ex: nil, message:nil, errors: {})
+      def error_hash(prod, dev, ex: nil, message:nil, errors: [])
         message = if not message.blank?
           message
         elsif not ex.blank? and not prod

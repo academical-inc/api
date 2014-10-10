@@ -48,8 +48,10 @@ module Academical
       end
 
       error Mongoid::Errors::Validations do
+        errors = env['sinatra.error'].document.errors.full_messages
         json_error 422,
-          message: "The data for the resource is incomplete or invalid"
+          message: "The data for the resource is incomplete or invalid",
+          errors: errors
       end
 
     end
