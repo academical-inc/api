@@ -40,5 +40,10 @@ describe School do
       school.terms = [ build(:school_term, name: "") ]
       expect(school).not_to be_valid
     end
+
+    it 'should be invalid if timezone is not present' do
+      school.timezone = nil
+      expect(school).not_to be_valid
+    end
   end
 end

@@ -13,6 +13,7 @@ module Academical
       field :custom, type: Hash
       field :active_modules, type: Array
       field :urls, type: Hash
+      field :timezone, type: String
       embeds_one :contact_info
       embeds_one :location
       embeds_one :assets, class_name: "SchoolAssets"
@@ -32,7 +33,7 @@ module Academical
       index({nickname: 1}, {unique: true})
 
       validates_presence_of :name, :nickname, :locale, :departments, :terms,
-                            :assets, :app_ui
+                            :assets, :app_ui, :timezone
 
       def self.linked_fields
         [:teachers, :sections, :students, :schedules]

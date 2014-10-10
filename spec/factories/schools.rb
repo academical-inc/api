@@ -7,6 +7,7 @@ FactoryGirl.define do
     name { generate :school_name }
     nickname { name.underscore.gsub(" ", "_") }
     locale "es"
+    timezone "America/Bogota"
 
     departments { build_list(:department, 5) }
     terms { [build(:school_term), build(:school_term, year: 2014, month: 8), \
