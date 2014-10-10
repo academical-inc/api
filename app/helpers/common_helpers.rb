@@ -6,7 +6,11 @@ module Academical
 
       def get_result(res, count)
         if count == true
-          if res.respond_to? :count then res.count else 1 end
+          if res.nil?
+            0
+          else
+            if res.respond_to? :count then res.count else 1 end
+          end
         else
           res
         end

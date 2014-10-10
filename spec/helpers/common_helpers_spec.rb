@@ -10,6 +10,16 @@ describe CommonHelpers do
     let(:all) { Student.all }
     let(:one) { Student.first }
 
+    context 'when result is nil' do
+      it 'should return 0 when count requested' do
+        expect(helper.get_result(nil, true)).to eq(0)
+      end
+
+      it 'should return nil when result requested' do
+        expect(helper.get_result(nil, false)).to be_nil
+      end
+    end
+
     context 'when result is iterable' do
       it 'should return the count when requested' do
         expect(helper.get_result(all, true)).to eq(2)
