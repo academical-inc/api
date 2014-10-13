@@ -17,7 +17,7 @@ module Academical
       validates_presence_of :name, :school
 
       index({:school => 1, "name.first" => 1, "name.middle" => 1,
-             "name.last" => 1}, {unique: true})
+             "name.last" => 1, "name.other" => 1}, {unique: true})
 
       def full_name
         name.full_name

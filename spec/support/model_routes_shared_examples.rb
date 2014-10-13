@@ -140,7 +140,7 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
     end
   end
 
-  context 'resource creation and updates' do
+  context 'creating and updating' do
     let(:res_hash) { resource_to_create.as_json.except "id" }
     let(:modified) {
       m = res_hash.dup

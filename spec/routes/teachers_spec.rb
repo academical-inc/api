@@ -11,10 +11,6 @@ describe Academical::Routes::Teachers do
 
   it_behaves_like Academical::Routes::ModelRoutes, to_update, to_remove,
     [:sections], [:school]
-
-  # TODO Test #students behavior
-  # TODO Test expand sections behavior
-
 end
 
 
