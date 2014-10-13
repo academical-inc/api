@@ -117,6 +117,12 @@ module Helpers
     )
   end
 
+  def expect_duplicate_error(fields)
+    expect(json_error(422)).to eq(
+      "A resource with the unique fields #{fields} already exists"
+    )
+  end
+
   def expect_missing_parameter_error(key=:data)
     expect(json_error(400)).to eq(
       "The parameter '#{key}' is missing from the request"
@@ -127,9 +133,9 @@ module Helpers
     expect(json_error(400)).to eq("Problems parsing JSON")
   end
 
-  def expect_duplicate_error(fields)
-    expect(json_error(422)).to eq(
-      "A resource with the unique fields #{fields} already exists"
+  def expect_content_type_error
+    expect(json_error(400)).to eq(
+      "The request Content-Type must be application/json"
     )
   end
 
