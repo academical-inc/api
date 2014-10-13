@@ -16,6 +16,9 @@ shared_examples_for "resource_helpers_for" do |model|
     allow(ResourceHelpers).to receive(:remove_key) { |*args|
       CommonHelpers.remove_key(*args)
     }
+    allow(ResourceHelpers).to receive(:filter_hash!) { |*args|
+      CommonHelpers.filter_hash!(*args)
+    }
     allow(ResourceHelpers.class).to receive(:model) { model }
   end
 
@@ -68,6 +71,10 @@ shared_examples_for "resource_helpers_for" do |model|
     end
   end
 
+  describe '.resource_like' do
+    # TODO
+  end
+
   describe '.create_resource' do
     let(:new_res) { build(factory) }
     let(:data) { new_res.as_json }
@@ -118,8 +125,9 @@ shared_examples_for "resource_helpers_for" do |model|
 
     context 'when resource already exists' do
       let(:modified) {
-        r1.name = "modified"
-        r1.as_json
+        r1_data = r1.as_json
+        r1_data["name"] = "modified"
+        r1_data
       }
 
       it 'should update the resource correctly' do

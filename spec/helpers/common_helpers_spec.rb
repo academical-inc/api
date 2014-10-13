@@ -41,6 +41,59 @@ describe CommonHelpers do
     end
   end
 
+  describe '.each_nested_key_val' do
+    let(:nested) { {key1: "val1", key2: {key3: "val2", key4: "val3"}} }
+    let(:single) { {key1: "val1", key2: "val2"} }
+    let(:dbl_nstd) { {key1: "val1", key2: {key3: "val2",
+                                           key4: {key5: "val3", key6: "val4"}}} }
+
+    it 'should yield the correct keys and values when no nested hash' do
+      expect{ |b| helper.each_nested_key_val "root", single, &b }.to\
+        yield_successive_args(["root.key1", "val1"], ["root.key2", "val2"])
+    end
+
+    it 'should yield the correct keys and values when nested hash' do
+      expect{ |b| helper.each_nested_key_val "root", nested, &b }.to\
+        yield_successive_args(["root.key1", "val1"],
+                              ["root.key2.key3", "val2"],
+                              ["root.key2.key4", "val3"])
+    end
+
+    it 'should yield the correct keys and values when multiple nested hash' do
+      expect{ |b| helper.each_nested_key_val "root", dbl_nstd, &b }.to\
+        yield_successive_args(["root.key1", "val1"],
+                              ["root.key2.key3", "val2"],
+                              ["root.key2.key4.key5", "val3"],
+                              ["root.key2.key4.key6", "val4"])
+    end
+
+    it 'should not yield any key value pairs when empty hash' do
+      expect{ |b| helper.each_nested_key_val "root", single, &b }.not_to\
+        yield_successive_args
+    end
+  end
+
+  describe '.filter_hash!' do
+    let(:keys) { [:key2, :key5] }
+    let(:nested) { {key1: "v1", key2: {key3: "v2", key4: "v3"}, key5: "v4"} }
+    let(:single) { {key1: "v1", key2: "v2", key5: "v3"} }
+
+    it 'should correctly extract values for keys when single hash' do
+      expect(helper.filter_hash!(keys, single)).to\
+        eq({"key2" => "v2", "key5" => "v3"})
+    end
+
+    it 'should correctly extract values for keys when nested hash' do
+      expect(helper.filter_hash!(keys, nested)).to\
+        eq({"key2.key3" => "v2", "key2.key4" => "v3", "key5" => "v4"})
+    end
+
+    it 'should raise error when provided keys do not exist in hash' do
+      expect{ helper.filter_hash!([:key2, :key6], nested) }.to\
+        raise_error(ParameterMissingError)
+    end
+  end
+
   describe '.remove_key' do
     let(:hash) { {field: "value"} }
 

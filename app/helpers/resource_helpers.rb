@@ -21,6 +21,22 @@ module Academical
         self.class.model.find(id)
       end
 
+      def resource_like(query)
+        begin
+          self.class.model.find_by query
+        rescue Mongoid::Errors::DocumentNotFound
+          r =  nil
+          query.each do |k, v|
+            begin
+              r = self.class.model.find_by({k=>v})
+              break
+            rescue Mongoid::Errors::DocumentNotFound
+            end
+          end
+          r
+        end
+      end
+
       def resource_rel(field, id: extract!(:resource_id),
                        count: contains?(:count))
           res = resource(id).send(field.to_sym)
@@ -51,14 +67,11 @@ module Academical
         begin
           [create_resource(data), 201]
         rescue Mongoid::Errors::DuplicateKey => ex
-          query = {}
-          ex.fields do |field|
-            query[field] = extract!(field, data)
-          end
+          query = filter_hash! ex.fields, data
 
-          # This query should never fail because we already know that a document
-          # with those fields already exists in the database
-          r = self.class.model.find_by query
+          # This query should never fail because we already know that a single
+          # document with those fields already exists in the database.
+          r = resource_like query
           r.update_attributes! data
           [r, 200]
         end

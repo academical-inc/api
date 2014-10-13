@@ -39,6 +39,34 @@ module Academical
         hash[key]
       end
 
+      def each_nested_key_val(root_key, hash)
+        hash.each_pair do |key, val|
+          key = "#{root_key}.#{key}"
+          if val.is_a? Hash
+            each_nested_key_val key, val do |k, v|
+              yield k, v
+            end
+          else
+            yield key, val
+          end
+        end
+      end
+
+      def filter_hash!(keys, hash)
+        values = {}
+        keys.each do |key|
+          value = extract!(key, hash)
+          if value.is_a? Hash
+            each_nested_key_val key, value do |k, v|
+              values[k] = v
+            end
+          else
+            values[key.to_s] = value
+          end
+        end
+        values
+      end
+
       def json_error(code, ex: env['sinatra.error'], message: nil, errors: {})
         response_hash = error_hash settings.production?, settings.development?,
           ex: ex, message: message, errors: errors
