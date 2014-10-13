@@ -179,7 +179,15 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
       if not model.unique_fields.blank?
       context 'when resource with same values for uniq fields already exists' do
 
-        it 'should update said resource' do
+        it 'should update said resource when it is the only one in the db' do
+          resource_to_create.save!
+          expect_model_to_be_updated model, resource_to_create.id, to_update do
+            post_json base_path, modified
+          end
+        end
+
+        it 'should update said resource when it is not the only one in the db' do
+          create(factory)
           resource_to_create.save!
           expect_model_to_be_updated model, resource_to_create.id, to_update do
             post_json base_path, modified
