@@ -41,12 +41,19 @@ describe Section do
   end
 
   describe 'callbacks' do
-    describe 'before creation' do
+    describe 'before save' do
       let(:section) { build(:section, :with_teachers) }
 
-      it 'should update the teacher names' do
+      it 'should update the teacher names when creating' do
         expect(section).to receive(:update_teacher_names).once
-        section.save
+        section.save!
+      end
+
+      it 'should update the teacher names when updating' do
+        section.save!
+        expect(section).to receive(:update_teacher_names).once
+        section.teachers = [build(:teacher)]
+        section.save!
       end
     end
   end

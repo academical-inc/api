@@ -29,7 +29,7 @@ module Academical
       has_and_belongs_to_many :prerequisites, class_name: "Section", index: true
       has_and_belongs_to_many :teachers, index: true
 
-      before_create :update_teacher_names
+      before_save :update_teacher_names
 
       validates_presence_of :course_name, :credits, :seats, :term, :course_code,
                             :section_id, :departments, :school, :section_number
