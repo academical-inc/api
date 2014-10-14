@@ -117,7 +117,9 @@ shared_examples_for "resource_helpers_for" do |model|
     context 'when resource does not exist' do
 
       it 'should create the new resource correctly' do
-        expect(helper).to receive(:create_resource).with(data)
+        expect(helper).to receive(:create_resource).with(
+          helper.remove_key(:id, data)
+        )
         _, code = helper.upsert_resource data
         expect(code).to eq(201)
       end
@@ -131,8 +133,6 @@ shared_examples_for "resource_helpers_for" do |model|
       }
 
       it 'should update the resource correctly' do
-        expect(helper).to receive(:resource).with(r1.id).and_call_original\
-          .at_least(:once)
         _, code = helper.upsert_resource(modified)
         expect(helper.resource(r1.id).name).to eq("modified")
         expect(code).to eq(200)
