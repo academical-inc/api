@@ -35,8 +35,25 @@ describe Section do
 
     it 'should update the teacher names correctly' do
       section.update_teacher_names
-      expect(section.teacher_names).to eq(["John_2 Paul_2 Doe_2",
-                                           "John_3 Paul_3 Doe_3"])
+      expect(section.teacher_names).to eq(["John_1 Paul_1 Doe_1",
+                                           "John_2 Paul_2 Doe_2"])
+    end
+  end
+
+  describe 'relations' do
+
+    describe 'autosave #teachers' do
+      let!(:teacher) { create(:teacher) }
+
+      it "should update the teacher's sections when teacher saved" do
+        expect(teacher.sections.count).to eq(0)
+        s = create(:section, teachers: [teacher])
+        expect(s.teachers.count).to eq(1)
+        expect(s.teachers.first).to eq(teacher)
+        teacher.reload
+        expect(teacher.sections.count).to eq(1)
+        expect(teacher.sections.first).to eq(s)
+      end
     end
   end
 

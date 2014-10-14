@@ -27,7 +27,7 @@ module Academical
       belongs_to :school, index: true
       has_and_belongs_to_many :schedules, index: true
       has_and_belongs_to_many :prerequisites, class_name: "Section", index: true
-      has_and_belongs_to_many :teachers, index: true
+      has_and_belongs_to_many :teachers, index: true, autosave: true
 
       before_save :update_teacher_names
 
