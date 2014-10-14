@@ -31,12 +31,17 @@ describe Section do
   end
 
   describe '#update_teacher_names' do
-    let(:section) { build(:section, :with_teachers) }
+    let(:section) { build(:section) }
 
     it 'should update the teacher names correctly' do
+      t1 = build(:teacher,
+                 name: build(:name, first: "John", middle: "Paul", last: "Man"))
+      t2 = build(:teacher,
+                 name: build(:name, first: "Jake", middle: "Pike", last: "Wow"))
+      section.teachers = [t1, t2]
       section.update_teacher_names
-      expect(section.teacher_names).to eq(["John_1 Paul_1 Doe_1",
-                                           "John_2 Paul_2 Doe_2"])
+      expect(section.teacher_names).to eq(["John Paul Man",
+                                           "Jake Pike Wow"])
     end
   end
 
