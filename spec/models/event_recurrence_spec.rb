@@ -63,6 +63,11 @@ describe EventRecurrence do
       expect(rec).not_to be_valid
     end
 
+    it 'should not be valid when repeat_until is not present' do
+      rec = build(:event_recurrence, repeat_until: nil)
+      expect(rec).not_to be_valid
+    end
+
     it 'should not be valid when days_of_week is not valid' do
       rec = build(:event_recurrence, days_of_week: ["HU"] )
       expect(rec).not_to be_valid

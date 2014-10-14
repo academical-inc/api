@@ -238,6 +238,21 @@ describe Event do
       expect(event).not_to be_valid
     end
 
+    it 'should be invalid if start_dt is missing' do
+      event.start_dt = nil
+      expect(event).not_to be_valid
+    end
+
+    it 'should be invalid if end_dt is missing' do
+      event.end_dt = nil
+      expect(event).not_to be_valid
+    end
+
+    it 'should be invalid if recurrence.repeat_until is missing' do
+      event.recurrence.repeat_until = nil
+      expect(event).not_to be_valid
+    end
+
     it 'should be invalid if timezone is invalid' do
       event.timezone = "Invalid"
       expect(event).not_to be_valid

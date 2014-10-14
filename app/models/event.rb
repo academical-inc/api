@@ -23,7 +23,7 @@ module Academical
       end
 
       def start_dt
-        if timezone_is_valid
+        if timezone_is_valid and not super.blank?
           super.in_time_zone(self.timezone)
         else
           super
@@ -31,7 +31,7 @@ module Academical
       end
 
       def end_dt
-        if timezone_is_valid
+        if timezone_is_valid and not super.blank?
           super.in_time_zone(self.timezone)
         else
           super
@@ -45,8 +45,9 @@ module Academical
       end
 
       def recurrence_end_date_is_valid
-        if has_recurrence? and \
-            not DateUtils.same_time?(self.start_dt, self.recurrence.repeat_until)
+        if has_recurrence? and not start_dt.blank? and\
+            not recurrence.repeat_until.blank? and\
+            not DateUtils.same_time?(start_dt, recurrence.repeat_until)
           errors.add("recurrence.repeat_until", \
                      "can't be different from event's start time")
         end

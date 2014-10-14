@@ -21,7 +21,7 @@ module Academical
       validates_presence_of :freq, :repeat_until
 
       def repeat_until
-        if event.timezone_is_valid
+        if event.timezone_is_valid and not super.blank?
           super.in_time_zone(event.timezone)
         else
           super
