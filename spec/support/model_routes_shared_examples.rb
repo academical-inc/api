@@ -105,6 +105,10 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
           let!(:field_factory) { get_factory_for model, field }
 
           context "when resource field #{field} is not present" do
+            before(:each) do
+              resource_created.send("#{field}=".to_sym, [])
+            end
+
             it 'should return an empty list' do
               get rel_path
               expect_collection 0

@@ -14,8 +14,8 @@ module Academical
       embeds_one  :term, class_name: "SchoolTerm"
       embeds_many :personal_events, class_name: "Event"
       belongs_to  :school, index: true
-      belongs_to  :student, index: true, inverse_of: :schedules
-      has_and_belongs_to_many :sections, index: true
+      belongs_to  :student, index: true, inverse_of: :schedules, autosave: true
+      has_and_belongs_to_many :sections, index: true, autosave: true
 
       validates_presence_of :name, :total_credits, :total_sections, :term,
                             :school, :student

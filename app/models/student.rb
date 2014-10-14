@@ -18,7 +18,7 @@ module Academical
       embeds_one :name
       belongs_to :school, index: true
       belongs_to :registered_schedule, class_name: "Schedule", inverse_of: nil
-      has_many   :schedules
+      has_many   :schedules, autosave: true
 
       index({username: 1}, {unique: true, name: "username_index"})
       index({email: 1}, {unique: true, name: "email_index"})

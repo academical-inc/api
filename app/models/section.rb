@@ -19,15 +19,22 @@ module Academical
       embeds_one :term, class_name: "SchoolTerm"
       embeds_many :events, cascade_callbacks: true
       embeds_many :departments
-      has_many :corequisites, class_name: "Section", inverse_of: :corequisite_of
+      has_many :corequisites,
+               class_name: "Section",
+               inverse_of: :corequisite_of,
+               autosave: true
       belongs_to :corequisite_of,
                  class_name: "Section",
                  inverse_of: :corequisites,
-                 index: true
-      belongs_to :school, index: true
-      has_and_belongs_to_many :schedules, index: true
-      has_and_belongs_to_many :prerequisites, class_name: "Section", index: true
+                 index: true,
+                 autosave: true
+      has_and_belongs_to_many :schedules, index: true, autosave: true
       has_and_belongs_to_many :teachers, index: true, autosave: true
+      has_and_belongs_to_many :prerequisites,
+                              class_name: "Section",
+                              index: true,
+                              autosave: true
+      belongs_to :school, index: true
 
       before_save :update_teacher_names
 
