@@ -44,7 +44,7 @@ module Academical
       end
 
       def create_resource(data=extract!(:data))
-        remove_key(:id, data)
+        data = remove_key(:id, data)
         self.class.model.create! data
       rescue Moped::Errors::OperationFailure => ex
         raise Mongoid::Errors::DuplicateKey.new(
@@ -53,7 +53,7 @@ module Academical
       end
 
       def update_resource(data=extract!(:data), id=extract!(:resource_id))
-        remove_key(:id, data)
+        data = remove_key(:id, data)
         r = resource(id)
         r.update_attributes! data
         r
@@ -64,7 +64,7 @@ module Academical
       end
 
       def upsert_resource(data=extract!(:data))
-        remove_key(:id, data)
+        data = remove_key(:id, data)
         begin
           [create_resource(data), 201]
         rescue Mongoid::Errors::DuplicateKey => ex
