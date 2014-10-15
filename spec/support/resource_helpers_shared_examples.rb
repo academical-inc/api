@@ -6,7 +6,7 @@ shared_examples_for "resource_helpers_for" do |model|
   let(:r1) { resource_list[0] }
   let(:r2) { resource_list[1] }
   let(:query_data) {
-    r1.as_json.slice(*r1.class.unique_fields.map {|f| f.to_s})
+    r1.as_json.slice(*r1.class.uniq_field_groups.first.map {|f| f.to_s})
   }
 
   before(:each) do
@@ -87,7 +87,9 @@ shared_examples_for "resource_helpers_for" do |model|
     end
 
     it 'should raise a validation error when data is incomplete' do
-      incomplete = data.except(*new_res.class.unique_fields.map {|f| f.to_s})
+      incomplete = data.except(
+        *new_res.class.uniq_field_groups.first.map {|f| f.to_s}
+      )
       expect {
         helper.create_resource incomplete
       }.to raise_error(Mongoid::Errors::Validations)

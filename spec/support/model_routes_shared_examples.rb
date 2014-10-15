@@ -180,7 +180,7 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
         end
       end
 
-      if not model.unique_fields.blank?
+      if not model.uniq_field_groups.blank?
       context 'when resource with same values for uniq fields already exists' do
 
         it 'should update said resource when it is the only one in the db' do
@@ -255,11 +255,11 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
           end
         end
 
-        if not model.unique_fields.blank?
+        if not model.uniq_field_groups.blank?
         it 'should fail when data to update already exists in the collection' do
           other_res = create(factory)
           put_json update_path, other_res.as_json.except("id")
-          expect_duplicate_error model.unique_fields
+          expect_duplicate_error model.uniq_field_groups
         end
         end
 

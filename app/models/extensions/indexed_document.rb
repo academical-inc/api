@@ -6,12 +6,11 @@ module Academical
 
       module ClassMethods
 
-        def unique_fields
+        def uniq_field_groups
           fields = []
           self.index_specifications.each do |spec|
             if spec.options[:unique] == true
-              vals = spec.fields.map { |f| f.to_s.split(".").first.to_sym }
-              fields.concat vals
+              fields << spec.fields
             end
           end
           fields.uniq

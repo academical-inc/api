@@ -13,6 +13,7 @@ describe IndexedDocument do
       field :field4
       field :field5
       field :field6, type: Hash
+      field :field7, type: Hash
 
       index({field1: 1, field2: 1}, {unique: true})
       index({field3: -1}, {unique: true})
@@ -20,12 +21,14 @@ describe IndexedDocument do
       index({field5: -1, field3: 1})
       index({field4: 1, field3: 1}, {unique: true})
       index({"field6.field" => 1}, {unique: true})
+      index({"field7.field" => 1, :field2 => 1}, {unique: true})
     end
 
 
     it 'should return the correct unique fields based on the mongoid indexes' do
-      expect(DummyDoc.unique_fields).to\
-        eq([:field1, :field2, :field3, :field4, :field6])
+      expect(DummyDoc.uniq_field_groups).to\
+        eq([[:field1, :field2], [:field3], [:field4, :field3],
+            [:"field6.field"], [:"field7.field", :field2]])
     end
   end
 
