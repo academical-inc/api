@@ -71,7 +71,11 @@ shared_examples_for "resource_helpers_for" do |model|
     end
   end
 
-  describe '.resource_like' do
+  describe '.resource_by' do
+    # TODO This is basically what mongo does, not so urgent to test
+  end
+
+  describe '.resource_first_match' do
     # TODO
   end
 
