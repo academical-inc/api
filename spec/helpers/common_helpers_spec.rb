@@ -171,29 +171,29 @@ describe CommonHelpers do
     end
   end
 
-  describe '.filter_hash!' do
+  describe '.extract_all!' do
     let(:ks) { [:k2, :k5] }
     let(:nested_ks) { [:"k2.k3", :"k2.k4", :k5] }
     let(:nested) { {k1: "v1", k2: {k3: "v2", k4: "v3"}, k5: "v4"} }
     let(:single) { {k1: "v1", k2: "v2", k5: "v3"} }
 
     it 'should correctly extract values for keys when single hash' do
-      expect(helper.filter_hash!(ks, single)).to\
+      expect(helper.extract_all!(ks, single)).to\
         eq({"k2" => "v2", "k5" => "v3"})
     end
 
     it 'should correctly extract values for keys when nested hash' do
-      expect(helper.filter_hash!(nested_ks, nested)).to\
+      expect(helper.extract_all!(nested_ks, nested)).to\
         eq({"k2.k3" => "v2", "k2.k4" => "v3", "k5" => "v4"})
     end
 
     it 'should raise error when provided keys do not exist in single hash' do
-      expect{ helper.filter_hash!([:k2, :k6], single) }.to\
+      expect{ helper.extract_all!([:k2, :k6], single) }.to\
         raise_error(KeyError)
     end
 
     it 'should raise error when provided keys do not exist in nested hash' do
-      expect{ helper.filter_hash!([:k1, "k2.k5"], nested) }.to\
+      expect{ helper.extract_all!([:k1, "k2.k5"], nested) }.to\
         raise_error
     end
   end

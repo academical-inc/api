@@ -16,8 +16,8 @@ shared_examples_for "resource_helpers_for" do |model|
     allow(ResourceHelpers).to receive(:remove_key) { |*args|
       CommonHelpers.remove_key(*args)
     }
-    allow(ResourceHelpers).to receive(:filter_hash!) { |*args|
-      CommonHelpers.filter_hash!(*args)
+    allow(ResourceHelpers).to receive(:extract_all!) { |*args|
+      CommonHelpers.extract_all!(*args)
     }
     allow(ResourceHelpers.class).to receive(:model) { model }
   end

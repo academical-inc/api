@@ -69,7 +69,7 @@ module Academical
           [create_resource(data), 201]
         rescue Mongoid::Errors::DuplicateKey => ex
           queries = ex.uniq_field_groups.map do |group|
-            filter_hash! group, data
+            extract_all! group, data
           end
 
           # This query should never fail because we already know that a single

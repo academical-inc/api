@@ -52,7 +52,7 @@ module Academical
         val
       end
 
-      def filter_hash!(keys, hash)
+      def extract_all!(keys, hash)
         values = {}
         keys.each do |key|
           if key.to_s.include? "."
