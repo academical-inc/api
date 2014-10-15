@@ -20,7 +20,7 @@ module Academical
       end
 
       def to_s
-        "The parameter '#{@key}' is missing from the request"
+        "Required data '#{@key}' is missing from the request"
       end
     end
   end

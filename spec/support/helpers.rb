@@ -125,7 +125,7 @@ module Helpers
 
   def expect_missing_parameter_error(key=:data)
     expect(json_error(400)).to eq(
-      "The parameter '#{key}' is missing from the request"
+      "Required data '#{key}' is missing from the request"
     )
   end
 
