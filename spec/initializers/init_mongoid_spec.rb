@@ -23,7 +23,7 @@ describe 'Mongoid Initializer' do
           raise e
         rescue Mongoid::Errors::DuplicateKey => ex
           expect(ex).to be
-          expect(ex.instance_variable_get(:@fields)).to eq([:field1])
+          expect(ex.uniq_field_groups).to eq([:field1])
           expect(ex.message).to\
             eq("A resource with the unique fields #{[:field1]} already exists")
         end

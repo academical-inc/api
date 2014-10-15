@@ -36,12 +36,12 @@ end
 module Mongoid::Errors
   class DuplicateKey < StandardError
 
-    attr_reader :fields
+    attr_reader :uniq_field_groups
 
-    def initialize(ex, fields)
+    def initialize(ex, uniq_field_groups)
       @ex = ex
       raise @ex if not is_duplicate_key_error?
-      @fields = fields
+      @uniq_field_groups = uniq_field_groups
     end
 
     def is_duplicate_key_error?
@@ -53,7 +53,7 @@ module Mongoid::Errors
     end
 
     def to_s
-      "A resource with the unique fields #{@fields} already exists"
+      "A resource with the unique fields #{@uniq_field_groups} already exists"
     end
   end
 end
