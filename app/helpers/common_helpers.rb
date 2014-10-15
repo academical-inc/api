@@ -22,49 +22,46 @@ module Academical
       end
 
       def contains?(key, hash=params)
-        hash.symbolize_keys!
-        hash.key? key.to_sym
+        h = hash.symbolize_keys
+        h.key? key.to_sym
       end
 
       def extract(key, hash=params)
-        hash.symbolize_keys!
+        h = hash.symbolize_keys
         key = key.to_sym
-        hash[key]
+        h[key]
       end
 
-      def extract!(key, hash=params)
-        hash.symbolize_keys!
+      def extract!(key, hash=(hash_set=true; params))
+        h = hash.symbolize_keys
         key = key.to_sym
-        raise ParameterMissingError, key if not hash.key? key
-        hash[key]
+        raise ParameterMissingError, key if not h.key? key and hash_set
+        h.fetch(key)
       end
 
-      def each_nested_key_val(root_key, hash)
-        hash.each_pair do |key, val|
-          key = "#{root_key}.#{key}"
-          if val.is_a? Hash
-            each_nested_key_val key, val do |k, v|
-              yield k, v
-            end
-          else
-            yield key, val
+      def extract_nested!(key, hash=(hash_set=true; params))
+        val = hash
+        key.to_s.split(".").each do |k|
+          begin
+            val = extract! k, val
+          rescue => ex
+            raise ParameterMissingError, key if hash_set
+            raise ex if not hash_set
           end
         end
+        val
       end
 
       def filter_hash!(keys, hash)
         values = {}
         keys.each do |key|
-          value = extract!(key, hash)
-          if value.is_a? Hash
-            each_nested_key_val key, value do |k, v|
-              values[k] = v
-            end
+          if key.to_s.include? "."
+            values[key] = extract_nested!(key, hash)
           else
-            values[key.to_s] = value
+            values[key] = extract!(key, hash)
           end
         end
-        values
+        values.stringify_keys
       end
 
       def json_error(code, ex: env['sinatra.error'], message: nil, errors: {})

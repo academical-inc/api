@@ -41,59 +41,6 @@ describe CommonHelpers do
     end
   end
 
-  describe '.each_nested_key_val' do
-    let(:nested) { {key1: "val1", key2: {key3: "val2", key4: "val3"}} }
-    let(:single) { {key1: "val1", key2: "val2"} }
-    let(:dbl_nstd) { {key1: "val1", key2: {key3: "val2",
-                                           key4: {key5: "val3", key6: "val4"}}} }
-
-    it 'should yield the correct keys and values when no nested hash' do
-      expect{ |b| helper.each_nested_key_val "root", single, &b }.to\
-        yield_successive_args(["root.key1", "val1"], ["root.key2", "val2"])
-    end
-
-    it 'should yield the correct keys and values when nested hash' do
-      expect{ |b| helper.each_nested_key_val "root", nested, &b }.to\
-        yield_successive_args(["root.key1", "val1"],
-                              ["root.key2.key3", "val2"],
-                              ["root.key2.key4", "val3"])
-    end
-
-    it 'should yield the correct keys and values when multiple nested hash' do
-      expect{ |b| helper.each_nested_key_val "root", dbl_nstd, &b }.to\
-        yield_successive_args(["root.key1", "val1"],
-                              ["root.key2.key3", "val2"],
-                              ["root.key2.key4.key5", "val3"],
-                              ["root.key2.key4.key6", "val4"])
-    end
-
-    it 'should not yield any key value pairs when empty hash' do
-      expect{ |b| helper.each_nested_key_val "root", single, &b }.not_to\
-        yield_successive_args
-    end
-  end
-
-  describe '.filter_hash!' do
-    let(:keys) { [:key2, :key5] }
-    let(:nested) { {key1: "v1", key2: {key3: "v2", key4: "v3"}, key5: "v4"} }
-    let(:single) { {key1: "v1", key2: "v2", key5: "v3"} }
-
-    it 'should correctly extract values for keys when single hash' do
-      expect(helper.filter_hash!(keys, single)).to\
-        eq({"key2" => "v2", "key5" => "v3"})
-    end
-
-    it 'should correctly extract values for keys when nested hash' do
-      expect(helper.filter_hash!(keys, nested)).to\
-        eq({"key2.key3" => "v2", "key2.key4" => "v3", "key5" => "v4"})
-    end
-
-    it 'should raise error when provided keys do not exist in hash' do
-      expect{ helper.filter_hash!([:key2, :key6], nested) }.to\
-        raise_error(ParameterMissingError)
-    end
-  end
-
   describe '.remove_key' do
     let(:hash) { {field: "value"} }
 
@@ -146,11 +93,23 @@ describe CommonHelpers do
   describe '.extract!' do
     let(:hash) { {field: "value"} }
     let(:str_hash) { {"field" => "value"} }
+    before(:each) do
+      allow(CommonHelpers).to receive(:params) { hash }
+    end
 
-    it 'should raise exception when key is missing from hash' do
+    it\
+    'should raise key err when key is missing and hash is explicitly set' do
       expect{helper.extract!(:invalid, hash)}\
-        .to raise_error(ParameterMissingError)
+        .to raise_error(KeyError)
       expect{helper.extract!("invalid", hash)}\
+        .to raise_error(KeyError)
+    end
+
+    it\
+    'should raise param missing when key is missing and hash is not explicitly set' do
+      expect{helper.extract!(:invalid)}\
+        .to raise_error(ParameterMissingError)
+      expect{helper.extract!("invalid")}\
         .to raise_error(ParameterMissingError)
     end
 
@@ -162,6 +121,80 @@ describe CommonHelpers do
     it 'should return the correct value from the hash given a string key' do
       expect(helper.extract!("field", hash)).to eq("value")
       expect(helper.extract!("field", str_hash)).to eq("value")
+    end
+  end
+
+  describe '.extract_nested!' do
+    let(:n2) { {k5: "v5"} }
+    let(:n1) { {k3: "v3", k4: n2} }
+    let(:hash) { {k1: "v1", k2: n1} }
+    before(:each) do
+      allow(CommonHelpers).to receive(:params) { hash }
+    end
+
+    it 'should raise param missing when hash not explicitly set' do
+      expect{ helper.extract_nested!("k0.k2") }\
+        .to raise_error(ParameterMissingError)
+      expect{ helper.extract_nested!("k1.k0.k2") }\
+        .to raise_error(ParameterMissingError)
+      expect{ helper.extract_nested!("k1.k2.k5") }\
+        .to raise_error(ParameterMissingError)
+    end
+
+    it 'should raise exception when first key missing from the hash' do
+      expect{ helper.extract_nested!("k0.k2", hash) }\
+        .to raise_error
+    end
+
+    it 'should raise exception when middle key missing from the hash' do
+      expect{ helper.extract_nested!("k1.k0.k3", hash) }\
+        .to raise_error
+    end
+
+    it 'should raise exception when last key missing from the hash' do
+      expect{ helper.extract_nested!("k1.k2.k5", hash) }\
+        .to raise_error
+    end
+
+    it 'should return the correct value for the first key' do
+      expect(helper.extract_nested!("k1", hash)).to eq("v1")
+      expect(helper.extract_nested!("k2", hash)).to eq(n1)
+    end
+
+    it 'should return the correct value for middle key' do
+      expect(helper.extract_nested!("k2.k3", hash)).to eq("v3")
+      expect(helper.extract_nested!("k2.k4", hash)).to eq(n2)
+    end
+
+    it 'should return the correct value for last key' do
+      expect(helper.extract_nested!("k2.k4.k5", hash)).to eq("v5")
+    end
+  end
+
+  describe '.filter_hash!' do
+    let(:ks) { [:k2, :k5] }
+    let(:nested_ks) { [:"k2.k3", :"k2.k4", :k5] }
+    let(:nested) { {k1: "v1", k2: {k3: "v2", k4: "v3"}, k5: "v4"} }
+    let(:single) { {k1: "v1", k2: "v2", k5: "v3"} }
+
+    it 'should correctly extract values for keys when single hash' do
+      expect(helper.filter_hash!(ks, single)).to\
+        eq({"k2" => "v2", "k5" => "v3"})
+    end
+
+    it 'should correctly extract values for keys when nested hash' do
+      expect(helper.filter_hash!(nested_ks, nested)).to\
+        eq({"k2.k3" => "v2", "k2.k4" => "v3", "k5" => "v4"})
+    end
+
+    it 'should raise error when provided keys do not exist in single hash' do
+      expect{ helper.filter_hash!([:k2, :k6], single) }.to\
+        raise_error(KeyError)
+    end
+
+    it 'should raise error when provided keys do not exist in nested hash' do
+      expect{ helper.filter_hash!([:k1, "k2.k5"], nested) }.to\
+        raise_error
     end
   end
 
