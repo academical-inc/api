@@ -145,4 +145,9 @@ shared_examples_for "resource_helpers_for" do |model|
       end
     end
   end
+
+  describe '.delete_resource' do
+    # TODO
+  end
+
 end

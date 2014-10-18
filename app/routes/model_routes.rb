@@ -65,6 +65,10 @@ module Academical
         put model_base_route do
           json_response update_resource
         end
+
+        delete model_base_route do
+          json_response delete_resource
+        end
       end
 
       module ClassMethods

@@ -47,7 +47,7 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
         expect_correct_model resource_created.id
       end
 
-      it 'should return 404 not found when school does not exist' do
+      it 'should fail when resource does not exist' do
         get "#{base_path}/non_existent"
         expect_not_found_error
       end
@@ -140,6 +140,25 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
             end
           end
         end
+      end
+    end
+
+    describe "delete #{base_path}/:resource_id" do
+
+      it 'should delete the resource correctly' do
+        expect_model_to_be_deleted model, resource_created.id do
+          delete single_path
+        end
+      end
+
+      it 'should fail when resource does not exist' do
+        delete "#{base_path}/non_existent"
+        expect_not_found_error
+      end
+
+      it 'should fail when id not provided in url' do
+        delete base_path
+        expect_invalid_path_error
       end
     end
   end

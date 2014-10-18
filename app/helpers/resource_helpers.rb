@@ -80,6 +80,10 @@ module Academical
         end
       end
 
+      def delete_resource(id=extract!(:resource_id))
+        resource(id).destroy
+      end
+
     end
   end
 end

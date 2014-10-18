@@ -97,6 +97,13 @@ module Helpers
     end
   end
 
+  def expect_model_to_be_deleted(model_class, model_id, &block)
+    expect{model_class.find(model_id)}.not_to raise_error
+    expect{block.call}.to change(model_class, :count).by(-1)
+    expect{model_class.find(model_id)}.to raise_error
+    expect(json_response).to eq(true)
+  end
+
   def expect_not_found_error
     expect(json_error(404)).to eq("The resource was not found")
   end
