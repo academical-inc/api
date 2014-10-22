@@ -147,7 +147,7 @@ shared_examples_for "resource_helpers_for" do |model|
   end
 
   describe '.delete_resource' do
-    # TODO
+    # TODO This is basically what mongo does, not so urgent to test
   end
 
 end
