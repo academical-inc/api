@@ -43,8 +43,17 @@ module Academical
         json_error 400, message: env['sinatra.error'].message
       end
 
+      error InvalidParameterError do
+        json_error 400, message: env['sinatra.error'].message
+      end
+
       error Mongoid::Errors::DocumentNotFound do
         json_error 404, message: "The resource was not found"
+      end
+
+      error Mongoid::Errors::DocumentsNotFound do
+        ex = env['sinatra.error']
+        json_error 404, message: ex.message, data: ex.found
       end
 
       error Mongoid::Errors::DuplicateKey do
