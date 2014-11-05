@@ -19,6 +19,9 @@ shared_examples_for "resource_helpers_for" do |model|
     allow(ResourceHelpers).to receive(:extract_all!) { |*args|
       CommonHelpers.extract_all!(*args)
     }
+    allow(ResourceHelpers).to receive(:extract!) { |*args|
+      CommonHelpers.extract!(*args)
+    }
     allow(ResourceHelpers.class).to receive(:model) { model }
   end
 
@@ -114,6 +117,35 @@ shared_examples_for "resource_helpers_for" do |model|
 
   describe '.update_resource' do
     # TODO
+  end
+
+  describe '.update_resources' do
+
+    it 'should update all provided resources correctly' do
+      data = [
+        {id: r1.id, name: "New Name 1"},
+        {id: r2.id, name: "New Name 2"}
+      ]
+      expect(helper.update_resources(data)).to eq(2)
+      expect(helper.resource(r1.id).name).to eq("New Name 1")
+      expect(helper.resource(r2.id).name).to eq("New Name 2")
+    end
+
+    it 'should raise exception if data is not an array' do
+      data = {id: r1.id, name: "New Name 1"}
+      expect{helper.update_resources(data)}.to raise_error(InvalidParameterError)
+    end
+
+    it 'should raise exception if any of the ids do not exist' do
+      data = [
+        {id: r1.id, name: "New Name 1"},
+        {id: "1234", name: "New Name 2"}
+      ]
+      expect{helper.update_resources(data)}.to\
+        raise_error(Mongoid::Errors::DocumentsNotFound,
+                    "1 out of 2 resources where not found")
+      expect(helper.resource(r1.id).name).to eq("New Name 1")
+    end
   end
 
   describe '.upsert_resource' do

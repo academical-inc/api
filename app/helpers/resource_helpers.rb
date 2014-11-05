@@ -63,6 +63,24 @@ module Academical
         )
       end
 
+      def update_resources(data=extract!(:data))
+        raise InvalidParameterError, :data if not data.is_a? Array
+        count = 0
+        data.each do |resource|
+          begin
+            update_resource resource, extract!(:id, resource)
+            count += 1
+          rescue Mongoid::Errors::DocumentNotFound
+          end
+        end
+        if count < data.count
+          raise Mongoid::Errors::DocumentsNotFound.new(
+            count, data.count - count
+          )
+        end
+        count
+      end
+
       def upsert_resource(data=extract!(:data))
         data = remove_key :id, data
         begin
