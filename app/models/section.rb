@@ -33,7 +33,6 @@ module Academical
                               index: true
       belongs_to :school, index: true
 
-      before_save :update_teacher_names
 
       validates_presence_of :course_name, :credits, :seats, :term, :course_code,
                             :section_id, :departments, :school, :section_number
@@ -51,8 +50,10 @@ module Academical
       index({:school=> 1, "events.location"=> 1}, {sparse: true})
 
 
-      def update_teacher_names
-        self.teacher_names = teachers.map { |teacher| teacher.full_name }
+      def serializable_hash(options = nil)
+        attrs = super(options)
+        attrs["teacher_names"] = teachers.map { |teacher| teacher.full_name }
+        attrs
       end
 
       def expand_events

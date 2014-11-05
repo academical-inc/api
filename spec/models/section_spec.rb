@@ -30,7 +30,7 @@ describe Section do
     end
   end
 
-  describe '#update_teacher_names' do
+  describe '#serializable_hash' do
     let(:section) { build(:section) }
 
     it 'should update the teacher names correctly' do
@@ -39,8 +39,9 @@ describe Section do
       t2 = build(:teacher,
                  name: build(:name, first: "Jake", middle: "Pike", last: "Wow"))
       section.teachers = [t1, t2]
-      section.update_teacher_names
-      expect(section.teacher_names).to eq(["John Paul Man",
+      hash = section.as_json
+      expect(hash).to have_key("teacher_names")
+      expect(hash["teacher_names"]).to eq(["John Paul Man",
                                            "Jake Pike Wow"])
     end
   end
@@ -68,25 +69,6 @@ describe Section do
         teacher.reload
         expect(teacher.sections.count).to eq(1)
         expect(teacher.sections.first).to eq(s)
-      end
-    end
-  end
-
-  describe 'callbacks' do
-    describe 'before save' do
-      let(:section) { build(:section) }
-
-      it 'should update the teacher names when creating' do
-        expect(section).to receive(:update_teacher_names).once
-        section.save!
-      end
-
-      it 'should update the teacher names when updating' do
-        section.save!
-        expect(section).to receive(:update_teacher_names).once.and_call_original
-        section.update_attributes!\
-          teachers: [build(:teacher, sections: [section])]
-        expect(section.teacher_names.count).to eq(1)
       end
     end
   end

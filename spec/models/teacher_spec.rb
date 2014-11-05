@@ -39,21 +39,6 @@ describe Teacher do
 
   end
 
-  describe 'callbacks' do
-    describe 'before save' do
-      let!(:section) { create(:section) }
-
-      it\
-      "should update the section's teacher names when a teacher is created" do
-        expect(section).to receive(:update_teacher_names).once
-        t = build(:teacher, sections: [section], school: section.school).as_json
-        Teacher.create! t
-        section.reload
-        expect(section.teacher_names.count).to eq(1)
-      end
-    end
-  end
-
   describe 'validations' do
 
     it 'should not be valid when the name is missing' do
