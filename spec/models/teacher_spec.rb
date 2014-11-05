@@ -13,14 +13,24 @@ describe Teacher do
 
   describe 'relations' do
 
-    describe 'autosave #sections' do
+    describe '#sections' do
       let!(:section) { create(:section) }
 
-      it "should update the section's teachers when teacher saved" do
+      it "should update the section's teachers when teacher created" do
         expect(section.teachers.count).to eq(0)
-        t = create(:teacher, sections: [section])
-        expect(t.sections.count).to eq(1)
-        expect(t.sections.first).to eq(section)
+        data = build(:teacher, sections: [section], school: section.school).as_json
+        t = Teacher.create! data
+        section.reload
+        expect(section.teachers.count).to eq(1)
+        expect(section.teachers.first).to eq(t)
+      end
+
+      it "should update the sections's teachers when teacher updated" do
+        expect(section.teachers.count).to eq(0)
+        data = build(:teacher, school: section.school).as_json
+        t = Teacher.create! data
+        expect(t.sections.count).to eq(0)
+        t.update_attributes! sections: [section]
         section.reload
         expect(section.teachers.count).to eq(1)
         expect(section.teachers.first).to eq(t)

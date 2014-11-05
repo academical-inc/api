@@ -12,7 +12,7 @@ module Academical
       field :teacher_number, type: String
       embeds_one :name
       belongs_to :school, index: true
-      has_and_belongs_to_many :sections, index: true, autosave: true
+      has_and_belongs_to_many :sections, index: true
 
       validates_presence_of :name, :school
 
