@@ -20,7 +20,16 @@ module Academical
       end
 
       def to_s
-        "Required data '#{@key}' is missing from the request"
+        "Required param '#{@key}' is missing from the request"
+      end
+    end
+    class InvalidParameterError < StandardError
+      def initialize(key)
+        @key = key
+      end
+
+      def to_s
+        "Required param '#{@key}' is invalid"
       end
     end
   end
