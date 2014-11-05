@@ -50,6 +50,15 @@ module Helpers
     json[:message]
   end
 
+  def json_error_with_data(code)
+    expect_status code
+    json = expect_correct_json
+
+    expect(json[:success]).to be(false)
+    expect(json).to have_key(:message)
+    [json[:message], json[:data]]
+  end
+
   def expect_nil
     expect(json_response).to be_nil
   end
@@ -94,6 +103,30 @@ module Helpers
     fields.each_pair do |key, value|
       expect(from_db.send(key.to_sym)).to eq(value)
       expect(json[key.to_s]).to eq(value)
+    end
+  end
+
+  def expect_models_to_be_updated(model_class, to_update, &block)
+    expect{block.call}.to change(model_class, :count).by(0)
+    expect(json_response).to eq(to_update.count)
+    to_update.each do |fields|
+      from_db = model_class.find(fields["id"])
+      fields.each_pair do |key, value|
+        expect(from_db.send(key.to_sym)).to eq(value)
+      end
+    end
+  end
+
+  def expect_models_partially_updated(model_class, to_update, total, &block)
+    expect{block.call}.to change(model_class, :count).by(0)
+    msg, data = json_error_with_data 404
+    expect(data).to eq(to_update.count)
+    expect_documents_not_found_error total - to_update.count, total, msg
+    to_update.each do |fields|
+      from_db = model_class.find(fields["id"])
+      fields.each_pair do |key, value|
+        expect(from_db.send(key.to_sym)).to eq(value)
+      end
     end
   end
 
