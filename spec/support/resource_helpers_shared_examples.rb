@@ -3,8 +3,8 @@ shared_examples_for "resource_helpers_for" do |model|
   let(:helper) { ResourceHelpers }
   let(:factory) { model.name.demodulize.underscore.to_sym }
   let!(:resource_list) { create_list(factory, 2) }
-  let(:r1) { resource_list[0] }
-  let(:r2) { resource_list[1] }
+  let!(:r1) { resource_list[0] }
+  let!(:r2) { resource_list[1] }
   let(:query_data) {
     r1.as_json.slice(*r1.class.uniq_field_groups.first.map {|f| f.to_s})
   }
