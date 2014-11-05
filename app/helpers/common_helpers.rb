@@ -64,9 +64,10 @@ module Academical
         values.stringify_keys
       end
 
-      def json_error(code, ex: env['sinatra.error'], message: nil, errors: {})
+      def json_error(code, ex: env['sinatra.error'], message: nil, errors: {},
+                    data: nil)
         response_hash = error_hash settings.production?, settings.development?,
-          ex: ex, message: message, errors: errors
+          ex: ex, message: message, errors: errors, data: data
         halt code, json(response_hash)
       end
 
