@@ -12,7 +12,6 @@ module Academical
       field :course_code, type: String
       field :section_id, type: String
       field :section_number, type: String
-      field :teacher_names, type: Array
       field :custom, type: Hash
       field :credits, type: Float
       field :seats, type: Hash
