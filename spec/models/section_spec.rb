@@ -50,7 +50,7 @@ describe Section do
     describe 'autosave #teachers' do
       let!(:teacher) { create(:teacher) }
 
-      it "should update the teacher's sections when teacher saved" do
+      it "should update the teacher's sections when section saved" do
         expect(teacher.sections.count).to eq(0)
         s = create(:section, teachers: [teacher])
         expect(s.teachers.count).to eq(1)
@@ -64,7 +64,7 @@ describe Section do
 
   describe 'callbacks' do
     describe 'before save' do
-      let(:section) { build(:section, :with_teachers) }
+      let(:section) { build(:section) }
 
       it 'should update the teacher names when creating' do
         expect(section).to receive(:update_teacher_names).once
@@ -73,9 +73,20 @@ describe Section do
 
       it 'should update the teacher names when updating' do
         section.save!
-        expect(section).to receive(:update_teacher_names).once
-        section.teachers = [build(:teacher)]
+        expect(section).to receive(:update_teacher_names).once.and_call_original
+        section.update_attributes!\
+          teachers: [build(:teacher, sections: [section])]
+        expect(section.teacher_names.count).to eq(1)
+      end
+
+      it\
+      'should update the teacher names when a teacher is created through autosave' do
         section.save!
+        expect(section).to receive(:update_teacher_names).once.and_call_original
+        t = build(:teacher, sections: [section], school: section.school).as_json
+        Teacher.create! t
+        section.reload
+        expect(section.teacher_names.count).to eq(1)
       end
     end
   end
