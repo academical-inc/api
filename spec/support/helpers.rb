@@ -108,6 +108,12 @@ module Helpers
     expect(json_error(404)).to eq("The resource was not found")
   end
 
+  def expect_documents_not_found_error(not_found, total, actual_msg)
+    expect(actual_msg).to eq(
+      "#{not_found} out of #{total} resources where not found"
+    )
+  end
+
   def expect_invalid_path_error
     expect(json_error(404)).to eq("The requested path is unknown")
   end

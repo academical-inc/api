@@ -56,6 +56,21 @@ module Mongoid::Errors
       "A resource with the unique fields #{@uniq_field_groups} already exists"
     end
   end
+
+  class DocumentsNotFound < StandardError
+
+    attr_reader :found, :not_found
+
+    def initialize(found, not_found)
+      @found = found
+      @not_found = not_found
+    end
+
+    def to_s
+      "#{@not_found} out of #{@found + @not_found} resources where not found"
+    end
+
+  end
 end
 
 # Monkeypatches UnknownAttribute error to be able to access the attribute that
