@@ -11,6 +11,7 @@ module Academical
       field :total_credits,  type: Float
       field :total_sections, type: Integer
       field :share_id, type: String
+      field :section_colors, type: Hash
       embeds_one  :term, class_name: "SchoolTerm"
       embeds_many :personal_events, class_name: "Event"
       belongs_to  :school, index: true
