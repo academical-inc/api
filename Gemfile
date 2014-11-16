@@ -11,6 +11,7 @@ gem 'mongoid'
 gem 'rake'
 gem 'i18n'
 gem 'rack-contrib'
+gem 'unicorn'
 
 group :development, :test do
   gem 'thin'
