@@ -17,7 +17,6 @@ module Academical
         set :clean_trace, true
       end
 
-      helpers Sinatra::JSON
       helpers ResponseUtils
       helpers CommonHelpers
 

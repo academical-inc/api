@@ -64,6 +64,11 @@ module Academical
         values.stringify_keys
       end
 
+      def json(hash)
+        content_type settings.api_content_type, charset: settings.api_charset
+        MultiJson.dump hash
+      end
+
       def json_error(code, ex: env['sinatra.error'], message: nil, errors: {},
                     data: nil)
         response_hash = error_hash settings.production?, settings.development?,

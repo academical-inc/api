@@ -198,6 +198,20 @@ describe CommonHelpers do
     end
   end
 
+  describe '.json' do
+    let(:h) { {data: "data"} }
+    let(:settings) { double "settings", api_content_type: :json,\
+                     api_charset: :utf }
+    before(:each) do
+      allow(helper).to receive(:settings) { settings }
+    end
+
+    it 'should set the correct content type and charset' do
+      expect(helper).to receive(:content_type).with(:json, charset: :utf)
+      helper.json h
+    end
+  end
+
   describe '.json_error' do
     # This method is already tested by testing response utils and the routes
     # This method can't be really tested outisde a Sinatra context
