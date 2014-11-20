@@ -24,6 +24,14 @@ module Helpers
       "Server responded: #{last_response.status} - #{last_response.body}"
   end
 
+  def expect_correct_encoding
+    expect(last_response.body.encoding.name).to eq("UTF-8")
+  end
+
+  def expect_correct_content_type
+    expect(last_response.content_type).to eq("application/json;charset=utf-8")
+  end
+
   def expect_correct_json
     json = ""
     expect {
@@ -34,6 +42,8 @@ module Helpers
 
   def json_response(code=200)
     expect_status code
+    expect_correct_content_type
+    expect_correct_encoding
     json = expect_correct_json
 
     expect(json[:success]).to be(true)
@@ -43,6 +53,8 @@ module Helpers
 
   def json_error(code)
     expect_status code
+    expect_correct_content_type
+    expect_correct_encoding
     json = expect_correct_json
 
     expect(json[:success]).to be(false)
