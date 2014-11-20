@@ -1,6 +1,7 @@
 
 shared_examples_for Academical::Routes::ModelRoutes\
-do |to_update, to_remove, linked_fields_many, linked_fields_single|
+do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_create|
+  except_for_create ||= []
 
   base_path = "/#{described_class.model_collection}"
   factory = described_class.model_singular
@@ -164,7 +165,10 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
   end
 
   context 'creating and updating' do
-    let(:res_hash) { resource_to_create.as_json.except "id" }
+    let(:res_hash) {
+      except = ["id"] + except_for_create
+      resource_to_create.as_json.except(*except)
+    }
     let(:modified) {
       m = res_hash.dup
       to_update.each_pair do |key, val|
@@ -277,7 +281,9 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single|
         if not model.uniq_field_groups.blank?
         it 'should fail when data to update already exists in the collection' do
           other_res = create(factory)
-          put_json update_path, other_res.as_json.except("id")
+          put_json update_path, other_res.as_json.except(
+            *(["id"]+except_for_create)
+          )
           expect_duplicate_error model.uniq_field_groups
         end
         end

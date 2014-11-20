@@ -4,13 +4,15 @@ describe Academical::Routes::Sections do
 
   to_update = {"course_name" => "Modified Course Name" }
   to_remove = ["credits"]
+
+  except_for_create = ["teacher_names"]
   let(:resource_to_create) {
     s = create(:school)
     build(:section, :with_teachers, school: s)
   }
 
   it_behaves_like Academical::Routes::ModelRoutes, to_update, to_remove,
-    [:teachers, :schedules], [:school]
+    [:teachers, :schedules], [:school], except_for_create
 
 
   describe "put /sections/_bulk" do

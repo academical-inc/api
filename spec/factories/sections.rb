@@ -27,9 +27,5 @@ FactoryGirl.define do
       teachers { create_list(:teacher, 2, school: school) }
     end
 
-    trait :with_teacher_names do
-      teacher_names ["John Doe", "Paul McCartney"]
-    end
-
   end
 end

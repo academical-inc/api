@@ -54,6 +54,7 @@ describe Section do
       it "should update the teacher's sections when section created" do
         expect(teacher.sections.count).to eq(0)
         data = build(:section, teachers: [teacher], school: teacher.school).as_json
+        data.delete "teacher_names"
         s = Section.create! data
         teacher.reload
         expect(teacher.sections.count).to eq(1)
@@ -63,6 +64,7 @@ describe Section do
       it "should update the teacher's sections when section updated" do
         expect(teacher.sections.count).to eq(0)
         data = build(:section, school: teacher.school).as_json
+        data.delete "teacher_names"
         s = Section.create! data
         expect(s.teachers.count).to eq(0)
         s.update_attributes! teachers: [teacher]
