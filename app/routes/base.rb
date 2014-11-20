@@ -5,7 +5,8 @@ module Academical
       configure do
         set :root, Api.root
         set :views, 'app/views'
-        set :req_content_type, 'application/json'
+        set :api_content_type, 'application/json'
+        set :api_charset, 'utf-8'
 
         disable :dump_errors
         disable :show_exceptions
@@ -22,7 +23,7 @@ module Academical
 
       before do
         if request.post? or request.put?
-          if request.content_type != settings.req_content_type
+          if request.content_type != settings.api_content_type
             json_error 400,
               message: "The request Content-Type must be application/json"
           end
