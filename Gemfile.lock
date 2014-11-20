@@ -121,6 +121,7 @@ DEPENDENCIES
   i18n
   mongoid
   moped (~> 2.0.2)
+  multi_json
   pry
   rack-contrib
   rack-parser
