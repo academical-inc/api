@@ -14,6 +14,7 @@ gem 'rake'
 gem 'i18n'
 gem 'rack-contrib'
 gem 'unicorn'
+gem 'aws-sdk'
 
 group :development, :test do
   gem 'thin'

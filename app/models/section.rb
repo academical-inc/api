@@ -2,6 +2,9 @@ module Academical
   module Models
     class Section
 
+      AWS_BUCKET = ENV['AWS_BUCKET']
+      DUMP_NAME  = 'magistral_sections.json'
+
       include Mongoid::Document
       include Mongoid::Timestamps
       include IndexedDocument
@@ -48,6 +51,7 @@ module Academical
       index({:school=> 1, "events.end_dt"=> 1}, {sparse: true})
       index({:school=> 1, "events.location"=> 1}, {sparse: true})
 
+      scope :magistrals, ->{ where(corequisite_of: nil) }
 
       def serializable_hash(options = nil)
         attrs = super(options)
@@ -73,6 +77,14 @@ module Academical
 
       def students
         # TODO
+      end
+
+      def self.dump_magistrals(school)
+        sections = Section.magistrals.to_json methods: [:corequisites]
+
+        s3 = AWS::S3.new
+        bucket = s3.buckets[AWS_BUCKET]
+        bucket.objects["#{school}/#{DUMP_NAME}"].write(sections)
       end
 
       def self.linked_fields
