@@ -81,5 +81,16 @@ describe Section do
     it 'should be valid with default values' do
       expect(section).to be_valid
     end
+
+    it\
+    'should not have corequisites and be corequisite_of another at same time' do
+      coreq  = build(:section, course_name: "corequisite")
+      parent = build(:section, course_name: "parent")
+
+      section.corequisites << coreq
+      section.corequisite_of = parent
+
+      expect(section).not_to be_valid
+    end
   end
 end

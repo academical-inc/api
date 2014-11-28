@@ -32,7 +32,7 @@ module Academical
                               index: true
       belongs_to :school, index: true
 
-
+      validate :either_has_corequisites_or_is_corequisite
       validates_presence_of :course_name, :credits, :seats, :term, :course_code,
                             :section_id, :departments, :school, :section_number
 
@@ -53,6 +53,16 @@ module Academical
         attrs = super(options)
         attrs["teacher_names"] = teachers.map { |teacher| teacher.full_name }
         attrs
+      end
+
+      def either_has_corequisites_or_is_corequisite
+        if (not self.corequisite_of.blank?) and (not self.corequisites.blank?)
+          errors.add(
+            :corequisites,
+            "Section cannot be a correquisite and have correquisites at the " +
+            "same time"
+          )
+        end
       end
 
       def expand_events
