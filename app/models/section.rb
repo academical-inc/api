@@ -62,7 +62,7 @@ module Academical
       end
 
       def either_has_corequisites_or_is_corequisite
-        if (not self.corequisite_of.blank?) and (not self.corequisites.blank?)
+        if (not corequisite_of.blank?) and (not corequisites.blank?)
           errors.add(
             :corequisites,
             "Section cannot be a correquisite and have correquisites at the " +
