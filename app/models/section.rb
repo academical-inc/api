@@ -9,7 +9,6 @@ module Academical
       include Mongoid::Timestamps
       include IndexedDocument
       include Linkable
-      include CommonHelpers
 
       field :course_name, type: String
       field :course_description, type: String
@@ -73,9 +72,9 @@ module Academical
       end
 
       def titleize_fields
-        self.course_name = titleize course_name
+        self.course_name = CommonHelpers.titleize course_name
         departments.each do |department|
-          department.name = titleize department.name
+          department.name = CommonHelpers.titleize department.name
         end
       end
 
@@ -91,7 +90,9 @@ module Academical
 
       def self.dump_magistrals(school)
         sections = Section.magistrals.map do |section|
-          CommonHelpers.camelize section.as_json(methods: [:corequisites])
+          CommonHelpers.camelize_hash_keys(
+            section.as_json(methods: [:corequisites])
+          )
         end
         sections = sections.to_json
 

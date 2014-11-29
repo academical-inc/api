@@ -85,15 +85,15 @@ module Academical
         str.mb_chars.titleize.to_s
       end
 
-      def camelize(hash)
+      def camelize_hash_keys(hash)
         res = {}
         hash.each_pair do |key, val|
           if val.is_a? Hash
-            val = camelize(val)
+            val = camelize_hash_keys(val)
           end
           if val.is_a? Array
             val = val.map { |v|
-              if v.is_a? Hash then camelize(v) else v end
+              if v.is_a? Hash then camelize_hash_keys(v) else v end
             }
           end
           res[key.to_s.camelize(:lower)] = val
