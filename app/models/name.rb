@@ -23,6 +23,13 @@ module Academical
         full_name
       end
 
+      def titleize
+        self.first  = self.first.titleize
+        self.last   = self.last.titleize
+        self.middle = self.middle.titleize if not self.middle.blank?
+        self.other  = self.other.titleize if not self.other.blank?
+      end
+
     end
   end
 end

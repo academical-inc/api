@@ -39,6 +39,8 @@ module Academical
       validates_presence_of :course_name, :credits, :seats, :term, :course_code,
                             :section_id, :departments, :school, :section_number
 
+      before_create :titleize_fields
+
       index({course_name: 1})
       index({school: 1, course_name: 1})
       index({school: 1, course_code: 1})
@@ -66,6 +68,13 @@ module Academical
             "Section cannot be a correquisite and have correquisites at the " +
             "same time"
           )
+        end
+      end
+
+      def titleize_fields
+        self.course_name = self.course_name.titleize
+        self.departments.each do |department|
+          department.name = department.name.titleize
         end
       end
 

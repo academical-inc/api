@@ -14,6 +14,8 @@ module Academical
       belongs_to :school, index: true
       has_and_belongs_to_many :sections, index: true
 
+      before_create :titleize_name
+
       validates_presence_of :name, :school
 
       index({:school => 1, "name.first" => 1, "name.middle" => 1,
@@ -21,6 +23,10 @@ module Academical
 
       def full_name
         name.full_name
+      end
+
+      def titleize_name
+        self.name.titleize
       end
 
       def self.linked_fields

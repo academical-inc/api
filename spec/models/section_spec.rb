@@ -75,6 +75,23 @@ describe Section do
     end
   end
 
+  describe 'callbacks' do
+
+    describe 'before_create' do
+      let(:section) {
+        dept = build(:department, name: "terrible_name")
+        build(:section, course_name: "MY AWFUL NAME", departments: [dept])
+      }
+
+      it 'titleizes corresponding fields correctly' do
+        section.save!
+        expect(section.course_name).to eq("My Awful Name")
+        expect(section.departments.first.name).to eq("Terrible Name")
+      end
+    end
+
+  end
+
   describe 'validations' do
     let(:section) { build(:section, :with_events, :with_teachers) }
 

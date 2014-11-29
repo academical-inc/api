@@ -54,4 +54,16 @@ describe Name do
       expect(not_trunc).to end_with("Last")
     end
   end
+
+  describe '#titleize' do
+    let!(:name) { build(:name,
+                        first: "JIM", middle: "ED-ward", last: "fallon") }
+
+    it 'titleizes entire name correctly' do
+      name.titleize
+      expect(name.first).to eq("Jim")
+      expect(name.middle).to eq("Ed Ward")
+      expect(name.last).to eq("Fallon")
+    end
+  end
 end

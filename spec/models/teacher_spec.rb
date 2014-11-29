@@ -39,6 +39,23 @@ describe Teacher do
 
   end
 
+  describe 'callbacks' do
+
+    describe 'before_create' do
+      let(:teacher) {
+        name = build(:name, first: "JULIAN", last: "ASSANGE", middle: "e")
+        build(:teacher, name: name)
+      }
+
+      it 'titleizes name correctly' do
+        teacher.save!
+        expect(teacher.name.first).to eq("Julian")
+        expect(teacher.name.middle).to eq("E")
+        expect(teacher.name.last).to eq("Assange")
+      end
+    end
+  end
+
   describe 'validations' do
 
     it 'should not be valid when the name is missing' do
