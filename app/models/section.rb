@@ -89,7 +89,10 @@ module Academical
       end
 
       def self.dump_magistrals(school)
-        sections = Section.magistrals.to_json methods: [:corequisites]
+        sections = Section.magistrals.map do |section|
+          CommonHelpers.camelize section.as_json(methods: [:corequisites])
+        end
+        sections = sections.to_json
 
         s3 = AWS::S3.new
         bucket = s3.buckets[AWS_BUCKET]
