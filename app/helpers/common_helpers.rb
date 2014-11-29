@@ -81,6 +81,22 @@ module Academical
         halt code, json(response_hash)
       end
 
+      def camelize(hash)
+        res = {}
+        hash.each_pair do |key, val|
+          if val.is_a? Hash
+            val = camelize(val)
+          end
+          if val.is_a? Array
+            val = val.map { |v|
+              if v.is_a? Hash then camelize(v) else v end
+            }
+          end
+          res[key.to_s.camelize(:lower)] = val
+        end
+        res
+      end
+
     end
   end
 end

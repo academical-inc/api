@@ -212,6 +212,18 @@ describe CommonHelpers do
     end
   end
 
+  describe '.camelize' do
+    let(:h) {
+      { k_one: 1, k_two: {k_three: 2}, k_four: [3, 4, {k_five: 5}]  }
+    }
+
+    it 'camelizes hash keys correctly' do
+      expect(helper.camelize(h)).to eq(
+        { "kOne"=>1, "kTwo"=>{"kThree"=>2}, "kFour"=>[3,4,{"kFive"=>5}] }
+      )
+    end
+  end
+
   describe '.json_error' do
     # This method is already tested by testing response utils and the routes
     # This method can't be really tested outisde a Sinatra context
