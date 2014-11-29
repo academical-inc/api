@@ -26,7 +26,7 @@ module Academical
       end
 
       def titleize_name
-        self.name.titleize
+        name.titleize_name
       end
 
       def self.linked_fields

@@ -3,6 +3,7 @@ module Academical
     class Name
 
       include Mongoid::Document
+      include CommonHelpers
 
       field :first, type: String
       field :middle, type: String
@@ -23,11 +24,11 @@ module Academical
         full_name
       end
 
-      def titleize
-        self.first  = self.first.titleize
-        self.last   = self.last.titleize
-        self.middle = self.middle.titleize if not self.middle.blank?
-        self.other  = self.other.titleize if not self.other.blank?
+      def titleize_name
+        self.first  = titleize first
+        self.last   = titleize last
+        self.middle = titleize middle if not middle.blank?
+        self.other  = titleize other if not other.blank?
       end
 
     end

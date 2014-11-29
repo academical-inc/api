@@ -79,7 +79,7 @@ describe Section do
 
     describe 'before_create' do
       let(:section) {
-        dept = build(:department, name: "terrible_name")
+        dept = build(:department, name: "terrible name")
         build(:section, course_name: "MY AWFUL NAME", departments: [dept])
       }
 

@@ -55,14 +55,14 @@ describe Name do
     end
   end
 
-  describe '#titleize' do
+  describe '#titleize_name' do
     let!(:name) { build(:name,
                         first: "JIM", middle: "ED-ward", last: "fallon") }
 
     it 'titleizes entire name correctly' do
-      name.titleize
+      name.titleize_name
       expect(name.first).to eq("Jim")
-      expect(name.middle).to eq("Ed Ward")
+      expect(name.middle).to eq("Ed-Ward")
       expect(name.last).to eq("Fallon")
     end
   end

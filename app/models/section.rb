@@ -9,6 +9,7 @@ module Academical
       include Mongoid::Timestamps
       include IndexedDocument
       include Linkable
+      include CommonHelpers
 
       field :course_name, type: String
       field :course_description, type: String
@@ -72,9 +73,9 @@ module Academical
       end
 
       def titleize_fields
-        self.course_name = self.course_name.titleize
-        self.departments.each do |department|
-          department.name = department.name.titleize
+        self.course_name = titleize course_name
+        departments.each do |department|
+          department.name = titleize department.name
         end
       end
 

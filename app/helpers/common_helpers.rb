@@ -81,6 +81,10 @@ module Academical
         halt code, json(response_hash)
       end
 
+      def titleize(str)
+        str.mb_chars.titleize.to_s
+      end
+
       def camelize(hash)
         res = {}
         hash.each_pair do |key, val|
