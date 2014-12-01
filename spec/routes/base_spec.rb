@@ -51,5 +51,15 @@ describe Academical::Routes::Base do
     end
   end
 
+  describe 'cross origin' do
+
+    it 'should return the correct CORS header' do
+      origin = 'http://app.uniandes.academical.co'
+      header 'Origin', origin
+      get '/'
+      expect(last_response.headers["Access-Control-Allow-Origin"]).to eq(origin)
+    end
+  end
+
 end
 

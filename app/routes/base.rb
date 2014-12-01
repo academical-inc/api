@@ -13,6 +13,11 @@ module Academical
         disable :protection
       end
 
+      configure do
+        register Sinatra::CrossOrigin
+        enable :cross_origin
+      end
+
       configure :production do
         set :haml, { :ugly=>true }
         set :clean_trace, true

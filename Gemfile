@@ -15,6 +15,7 @@ gem 'i18n'
 gem 'rack-contrib'
 gem 'unicorn'
 gem 'aws-sdk'
+gem 'sinatra-cross_origin'
 
 group :development, :test do
   gem 'thin'
