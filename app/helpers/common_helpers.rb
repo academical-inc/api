@@ -64,7 +64,8 @@ module Academical
         values.stringify_keys
       end
 
-      def json(hash)
+      def json(hash, camelize: contains?(:camelize))
+        hash = camelize_hash_keys hash if camelize
         content_type settings.api_content_type, charset: settings.api_charset
         MultiJson.dump hash
       end

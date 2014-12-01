@@ -208,7 +208,13 @@ describe CommonHelpers do
 
     it 'should set the correct content type and charset' do
       expect(helper).to receive(:content_type).with(:json, charset: :utf)
-      helper.json h
+      helper.json h, camelize: false
+    end
+
+    it 'should camelize hash if camelize specified' do
+      allow(helper).to receive(:content_type)
+      expect(helper).to receive(:camelize_hash_keys).with(h)
+      helper.json h, camelize: true
     end
   end
 
