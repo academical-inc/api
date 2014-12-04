@@ -21,7 +21,7 @@ module Academical
         full_name << " #{last}"
         full_name << " #{other}" if include_other and not other.blank?
         full_name = full_name.truncate(trunc_length) if truncate
-        full_name
+        titleize full_name
       end
 
       def titleize_name

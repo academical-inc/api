@@ -12,9 +12,9 @@ describe Name do
 
   describe '#full_name' do
     let!(:name) { build(:name,
-                        first: "John", middle: "Sebastian", last: "Doe") }
+                        first: "JohN", middle: "SEBASTIAN", last: "doe") }
 
-    it 'should return the correct name' do
+    it 'should return the correct titleized name' do
       expect(name.full_name).to eq "John Sebastian Doe"
     end
 
@@ -51,7 +51,7 @@ describe Name do
 
       not_trunc = name.full_name(truncate: false)
       expect(not_trunc.length).to eq(full_l)
-      expect(not_trunc).to end_with("Last")
+      expect(not_trunc).to end_with("last")
     end
   end
 
