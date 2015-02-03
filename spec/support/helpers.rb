@@ -89,12 +89,7 @@ module Helpers
   end
 
   def expect_correct_models(ids)
-    json = expect_collection ids.length
-
-    models = json.collect do |model_data|
-      expect(model_data).to have_key("data")
-      model_data["data"]
-    end
+    models = expect_collection ids.length
     ids.each do |id|
       res = models.select { |m| m["id"] == id.to_s }
       expect(res.length).to eq(1)

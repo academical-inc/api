@@ -83,10 +83,10 @@ describe ResponseUtils do
         Student.all
       }
 
-      it 'all elements of data should have "data" root key' do
+      it 'only the root of the array should have the root "data" key' do
         hash = utls.success_hash data
         hash[:data].each do |el|
-          expect(el).to have_key(:data)
+          expect(el).not_to have_key(:data)
         end
       end
     end

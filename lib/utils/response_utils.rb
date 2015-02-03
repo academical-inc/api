@@ -25,25 +25,16 @@ module Academical
       end
 
       def success_hash(data)
-        response_hash = if data.respond_to?(:key?)
-          if data.key?(:data) or data.key?("data")
-            data.symbolize_keys
-          else
-            {data: data}
-          end
-        elsif data.respond_to? :each
-          {data: data.as_json(root: :data)}
+        is_hash = data.is_a? Hash
+        contains_data_key = (is_hash and (data.key? :data or data.key? "data"))
+
+        response_hash = if contains_data_key
+          data.symbolize_keys
         else
-          data.as_json root: :data
+          {data: data.as_json}
         end
 
-        hash_is_valid = begin
-          response_hash.fetch(:data)
-        rescue
-          false
-        end
-
-        response_hash = {data: response_hash} unless hash_is_valid
+        # response_hash = {data: response_hash} unless hash_is_valid
         response_hash.merge({success: true})
       end
 
