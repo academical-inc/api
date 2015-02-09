@@ -21,6 +21,11 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_c
         get "#{base_path}?count"
         expect(json_response).to eq(2)
       end
+
+      it 'should return a camelized object when option provided' do
+        get "#{base_path}?camelize"
+        expect_camelized_response
+      end
     end
 
     context 'when no resources present' do
@@ -51,6 +56,11 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_c
       it 'should fail when resource does not exist' do
         get "#{base_path}/non_existent"
         expect_not_found_error
+      end
+
+      it 'should return a camelized object when option provided' do
+        get "#{single_path}?camelize"
+        expect_camelized_response
       end
     end
 
@@ -201,6 +211,12 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_c
             post_json base_path, res_hash
           end
         end
+
+        it 'should return a camelized object when option provided' do
+          pl = {data: res_hash, camelize: true}
+          post_json base_path, pl, root: false
+          expect_camelized_response json_response(201)
+        end
       end
 
       if not model.uniq_field_groups.blank?
@@ -264,6 +280,12 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_c
       context 'when resource exists' do
         before(:each) do
           resource_to_create.save!
+        end
+
+        it 'should return a camelized object when option provided' do
+          pl = {data: to_update, camelize: true}
+          put_json update_path, pl, root: false
+          expect_camelized_response
         end
 
         it 'should update the resource when entire resource provided' do

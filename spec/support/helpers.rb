@@ -71,6 +71,20 @@ module Helpers
     [json[:message], json[:data]]
   end
 
+  def expect_camelized_response(response=json_response(200))
+    case response
+    when Hash
+      response.each_pair do |key, val|
+        expect(key).not_to include("_")
+        expect_camelized_response val
+      end
+    when Array
+      response.each do |v|
+        expect_camelized_response v
+      end
+    end
+  end
+
   def expect_nil
     expect(json_response).to be_nil
   end
