@@ -89,10 +89,10 @@ module Academical
       def camelize_hash_keys(hash)
         res = {}
         hash.each_pair do |key, val|
-          if val.is_a? Hash
+          case val
+          when Hash
             val = camelize_hash_keys(val)
-          end
-          if val.is_a? Array
+          when Array
             val = val.map { |v|
               if v.is_a? Hash then camelize_hash_keys(v) else v end
             }
