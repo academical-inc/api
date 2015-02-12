@@ -16,6 +16,7 @@ module Academical
       configure do
         register Sinatra::CrossOrigin
         enable :cross_origin
+        set :allow_methods, [:get, :post, :put, :delete, :options]
       end
 
       configure :production do
@@ -27,6 +28,7 @@ module Academical
       helpers CommonHelpers
 
       before do
+        halt 200 if request.options?
         if request.post? or request.put?
           if request.content_type != settings.api_content_type
             json_error 400,
