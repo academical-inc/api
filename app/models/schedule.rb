@@ -7,6 +7,8 @@ module Academical
       include IndexedDocument
       include Linkable
 
+      attr_accessor :include_sections
+
       field :name, type: String
       field :total_credits,  type: Float
       field :total_sections, type: Integer
@@ -32,6 +34,12 @@ module Academical
 
       def self.linked_fields
         [:student, :sections, :school]
+      end
+
+      def as_json(options=nil)
+        options ||= {}
+        options[:methods] = :sections if @include_sections == true
+        super options
       end
 
     end
