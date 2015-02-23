@@ -39,7 +39,7 @@ module Academical
       validates_presence_of :course_name, :credits, :seats, :term, :course_code,
                             :section_id, :departments, :school, :section_number
 
-      before_create :titleize_fields
+      before_create :init_fields
 
       index({course_name: 1})
       index({school: 1, course_name: 1})
@@ -71,10 +71,23 @@ module Academical
         end
       end
 
+      def init_fields
+        titleize_fields
+        set_events_name
+      end
+
       def titleize_fields
         self.course_name = CommonHelpers.titleize course_name
         departments.each do |department|
           department.name = CommonHelpers.titleize department.name
+        end
+      end
+
+      def set_events_name
+        if not events.blank?
+          events.each do |event|
+            event.name = course_name if event.name.blank?
+          end
         end
       end
 

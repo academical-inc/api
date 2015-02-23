@@ -36,7 +36,7 @@ describe Academical::Routes::Students do
       schedules = json_response
       schedules.each do |schedule|
         expect(schedule).to have_key("sections")
-        expect(schedule["sections"].count).to equal(2)
+        expect(schedule["sections"].count).to eq(2)
       end
     end
 
@@ -45,7 +45,7 @@ describe Academical::Routes::Students do
       schedules = json_response
       schedules.each do |schedule|
         expect(schedule).to have_key("sections")
-        expect(schedule["sections"].count).to equal(2)
+        expect(schedule["sections"].count).to eq(2)
         schedule["sections"].each do |section|
           section["events"].each {|e| expect(e).to have_key("expanded")}
         end

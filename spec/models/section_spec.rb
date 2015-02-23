@@ -80,13 +80,21 @@ describe Section do
     describe 'before_create' do
       let(:section) {
         dept = build(:department, name: "terrible name")
-        build(:section, course_name: "MY AWFUL NAME", departments: [dept])
+        build(:section, :with_events, course_name: "MY AWFUL NAME", departments: [dept])
       }
 
       it 'titleizes corresponding fields correctly' do
         section.save!
         expect(section.course_name).to eq("My Awful Name")
         expect(section.departments.first.name).to eq("Terrible Name")
+      end
+
+      it 'sets event names accordingly' do
+        section.save!
+        expect(section.events).not_to be_empty
+        section.events.each do |event|
+          expect(event.name).to eq("My Awful Name")
+        end
       end
     end
 
