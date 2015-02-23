@@ -15,18 +15,12 @@ describe Academical::Routes::Students do
   describe "get /students/:resource_id/schedules" do ||
     let(:student) { resource_to_create }
     before(:each) do
-      student.save!
       schedules = create_list(
         :schedule,
         2,
         student: student,
         school: student.school
       )
-      sections = create_list(:section, 2, :with_events)
-      schedules.each do |sched|
-        sched.sections = sections
-        sched.save!
-      end
       student.schedules = schedules
       student.save!
     end
