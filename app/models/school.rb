@@ -19,7 +19,7 @@ module Academical
       embeds_one :assets, class_name: "SchoolAssets"
       embeds_one :app_ui
       embeds_many :departments
-      embeds_many :terms, class_name: "SchoolTerm" do
+      embeds_many :terms, class_name: "SchoolTerm", order: :start_date.desc  do
         def latest_term
           desc(:start_date).limit(1).first
         end
