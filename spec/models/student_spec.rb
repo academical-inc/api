@@ -11,6 +11,20 @@ describe Student do
     end
   end
 
+  describe 'callbacks' do
+
+    describe 'after_create' do
+      let(:student) { build(:student, schedules: []) }
+
+      it 'creates a default schedule' do
+        student.save!
+        expect(student.schedules.count).to eq(1)
+        expect(student.schedules.first.name).to  \
+          eq(I18n.t("schedule.default_name"))
+      end
+    end
+  end
+
   describe 'validations' do
     context 'when email is incorrect' do
       let(:student) { build(:student) }

@@ -47,6 +47,7 @@ module Academical
       I18n.load_path += Dir[File.join(root, 'config/locales', '*.yml')]
       I18n.available_locales = [:en, :es]
       I18n.backend.load_translations
+      I18n.default_locale = :en
     end
 
     configure do

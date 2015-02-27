@@ -27,6 +27,17 @@ module Academical
                             :school
       validates_format_of :email, :with => /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/
 
+      after_create :create_default_schedule
+
+      def create_default_schedule
+        Schedule.create!(
+          name: I18n.t("schedule.default_name"),
+          student: self,
+          school: school,
+          term: school.terms.latest_term
+        )
+      end
+
       def self.linked_fields
         [:school, :schedules, :registered_schedule]
       end
