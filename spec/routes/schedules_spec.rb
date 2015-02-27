@@ -3,10 +3,11 @@ require 'spec_helper'
 describe Academical::Routes::Schedules do
 
   to_update = {"name" => "Otha"}
-  to_remove = ["total_credits"]
+  to_remove = ["name"]
   let(:resource_to_create) {
     s = create(:school)
     student = create(:student, school: s)
+    student.schedules.each { |sched| sched.save! }
     build(:schedule, school: s, student: student)
   }
 

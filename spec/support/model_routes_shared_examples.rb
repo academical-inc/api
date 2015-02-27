@@ -207,6 +207,7 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_c
       context 'when resource does not exist' do
 
         it 'should create the resource' do
+          res_hash # this is to evaluate res_hash from the let and create everything
           expect_model_to_be_created model do
             post_json base_path, res_hash
           end
