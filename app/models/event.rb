@@ -16,7 +16,7 @@ module Academical
       embedded_in :section
       embedded_in :schedule
 
-      validates_presence_of :start_dt, :end_dt, :location, :timezone
+      validates_presence_of :start_dt, :end_dt, :name, :timezone
       validate :recurrence_end_date_is_valid, :timezone_is_valid
 
       def expand
