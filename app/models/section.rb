@@ -39,7 +39,7 @@ module Academical
       validates_presence_of :course_name, :credits, :seats, :term, :course_code,
                             :section_id, :departments, :school, :section_number
 
-      before_create :init_fields
+      before_validation :init_fields
 
       index({course_name: 1})
       index({school: 1, course_name: 1})

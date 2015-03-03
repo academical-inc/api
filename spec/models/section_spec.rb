@@ -77,7 +77,7 @@ describe Section do
 
   describe 'callbacks' do
 
-    describe 'before_create' do
+    describe 'before_validation' do
       let(:section) {
         dept = build(:department, name: "terrible name")
         build(:section, :with_events, course_name: "MY AWFUL NAME", departments: [dept])
@@ -90,6 +90,7 @@ describe Section do
       end
 
       it 'sets event names accordingly' do
+        section.events.each { |ev| ev.name = "" }
         section.save!
         expect(section.events).not_to be_empty
         section.events.each do |event|
