@@ -38,7 +38,13 @@ module Academical
 
       def as_json(options=nil)
         options ||= {}
-        options[:methods] = :sections if @include_sections == true
+        if @include_sections == true
+          if options[:methods].is_a? Array
+            options[:methods].push :sections
+          else
+            options[:methods] = :sections
+          end
+        end
         super options
       end
 
