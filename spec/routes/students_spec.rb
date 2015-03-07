@@ -35,7 +35,7 @@ describe Academical::Routes::Students do
     end
 
     it "retreives student's schedules with expanded section events when requested" do
-      get "/students/#{student.id}/schedules?include_sections&expand_section_events"
+      get "/students/#{student.id}/schedules?include_sections&expand_events"
       schedules = json_response
       schedules.each do |schedule|
         expect(schedule).to have_key("sections")
