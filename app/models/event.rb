@@ -110,8 +110,10 @@ module Academical
       end
 
       def build_instance_from_self(sdt, edt)
-        Event.new(start_dt: sdt, end_dt: edt, location: self.location,
-                 timezone: self.timezone)
+        clone = self.dup
+        clone.start_dt = sdt
+        clone.end_dt   = edt
+        clone
       end
 
     end
