@@ -132,13 +132,18 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_c
           end
 
           context "when resource field #{field} is present" do
+            let(:embedded?) { resource_created.send("#{field.to_sym}").embedded? }
+            let(:children) { resource_created.send(field) }
             before(:each) do
-              vals = create_list(field_factory, 2)
+              if embedded?
+                vals = build_list(field_factory, 2)
+              else
+                vals = create_list(field_factory, 2)
+              end
               resource_created.send("#{field}=".to_sym, vals)
               resource_created.save!
             end
-            let!(:ids) { resource_created.send(field).
-                         collect { |linked| linked.id } }
+            let!(:ids) { children.collect { |linked| linked.id } }
 
             it "should return the resource's #{field}" do
               get rel_path
