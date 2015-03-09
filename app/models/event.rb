@@ -40,6 +40,12 @@ module Academical
       end
 
       def serializable_hash(options = nil)
+        options ||= {}
+        if options[:methods].is_a? Array
+          options[:methods].push :id
+        else
+          options[:methods] = [:id]
+        end
         attrs = super(options)
         attrs["expanded"] = @expanded.as_json if not @expanded.blank?
         attrs

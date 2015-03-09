@@ -67,6 +67,10 @@ describe Event do
     it 'should not add @expanded var when it is not present' do
       expect(event.as_json).not_to have_key("expanded")
     end
+
+    it 'should always add id field' do
+      expect(event.as_json).to have_key("id")
+    end
   end
 
   describe '#generate_instances' do
