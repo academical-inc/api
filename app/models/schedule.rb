@@ -15,7 +15,7 @@ module Academical
       field :share_id, type: String
       field :section_colors, type: Hash
       embeds_one  :term, class_name: "SchoolTerm"
-      embeds_many :personal_events, class_name: "Event"
+      embeds_many :events
       belongs_to  :school, index: true
       belongs_to  :student, index: true, inverse_of: :schedules
       has_and_belongs_to_many :sections, index: true
@@ -30,11 +30,7 @@ module Academical
       index({school: 1, name:1})
       index({school: 1, total_credits: 1})
       index({school: 1, total_sections: 1})
-      index({:school=>1, "personal_events.name"=>1}, {sparse: true})
-
-      def self.linked_fields
-        [:student, :sections, :school]
-      end
+      index({:school=>1, "events.name"=>1}, {sparse: true})
 
       def as_json(options=nil)
         options ||= {}
@@ -42,10 +38,14 @@ module Academical
           if options[:methods].is_a? Array
             options[:methods].push :sections
           else
-            options[:methods] = :sections
+            options[:methods] = [:sections]
           end
         end
         super options
+      end
+
+      def self.linked_fields
+        [:sections, :events]
       end
 
     end

@@ -7,7 +7,7 @@ FactoryGirl.define do
     term { build(:school_term) }
     student { build(:student) }
     school { student.school }
-    personal_events { build_list(:event, 3, name: "My event") }
+    events { build_list(:event, 2, :with_recurrence) }
     sections { build_list(:section, 2, :with_events) }
     after(:create) do |schedule|
       schedule.student.save!

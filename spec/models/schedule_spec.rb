@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Schedule do
-  it_behaves_like Linkable, [:student, :sections, :school]
+  it_behaves_like Linkable, [:sections, :events]
 
   describe 'instantiation' do
     let(:schedule) { build(:schedule) }

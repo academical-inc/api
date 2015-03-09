@@ -18,9 +18,9 @@ module Academical
           end
         end
         if expand_evs
-          scbedules.each do |schedule|
-            schedule.personal_events.each do |personal_event|
-              personal_event.expand
+          schedules.each do |schedule|
+            schedule.events.each do |event|
+              event.expand
             end
           end
         end
