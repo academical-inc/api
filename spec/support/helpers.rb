@@ -110,6 +110,14 @@ module Helpers
     end
   end
 
+  def expect_correct_model_objs(models)
+    objs = expect_collection ids.length
+    models.each do |model|
+      res = objs.select { |o| o.to_json == model.to_json }
+      expect(res.length).to eq(1)
+    end
+  end
+
   def expect_model_to_be_created(model_class, &block)
     expect{block.call}.to change(model_class, :count).by(1)
     json = json_response(201)
