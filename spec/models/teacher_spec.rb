@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Teacher do
-  it_behaves_like Linkable, [:sections, :school]
+  it_behaves_like Linkable, [:sections]
 
   describe 'instantiation' do
     let(:teacher) { build(:teacher) }

@@ -115,7 +115,7 @@ module Academical
       end
 
       def self.linked_fields
-        [:teachers, :students, :schedules, :school]
+        [:teachers, :students, :schedules]
       end
 
     end

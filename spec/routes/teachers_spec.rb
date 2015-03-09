@@ -10,7 +10,7 @@ describe Academical::Routes::Teachers do
   }
 
   it_behaves_like Academical::Routes::ModelRoutes, to_update, to_remove,
-    [:sections], [:school]
+    [:sections], []
 end
 
 

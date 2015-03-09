@@ -10,7 +10,7 @@ describe Academical::Routes::Students do
   }
 
   it_behaves_like Academical::Routes::ModelRoutes, to_update, to_remove,
-    [:schedules], [:school, :registered_schedule]
+    [:schedules], [:registered_schedule]
 
   describe "get /students/:resource_id/schedules" do ||
     let(:student) { resource_to_create }

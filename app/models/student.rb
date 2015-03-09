@@ -41,7 +41,7 @@ module Academical
       end
 
       def self.linked_fields
-        [:school, :schedules, :registered_schedule]
+        [:schedules, :registered_schedule]
       end
 
     end

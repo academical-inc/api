@@ -12,7 +12,7 @@ describe Academical::Routes::Schedules do
   }
 
   it_behaves_like Academical::Routes::ModelRoutes, to_update, to_remove,
-    [:sections], [:school, :student], [:sections]
+    [:sections, :events], [], [:sections]
 end
 
 

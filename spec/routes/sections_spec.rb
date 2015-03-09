@@ -12,7 +12,7 @@ describe Academical::Routes::Sections do
   }
 
   it_behaves_like Academical::Routes::ModelRoutes, to_update, to_remove,
-    [:teachers, :schedules], [:school], except_for_create
+    [:teachers, :schedules], [], except_for_create
 
 
   describe "put /sections/_bulk" do
