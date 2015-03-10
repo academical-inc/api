@@ -16,8 +16,8 @@ module Academical
           end
         end
         if expand_evs
-          schedule.personal_events.each do |personal_event|
-            personal_event.expand
+          schedule.events.each do |event|
+            event.expand
           end
         end
         json_response schedule
