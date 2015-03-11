@@ -20,6 +20,34 @@ describe School do
     end
   end
 
+  describe '#set_utc_offset' do
+    let(:school) { build(:school, timezone: "America/Bogota") }
+
+    it 'sets utc_offset in minutes depending on timezone' do
+      school.set_utc_offset
+      expect(school.utc_offset).to eq(-300)
+    end
+  end
+
+  describe 'callbacks' do
+
+    describe 'after_save' do
+      let(:school) { build(:school) }
+
+      it 'inits utc_offset after creating school' do
+        expect(school).to receive(:set_utc_offset)
+        school.save!
+      end
+
+      it 'inits utc_offset after updating school' do
+        expect(school).to receive(:set_utc_offset).twice
+        school.save!
+        school.update_attributes! timezone: "America/LosAngeles"
+      end
+    end
+
+  end
+
   describe 'validations' do
     let!(:school) { build(:school) }
 

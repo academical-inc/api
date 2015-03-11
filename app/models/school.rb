@@ -14,6 +14,7 @@ module Academical
       field :active_modules, type: Array
       field :urls, type: Hash
       field :timezone, type: String
+      field :utc_offset, type: Integer
       embeds_one :contact_info
       embeds_one :location
       embeds_one :assets, class_name: "SchoolAssets"
@@ -32,8 +33,15 @@ module Academical
       index({name: 1}, {unique: true})
       index({nickname: 1}, {unique: true})
 
+      after_save :set_utc_offset
+
       validates_presence_of :name, :nickname, :locale, :departments, :terms,
                             :assets, :app_ui, :timezone
+
+      def set_utc_offset
+        current = TZInfo::Timezone.get(self.timezone).current_period
+        self.utc_offset = current.utc_total_offset / 60
+      end
 
       def self.linked_fields
         [:teachers, :sections, :students, :schedules]
