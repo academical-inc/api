@@ -31,18 +31,20 @@ describe School do
 
   describe 'callbacks' do
 
-    describe 'after_save' do
+    describe 'before_save' do
       let(:school) { build(:school) }
 
       it 'inits utc_offset after creating school' do
-        expect(school).to receive(:set_utc_offset)
         school.save!
+        school.reload
+        expect(school.utc_offset).not_to be_nil
       end
 
       it 'inits utc_offset after updating school' do
-        expect(school).to receive(:set_utc_offset).twice
         school.save!
-        school.update_attributes! timezone: "America/LosAngeles"
+        school.update_attributes! timezone: "America/Bogota"
+        school.reload
+        expect(school.utc_offset).to eq(-300)
       end
     end
 

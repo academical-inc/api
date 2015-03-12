@@ -33,7 +33,7 @@ module Academical
       index({name: 1}, {unique: true})
       index({nickname: 1}, {unique: true})
 
-      after_save :set_utc_offset
+      before_save :set_utc_offset
 
       validates_presence_of :name, :nickname, :locale, :departments, :terms,
                             :assets, :app_ui, :timezone
