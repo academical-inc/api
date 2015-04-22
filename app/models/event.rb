@@ -39,7 +39,8 @@ module Academical
         end
       end
 
-      def serializable_hash(options = {})
+      def serializable_hash(options = nil)
+        options ||= {}
         if options[:methods].is_a? Array
           options[:methods].push :id
         else
