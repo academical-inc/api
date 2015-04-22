@@ -55,7 +55,8 @@ module Academical
 
       scope :magistrals, ->{ where(corequisite_of: nil) }
 
-      def serializable_hash(options = {})
+      def serializable_hash(options = nil)
+        options ||= {}
         if options[:methods].is_a? Array
           options[:methods].push :corequisites
         else
