@@ -55,7 +55,12 @@ module Academical
 
       scope :magistrals, ->{ where(corequisite_of: nil) }
 
-      def serializable_hash(options = nil)
+      def serializable_hash(options = {})
+        if options[:methods].is_a? Array
+          options[:methods].push :corequisites
+        else
+          options[:methods] = [:corequisites]
+        end
         attrs = super(options)
         attrs["teacher_names"] = teachers.map { |teacher| teacher.full_name }
         attrs
