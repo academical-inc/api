@@ -25,7 +25,7 @@ module Academical
       post "/schedules" do
         schedule, code = upsert_resource
         schedule = apply_options schedule
-        json_response res, code: code
+        json_response schedule, code: code
       end
 
       put "/schedules/:resource_id" do
