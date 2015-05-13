@@ -2,11 +2,10 @@ module Academical
   module Routes
     class Schedules < Base
 
-      put "/schedules/:resource_id" do
+      def apply_options(schedule)
         inc_secs   = contains? :include_sections
         expand_evs = contains? :expand_events
 
-        schedule = update_resource
         if inc_secs
           schedule.include_sections = true
           if expand_evs
@@ -20,6 +19,18 @@ module Academical
             event.expand
           end
         end
+        schedule
+      end
+
+      post "/schedules" do
+        schedule, code = upsert_resource
+        schedule = apply_options schedule
+        json_response res, code: code
+      end
+
+      put "/schedules/:resource_id" do
+        schedule = update_resource
+        schedule = apply_options schedule
         json_response schedule
       end
 
