@@ -26,26 +26,34 @@ describe Student do
   end
 
   describe 'validations' do
-    context 'when email is incorrect' do
-      let(:student) { build(:student) }
+    let!(:student) { build(:student) }
 
-      it 'should not be valid' do
-        student.email = "invalid"
-        expect(student).not_to be_valid
-        student.email = "invalid@invalid,co"
-        expect(student).not_to be_valid
-        student.email = "invalid@invalid"
-        expect(student).not_to be_valid
-      end
+    it 'should not be valid email is incorrect' do
+      student.email = "invalid"
+      expect(student).not_to be_valid
+      student.email = "invalid@invalid,co"
+      expect(student).not_to be_valid
+      student.email = "invalid@invalid"
+      expect(student).not_to be_valid
     end
 
-    context 'when email is correct' do
-      let(:student) { build(:student) }
-
-      it 'should not be valid' do
-        expect(student).to be_valid
-      end
+    it 'should be valid when email is correct' do
+      expect(student).to be_valid
     end
+
+    it 'should be valid when number of schedules does not exceed max' do
+      student.schedules = build_list(:schedule, Student::MAX_SCHEDULES)
+      expect(student).to be_valid
+      student.schedules = build_list(:schedule, 1)
+      expect(student).to be_valid
+    end
+
+    it 'should be invalid when number of schedules exceeds max' do
+      student.schedules = build_list(:schedule, Student::MAX_SCHEDULES + 1)
+      expect(student).not_to be_valid
+      student.save!
+    end
+
   end
 
 end

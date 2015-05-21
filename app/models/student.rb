@@ -2,6 +2,8 @@ module Academical
   module Models
     class Student
 
+      MAX_SCHEDULES = 7
+
       include Mongoid::Document
       include Mongoid::Timestamps
       include IndexedDocument
@@ -26,6 +28,8 @@ module Academical
       validates_presence_of :username, :email, :last_login, :login_provider,
                             :school
       validates_format_of :email, :with => /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/
+      validates_length_of :schedules, maximum: MAX_SCHEDULES,
+        too_long: "is too long (max number of schedules is #{MAX_SCHEDULES})"
 
       after_create :create_default_schedule
 
