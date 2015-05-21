@@ -36,6 +36,23 @@ describe Schedule do
     it 'should be valid with default values' do
       expect(schedule).to be_valid
     end
+
+    it 'should be invalid when name length exceeds max' do
+      schedule.name = ("n" * Schedule::MAX_NAME_LENGTH) + "n"
+      expect(schedule).not_to be_valid
+    end
+
+    it 'should be invalid when name length is 0' do
+      schedule.name = ""
+      expect(schedule).not_to be_valid
+    end
+
+    it 'should be valid when name length does not exceed max' do
+      schedule.name = ("n" * Schedule::MAX_NAME_LENGTH)
+      expect(schedule).to be_valid
+      schedule.name = "n" * (Schedule::MAX_NAME_LENGTH-1)
+      expect(schedule).to be_valid
+    end
   end
 
 end
