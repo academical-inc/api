@@ -16,6 +16,7 @@ gem 'rack-contrib'
 gem 'unicorn'
 gem 'aws-sdk'
 gem 'sinatra-cross_origin'
+gem 'icalendar'
 
 group :development, :test do
   gem 'thin'
