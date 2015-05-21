@@ -51,7 +51,6 @@ describe Student do
     it 'should be invalid when number of schedules exceeds max' do
       student.schedules = build_list(:schedule, Student::MAX_SCHEDULES + 1)
       expect(student).not_to be_valid
-      student.save!
     end
 
   end
