@@ -2,6 +2,8 @@ module Academical
   module Models
     class Schedule
 
+      MAX_NAME_LENGTH = 24
+
       include Mongoid::Document
       include Mongoid::Timestamps
       include IndexedDocument
@@ -22,6 +24,7 @@ module Academical
 
       validates_presence_of :name, :total_credits, :total_sections, :term,
                             :school, :student
+      validates_length_of :name, minimum: 1, maximum: MAX_NAME_LENGTH
 
       index({name: 1})
       index({total_credits: 1})
