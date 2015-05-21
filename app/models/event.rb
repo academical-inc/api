@@ -70,6 +70,17 @@ module Academical
         end
       end
 
+      # TODO Test
+      def to_ical
+        ev = Icalendar::Event.new
+        ev.dtstart  = start_dt
+        ev.dtend    = end_dt
+        ev.summary  = name
+        ev.rrule    = recurrence.rule if not recurrence.rule.blank?
+        ev.location = location if not location.blank?
+        ev
+      end
+
       private
 
       def generate_instances

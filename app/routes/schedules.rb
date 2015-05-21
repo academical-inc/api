@@ -22,6 +22,16 @@ module Academical
         schedule
       end
 
+      get "/schedules/:resource_id" do
+        format = extract :format
+        if format == 'ics'
+          schedule = resource
+          json_response schedule.to_ical
+        else
+          json_response resource
+        end
+      end
+
       post "/schedules" do
         schedule, code = upsert_resource
         schedule = apply_options schedule

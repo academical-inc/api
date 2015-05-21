@@ -44,6 +44,23 @@ module Academical
         super options
       end
 
+      # TODO Test
+      def to_ical
+        cal = Icalendar::Calendar.new
+        sections.each do |sec|
+          sec.events.each do |sec_event|
+            cal.add_event sec_event.to_ical
+          end
+        end
+
+        events.each do |event|
+          cal.add_event event.to_ical
+        end
+
+        cal.publish
+        cal.to_ical
+      end
+
       def self.linked_fields
         [:sections, :events]
       end
