@@ -6,9 +6,9 @@ module Academical
       include CommonHelpers
 
       field :first, type: String
-      field :middle, type: String
+      field :middle, type: String, default: ""
       field :last, type: String
-      field :other, type: String
+      field :other, type: String, default: ""
 
       embedded_in :student
       embedded_in :teacher
