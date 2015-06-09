@@ -107,17 +107,27 @@ module Academical
         # TODO
       end
 
-      def self.dump_magistrals(school)
-        sections = Section.magistrals.map do |section|
+      def self.dump_magistrals(school, dev=false)
+        sections = Section.magistrals.select do |section|
+          not section.events.blank?
+        end
+        sections = sections.map do |section|
+          section.expand_events
+          section.corequisites.each do |corequisite|
+            corequisite.expand_events
+          end
           CommonHelpers.camelize_hash_keys(
-            section.as_json(methods: [:corequisites])
+            section.as_json
           )
         end
         sections = sections.to_json
+        name = "#{school}"
+        name += "/dev" if dev
+        name += "/#{DUMP_NAME}"
 
         s3 = AWS::S3.new
         bucket = s3.buckets[AWS_BUCKET]
-        bucket.objects["#{school}/#{DUMP_NAME}"].write(sections)
+        bucket.objects[name].write(sections)
       end
 
       def self.linked_fields
