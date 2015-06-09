@@ -15,6 +15,7 @@ module Academical
       field :urls, type: Hash
       field :timezone, type: String
       field :utc_offset, type: Integer
+      field :identity_providers, type: Array
       embeds_one :contact_info
       embeds_one :location
       embeds_one :assets, class_name: "SchoolAssets"
@@ -36,7 +37,7 @@ module Academical
       before_save :set_utc_offset
 
       validates_presence_of :name, :nickname, :locale, :departments, :terms,
-                            :assets, :app_ui, :timezone
+                            :assets, :app_ui, :timezone, :identity_providers
 
       def set_utc_offset
         current = TZInfo::Timezone.get(self.timezone).current_period
