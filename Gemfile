@@ -17,6 +17,7 @@ gem 'unicorn'
 gem 'aws-sdk'
 gem 'sinatra-cross_origin'
 gem 'icalendar'
+gem 'jwt'
 
 group :development, :test do
   gem 'thin'
