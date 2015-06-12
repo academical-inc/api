@@ -14,8 +14,8 @@ module Academical
       field :name, type: String
       field :total_credits,  type: Float, default: 0
       field :total_sections, type: Integer, default: 0
-      field :share_id, type: String
       field :section_colors, type: Hash, default: {}
+      field :public, type: Boolean, default: false
       embeds_one  :term, class_name: "SchoolTerm"
       embeds_many :events, cascade_callbacks: true
       belongs_to  :school, index: true
