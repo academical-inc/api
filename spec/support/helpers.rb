@@ -19,6 +19,30 @@ module Helpers
     put path, payload(*args), HEADERS
   end
 
+  def current_student(student)
+    allow_any_instance_of(Academical::Routes::Base).to receive(:current_student) { student }
+  end
+
+  def roles(roles)
+    allow_any_instance_of(Academical::Routes::Base).to receive(:roles) { roles }
+  end
+
+  def make_logged_in(val)
+    make_admin false
+    make_student false
+    allow_any_instance_of(Academical::Routes::Base).to receive(:logged_in?) { val }
+  end
+
+  def make_admin(val)
+    allow_any_instance_of(Academical::Routes::Base).to receive(:is_admin?) { val }
+  end
+
+  def make_student(val, student=nil)
+    make_admin false
+    current_student student if not student.nil?
+    allow_any_instance_of(Academical::Routes::Base).to receive(:is_student?) { val }
+  end
+
   def expect_status(code)
     expect(last_response.status).to eq(code), "Expected #{code}, " +
       "Server responded: #{last_response.status} - #{last_response.body}"
@@ -108,9 +132,10 @@ module Helpers
       res = models.select { |m| m["id"] == id.to_s }
       expect(res.length).to eq(1)
     end
+    models
   end
 
-  def expect_correct_model_objs(models)
+  def expect_correct_model_objs(ids, models)
     objs = expect_collection ids.length
     models.each do |model|
       res = objs.select { |o| o.to_json == model.to_json }
@@ -119,10 +144,14 @@ module Helpers
   end
 
   def expect_model_to_be_created(model_class, &block)
-    expect{block.call}.to change(model_class, :count).by(1)
-    json = json_response(201)
-    expect(json).to have_key("id")
-    expect{model_class.find(json["id"])}.not_to raise_error
+    json = nil
+    expect {
+      block.call
+      json = json_response(201)
+      expect(json).to have_key("id")
+      expect{model_class.find(json["id"])}.not_to raise_error
+    }.to change(model_class, :count).by(1)
+    json
   end
 
   def expect_model_to_be_updated(model_class, model_id, fields, &block)
@@ -164,6 +193,14 @@ module Helpers
     expect{block.call}.to change(model_class, :count).by(-1)
     expect{model_class.find(model_id)}.to raise_error
     expect(json_response).to eq(true)
+  end
+
+  def expect_invalid_auth_error
+    expect(json_error(401)).to eq("Invalid credentials. Please try again.")
+  end
+
+  def expect_not_authorized_error
+    expect(json_error(403)).to eq("Not authorized")
   end
 
   def expect_not_found_error
