@@ -26,6 +26,8 @@ module Academical
 
       helpers ResponseUtils
       helpers CommonHelpers
+      helpers ResourceHelpers
+      helpers AuthHelpers
 
       before do
         halt 200 if request.options?
@@ -52,6 +54,15 @@ module Academical
 
       error InvalidParameterError do
         json_error 400, message: env['sinatra.error'].message
+      end
+
+      error InvalidTokenError do
+        json_error 401, message: env['sinatra.error'].message
+      end
+
+      error NotAuthorizedError do
+        error = env['sinatra.error']
+        json_error error.code, message: error.message
       end
 
       error Mongoid::Errors::DocumentNotFound do
