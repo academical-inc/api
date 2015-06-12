@@ -4,6 +4,7 @@ describe Academical::Routes::Teachers do
 
   to_update = {"email" => "mod@email.co" }
   to_remove = ["name"]
+  before(:each) { make_admin true }
   let(:resource_to_create) {
     s = create(:school)
     build(:teacher, school: s)

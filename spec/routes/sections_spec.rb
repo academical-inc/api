@@ -6,6 +6,7 @@ describe Academical::Routes::Sections do
   to_remove = ["credits"]
 
   except_for_create = ["teacher_names"]
+  before(:each) { make_admin true }
   let(:resource_to_create) {
     s = create(:school)
     build(:section, :with_teachers, school: s)
