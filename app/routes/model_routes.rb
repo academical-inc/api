@@ -41,8 +41,6 @@ module Academical
 
       included do
 
-        helpers ResourceHelpers
-
         get "/#{model_collection}" do
           json_response resources
         end

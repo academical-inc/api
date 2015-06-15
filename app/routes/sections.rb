@@ -2,11 +2,13 @@ module Academical
   module Routes
     class Sections < Base
 
-      include ModelRoutes
-
-      post "/#{model_collection}/_bulk" do
-        json_response update_resources
+      before "/sections*" do
+        authorize! do
+          is_admin?
+        end
       end
+
+      include ModelRoutes
 
     end
   end

@@ -7,6 +7,7 @@ describe Academical::Routes::Base do
     let(:payload) { {any: "data"}.to_json }
 
     it 'should not return error if content-type missing on GET' do
+      make_admin true
       get '/'
       expect(last_response).to be_ok
     end
@@ -19,6 +20,86 @@ describe Academical::Routes::Base do
     it 'should return error if content-type missing on PUT' do
       put '/', payload
       expect_content_type_error
+    end
+  end
+
+  describe 'auth' do
+    def app
+      Class.new Academical::Routes::Base do
+        set :environment, :production
+        get '/' do
+          authorize! { logged_in? }
+          json_response "data"
+        end
+
+        get '/admin' do
+          authorize!(403) { is_admin? }
+          json_response "data"
+        end
+
+        get '/student' do
+          authorize!(403) { is_student? }
+          json_response "data"
+        end
+      end
+    end
+
+    it 'should return 401 error when token not provided' do
+      get "/"
+      expect_invalid_auth_error
+    end
+
+    it 'should return 401 error when invalid auth token provided' do
+      get "/", {}, {"HTTP_AUTHORIZATION" => "12345"}
+      expect_invalid_auth_error
+    end
+
+    it 'should return 401 error when request from invalid client' do
+      allow(JWT).to receive(:decode) { [{"aud"=>"12345"}] }
+      get "/", {}, {"HTTP_AUTHORIZATION" => "12345"}
+      expect_invalid_auth_error
+    end
+
+    it 'should return 403 error when not authorized to access' do
+      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
+        {"app_metadata" => {"roles" => []}}
+      }
+      get "/admin"
+      expect_not_authorized_error
+      get "/student"
+      expect_not_authorized_error
+    end
+
+    it 'should return 403 error when student and not authorized to access' do
+      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
+        {"app_metadata" => {"roles" => ["student"]}}
+      }
+      get "/admin"
+      expect_not_authorized_error
+      get "/student"
+      json_response
+    end
+
+    it 'should return 403 error when admin and not authorized to access' do
+      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
+        {"app_metadata" => {"roles" => ["admin"]}}
+      }
+      get "/admin"
+      json_response
+      get "/student"
+      expect_not_authorized_error
+    end
+
+    it 'should succeed when appropriate roles granted' do
+      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
+        {"app_metadata" => {"roles" => ["admin", "student"]}}
+      }
+      get "/"
+      json_response
+      get "/admin"
+      json_response
+      get "/student"
+      json_response
     end
   end
 

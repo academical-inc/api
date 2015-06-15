@@ -23,6 +23,7 @@ namespace :db do
     rescue => ex
       puts "Indexes don't exist. Skipping index removal."
       puts ex
+      puts ex.backtrace
     ensure
       School.create_indexes
       Student.create_indexes

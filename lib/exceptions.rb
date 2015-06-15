@@ -32,6 +32,26 @@ module Academical
         "Required param '#{@key}' is invalid"
       end
     end
+    class InvalidTokenError < StandardError
+      def to_s
+        "Invalid credentials. Please try again."
+      end
+    end
+    class NotAuthorizedError < StandardError
+      attr_reader :code
+      def initialize(code)
+        @code = code
+      end
+
+      def to_s
+        case @code
+        when 404
+          "The resource was not found"
+        when 403
+          "Not authorized"
+        end
+      end
+    end
   end
 end
 

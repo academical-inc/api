@@ -1,12 +1,10 @@
 FactoryGirl.define do
 
-  sequence(:username) { |n| "user#{n}" }
+  sequence(:auth0_user_id) { |n| "user#{n}" }
 
   factory :student do
-    username { generate :username }
-    email { "#{username}@gmail.com" }
-    last_login Date.new(2015, 1, 1)
-    login_provider "Google"
+    auth0_user_id { generate :auth0_user_id }
+    email { "#{auth0_user_id}@gmail.com" }
     school { build(:school) }
   end
 

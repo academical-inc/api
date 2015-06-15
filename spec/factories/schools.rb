@@ -9,6 +9,7 @@ FactoryGirl.define do
     locale "es"
     timezone "America/Bogota"
 
+    identity_providers { ["facebook"] }
     departments { build_list(:department, 5) }
     terms { [build(:school_term), build(:school_term, year: 2014, month: 8), \
              build(:school_term, year: 2014)] }

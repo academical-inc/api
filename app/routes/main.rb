@@ -3,6 +3,10 @@ module Academical
     class Main < Base
 
       get '/' do
+        authorize! do
+          is_admin?
+        end
+
         haml :index
       end
 

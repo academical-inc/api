@@ -262,7 +262,7 @@ do |to_update, to_remove, linked_fields_many, linked_fields_single, except_for_c
         expect_validation_error
       end
 
-      it 'should fail when school data is unknown' do
+      it 'should fail when data is unknown' do
         post_json base_path, unknown
         expect_unknown_field_error unknown.keys.first
         post_json base_path, modified.merge(unknown)
