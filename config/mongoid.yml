@@ -2,6 +2,8 @@ development:
   sessions:
     default:
       uri: <%= ENV['MONGOLAB_URI'] %>
+      options:
+        pool_size: 50
 test:
   sessions:
     default:

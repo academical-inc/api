@@ -3,7 +3,7 @@ module Academical
     class Section
 
       AWS_BUCKET = ENV['AWS_BUCKET']
-      DUMP_NAME  = 'magistral_sections.json'
+      NUM_THREADS = ENV['NUM_THREADS_DUMP'].to_i
 
       include Mongoid::Document
       include Mongoid::Timestamps
@@ -44,6 +44,7 @@ module Academical
       index({course_name: 1})
       index({school: 1, course_name: 1})
       index({school: 1, course_code: 1})
+      index({school: 1, corequisite_of: 1})
       index({school: 1, section_id: 1}, {unique: true})
       index({:school=> 1, "term.name"=> 1})
       index({:school=> 1, "departments.name"=> 1})
@@ -53,7 +54,11 @@ module Academical
       index({:school=> 1, "events.end_dt"=> 1}, {sparse: true})
       index({:school=> 1, "events.location"=> 1}, {sparse: true})
 
-      scope :magistrals, ->{ where(corequisite_of: nil) }
+      scope :magistrals, ->(nickname){
+        where(
+          school: School.find_by(nickname: nickname), corequisite_of: nil
+        )
+      }
 
       def serializable_hash(options = nil)
         options ||= {}
@@ -107,27 +112,40 @@ module Academical
         # TODO
       end
 
-      def self.dump_magistrals(school, dev=false)
-        sections = Section.magistrals.select do |section|
-          not section.events.blank?
-        end
-        sections = sections.map do |section|
-          section.expand_events
-          section.corequisites.each do |corequisite|
-            corequisite.expand_events
+      def self.dump_magistrals(school)
+        sections = Section.magistrals(school).to_a
+        batch_size = sections.count / NUM_THREADS
+        threads = []
+
+        sections.each_slice(batch_size).with_index do |batch, idx|
+          threads << Thread.new do
+            batch.each_with_index do |section, i|
+              actual = i + (idx*batch_size)
+              section.expand_events
+              section.corequisites.each do |corequisite|
+                corequisite.expand_events
+              end
+              sections[actual] = CommonHelpers.camelize_hash_keys(
+                section.as_json
+              )
+            end
           end
-          CommonHelpers.camelize_hash_keys(
-            section.as_json
-          )
         end
+        threads.each(&:join)
+        puts "Finished expanding section events"
+
+        name = "#{school}.json"
         sections = sections.to_json
-        name = "#{school}"
-        name += "/dev" if dev
-        name += "/#{DUMP_NAME}"
+        puts "Finished converting to json"
 
         s3 = AWS::S3.new
         bucket = s3.buckets[AWS_BUCKET]
-        bucket.objects[name].write(sections)
+        bucket.objects[name].write(sections, {
+          acl: :public_read,
+          cache_control: 'no-cache',
+          content_type: 'application/json'
+        })
+        puts "Finished uploading to S3"
       end
 
       def self.linked_fields
