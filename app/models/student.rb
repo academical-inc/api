@@ -31,7 +31,7 @@ module Academical
       def create_default_schedule
         if schedules.empty?
           Schedule.create!(
-            name: I18n.t("schedule.default_name"),
+            name: I18n.t("schedule.default_name", locale: school.locale),
             student: self,
             school: school,
             term: school.terms.latest_term
