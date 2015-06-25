@@ -16,7 +16,7 @@ GEM
     aws-sdk-v1 (1.59.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
-    backports (3.6.0)
+    backports (3.6.4)
     bson (2.3.0)
     builder (3.2.2)
     byebug (3.4.0)
@@ -148,3 +148,6 @@ DEPENDENCIES
   thin
   unicorn
   webmock
+
+BUNDLED WITH
+   1.10.5
