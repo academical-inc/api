@@ -112,15 +112,15 @@ module Academical
       end
 
       def titleize_fields
-        course_name = CommonHelpers.titleize course_name
-        departments.each do |department|
+        self.course_name = CommonHelpers.titleize self.course_name
+        self.departments.each do |department|
           department.name = CommonHelpers.titleize department.name
         end
       end
 
       def set_events_name
-        if not events.blank?
-          events.each do |event|
+        if not self.events.blank?
+          self.events.each do |event|
             event.name = course_name
           end
         end
