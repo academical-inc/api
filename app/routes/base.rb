@@ -32,9 +32,9 @@ module Academical
       before do
         halt 200 if request.options?
         if request.post? or request.put?
-          if request.content_type != settings.api_content_type
+          if !request.content_type.include? settings.api_content_type
             json_error 400,
-              message: "The request Content-Type must be application/json"
+              message: "The request Content-Type must be application/json. Received #{request.content_type}"
           end
         end
       end
