@@ -2,7 +2,7 @@ module Academical
   module Models
     class Schedule
 
-      MAX_NAME_LENGTH = 23
+      MAX_NAME_LENGTH = 60
 
       include Mongoid::Document
       include Mongoid::Timestamps
