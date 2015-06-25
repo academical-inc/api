@@ -2,20 +2,6 @@ module Academical
   module Routes
     class Students < Base
 
-      def students_auth(method=nil, path=nil)
-        if request.delete? or request.put?
-          is_admin?
-        elsif request.get?
-          if path != "/students"
-            is_student?
-          else
-            is_admin?
-          end
-        else
-          is_student?
-        end
-      end
-
       def is_current_student?(student)
         is_admin? or (is_student? and student == current_student)
       end
