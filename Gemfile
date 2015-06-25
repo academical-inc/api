@@ -18,6 +18,9 @@ gem 'aws-sdk'
 gem 'sinatra-cross_origin'
 gem 'icalendar'
 gem 'jwt'
+gem 'typhoeus'
+gem 'searchkick'
+gem 'oj'
 
 group :development, :test do
   gem 'thin'
