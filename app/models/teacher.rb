@@ -34,7 +34,6 @@ module Academical
           sections.each do |section|
             section.teacher_names = (section.teacher_names << self.full_name).uniq
             section.save
-            section.reindex
           end
         end
       end
