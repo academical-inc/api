@@ -11,7 +11,7 @@ module Academical
       include IndexedDocument
       include Linkable
 
-      searchkick language: "Spanish", text_start: [
+      searchkick callbacks: :async, language: "Spanish", text_start: [
         :course_name,
         :course_code,
         :section_id,
@@ -72,6 +72,7 @@ module Academical
 
       def search_data
         {
+          id: id,
           school: school.nickname,
           term: term.name,
           section_id: section_id,
