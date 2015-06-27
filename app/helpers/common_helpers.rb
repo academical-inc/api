@@ -77,8 +77,8 @@ module Academical
         halt code, json(response_hash)
       end
 
-      def json_response(data, code: 200)
-        response_hash = success_hash data
+      def json_response(data, options: nil, code: 200)
+        response_hash = success_hash data, options
         halt code, json(response_hash)
       end
 
