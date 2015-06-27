@@ -15,7 +15,7 @@ module Academical
       has_and_belongs_to_many :sections, index: true
 
       validates_presence_of :name, :school
-      after_save :reindex_sections
+      before_save :reindex_sections
 
       index({:school => 1, "name.first" => 1, "name.middle" => 1,
              "name.last" => 1, "name.other" => 1}, {unique: true})
@@ -24,9 +24,18 @@ module Academical
         name.full_name
       end
 
+      def name_changed?
+        name.first_changed? or name.last_changed? \
+          or name.middle_changed? or name.other_changed?
+      end
+
       def reindex_sections
-        sections.each do |section|
-          section.reindex
+        if name_changed?
+          sections.each do |section|
+            section.teacher_names = (section.teacher_names << self.full_name).uniq
+            section.save
+            section.reindex
+          end
         end
       end
 
