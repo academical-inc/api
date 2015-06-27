@@ -8,6 +8,7 @@ module Academical
 
       include Mongoid::Document
       include Mongoid::Timestamps
+      include Mongoid::CachedJson
       include IndexedDocument
       include Linkable
 
@@ -70,6 +71,21 @@ module Academical
         )
       }
 
+      json_fields \
+        course_name: {},
+        course_description: {},
+        course_code: {},
+        section_id: {},
+        section_number: {},
+        custom: {},
+        credits: {},
+        seats: {},
+        teacher_names: {},
+        term: { type: :reference },
+        events: { type: :reference },
+        departments: { type: :reference },
+        corequisites: { type: :reference, properties: :public, reference_properties: :short }
+
       def search_data
         {
           id: id,
@@ -84,16 +100,6 @@ module Academical
           corequisite_of: corequisite_of,
           custom: custom
         }
-      end
-
-      def serializable_hash(options = nil)
-        options ||= {}
-        if options[:methods].is_a? Array
-          options[:methods].push :corequisites
-        else
-          options[:methods] = [:corequisites]
-        end
-        super(options)
       end
 
       def either_has_corequisites_or_is_corequisite
