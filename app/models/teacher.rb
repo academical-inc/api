@@ -29,6 +29,7 @@ module Academical
           or name.middle_changed? or name.other_changed?
       end
 
+      # TODO Test
       def reindex_sections
         if name_changed?
           sections.each do |section|
