@@ -11,7 +11,6 @@ module Academical
       field :nickname, type: String
       field :locale, type: String
       field :custom, type: Hash
-      field :active_modules, type: Array
       field :urls, type: Hash
       field :timezone, type: String
       field :utc_offset, type: Integer

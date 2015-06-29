@@ -84,7 +84,11 @@ module Academical
         term: { type: :reference },
         events: { type: :reference },
         departments: { type: :reference },
-        corequisites: { type: :reference, properties: :public, reference_properties: :short }
+        corequisites: { type: :reference, properties: :public, reference_properties: :short },
+        corequisite_of_id: { properties: :all },
+        corequisite_ids: { properties: :all },
+        teacher_ids: { properties: :all },
+        school_id: { properties: :all }
 
       def search_data
         {

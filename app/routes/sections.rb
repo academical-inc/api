@@ -26,6 +26,12 @@ module Academical
         )
       end
 
+      post "/sections" do
+        clean_hash_default_proc!
+        res, code = upsert_resource
+        json_response res, options: {properties: :all}, code: code
+      end
+
       include ModelRoutes
 
     end

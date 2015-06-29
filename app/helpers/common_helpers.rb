@@ -64,6 +64,16 @@ module Academical
         values.stringify_keys
       end
 
+      def clean_hash_default_proc!(hash=params)
+        case hash
+        when Hash
+          hash.default_proc = nil
+          hash.each { |key, val| clean_hash_default_proc!(val) }
+        when Array
+          hash.each { |val| clean_hash_default_proc!(val) }
+        end
+      end
+
       def json(hash, camelize: contains?(:camelize))
         hash = camelize_hash_keys hash if camelize
         content_type settings.api_content_type, charset: settings.api_charset
