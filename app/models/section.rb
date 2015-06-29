@@ -72,6 +72,7 @@ module Academical
       }
 
       json_fields \
+        id: {},
         course_name: {},
         course_description: {},
         course_code: {},
