@@ -29,6 +29,11 @@ module Academical
       helpers ResourceHelpers
       helpers AuthHelpers
 
+      get "/status" do
+        status = "Ok!"
+        json_response status
+      end
+
       before do
         halt 200 if request.options?
         if request.post? or request.put?
