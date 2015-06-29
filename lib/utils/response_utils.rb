@@ -24,17 +24,16 @@ module Academical
         response_hash
       end
 
-      def success_hash(data)
+      def success_hash(data, options=nil)
         is_hash = data.is_a? Hash
         contains_data_key = (is_hash and (data.key? :data or data.key? "data"))
 
         response_hash = if contains_data_key
           data.symbolize_keys
         else
-          {data: data.as_json}
+          {data: data.as_json(options)}
         end
 
-        # response_hash = {data: response_hash} unless hash_is_valid
         response_hash.merge({success: true})
       end
 

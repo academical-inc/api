@@ -4,11 +4,21 @@ module Academical
 
       AWS_BUCKET = ENV['AWS_BUCKET']
       NUM_THREADS = ENV['NUM_THREADS_DUMP'].to_i
+      SEARCH_LIMIT = 50
 
       include Mongoid::Document
       include Mongoid::Timestamps
+      include Mongoid::CachedJson
       include IndexedDocument
       include Linkable
+
+      searchkick callbacks: :async, language: "Spanish", text_start: [
+        :course_name,
+        :course_code,
+        :section_id,
+        :teacher_names,
+        :departments
+      ]
 
       field :course_name, type: String
       field :course_description, type: String
@@ -18,6 +28,7 @@ module Academical
       field :custom, type: Hash
       field :credits, type: Float
       field :seats, type: Hash
+      field :teacher_names, type: Array, default: []
       embeds_one :term, class_name: "SchoolTerm"
       embeds_many :events, cascade_callbacks: true
       embeds_many :departments
@@ -60,16 +71,35 @@ module Academical
         )
       }
 
-      def serializable_hash(options = nil)
-        options ||= {}
-        if options[:methods].is_a? Array
-          options[:methods].push :corequisites
-        else
-          options[:methods] = [:corequisites]
-        end
-        attrs = super(options)
-        attrs["teacher_names"] = teachers.map { |teacher| teacher.full_name }
-        attrs
+      json_fields \
+        course_name: {},
+        course_description: {},
+        course_code: {},
+        section_id: {},
+        section_number: {},
+        custom: {},
+        credits: {},
+        seats: {},
+        teacher_names: {},
+        term: { type: :reference },
+        events: { type: :reference },
+        departments: { type: :reference },
+        corequisites: { type: :reference, properties: :public, reference_properties: :short }
+
+      def search_data
+        {
+          id: id,
+          school: school.nickname,
+          term: term.name,
+          section_id: section_id,
+          course_name: course_name,
+          course_code: course_code,
+          seats: seats,
+          teacher_names: teacher_names,
+          departments: departments.map { |dep| dep.name },
+          corequisite_of: corequisite_of,
+          custom: custom
+        }
       end
 
       def either_has_corequisites_or_is_corequisite
@@ -85,21 +115,26 @@ module Academical
       def init_fields
         titleize_fields
         set_events_name
+        set_teacher_names
       end
 
       def titleize_fields
-        self.course_name = CommonHelpers.titleize course_name
-        departments.each do |department|
+        self.course_name = CommonHelpers.titleize self.course_name
+        self.departments.each do |department|
           department.name = CommonHelpers.titleize department.name
         end
       end
 
       def set_events_name
-        if not events.blank?
-          events.each do |event|
-            event.name = course_name if event.name.blank?
+        if not self.events.blank?
+          self.events.each do |event|
+            event.name = course_name
           end
         end
+      end
+
+      def set_teacher_names
+        self.teacher_names = teachers.map { |teacher| teacher.full_name }
       end
 
       def expand_events
@@ -110,6 +145,22 @@ module Academical
 
       def students
         # TODO
+      end
+
+      def self.autocompl_search(query, school, term, filters=[])
+        where = { school: school, term: term, corequisite_of: nil }
+        filters.each do |filter|
+          filter.deep_symbolize_keys!
+          where.merge! filter
+        end
+
+        Section.search query, fields: [
+          {course_name: :text_start},
+          {course_code: :text_start},
+          {section_id:  :text_start},
+          {teacher_names: :text_start},
+          {departments: :text_start}
+        ], where: where, limit: SEARCH_LIMIT
       end
 
       def self.dump_magistrals(school)

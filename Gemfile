@@ -18,6 +18,11 @@ gem 'aws-sdk'
 gem 'sinatra-cross_origin'
 gem 'icalendar'
 gem 'jwt'
+gem 'typhoeus'
+gem 'searchkick'
+gem 'oj'
+gem 'activejob_backport'
+gem 'mongoid-cached-json'
 
 group :development, :test do
   gem 'thin'
