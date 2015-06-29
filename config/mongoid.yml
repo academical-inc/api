@@ -1,7 +1,14 @@
+production:
+  sessions:
+    default:
+      uri: <%= ENV['MONGO_URI_PROD'] %>
+      options:
+        pool_size: 50
+
 development:
   sessions:
     default:
-      uri: <%= ENV['MONGOLAB_URI'] %>
+      uri: <%= ENV['MONGO_URI_STAGING'] %>
       options:
         pool_size: 50
 test:
