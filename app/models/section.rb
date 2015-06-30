@@ -12,7 +12,7 @@ module Academical
       include IndexedDocument
       include Linkable
 
-      searchkick callbacks: :async, language: "Spanish", text_start: [
+      searchkick callbacks: :async, language: "Spanish", word_start: [
         :course_name,
         :course_code,
         :section_id,
@@ -154,12 +154,12 @@ module Academical
         end
 
         Section.search query, fields: [
-          {course_name: :text_start},
-          {course_code: :text_start},
-          {section_id:  :text_start},
-          {teacher_names: :text_start},
-          {departments: :text_start}
-        ], where: where, limit: SEARCH_LIMIT
+          {course_name: :word_start},
+          {course_code: :word_start},
+          {section_id:  :word_start},
+          {teacher_names: :word_start},
+          {departments: :word_start}
+        ], operator: "or", where: where, limit: SEARCH_LIMIT
       end
 
       def self.dump_magistrals(school)
