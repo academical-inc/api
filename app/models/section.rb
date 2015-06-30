@@ -39,7 +39,7 @@ module Academical
                  class_name: "Section",
                  inverse_of: :corequisites,
                  index: true
-      has_and_belongs_to_many :schedules, index: true
+      has_and_belongs_to_many :schedules, dependent: :nullify, index: true
       has_and_belongs_to_many :teachers, index: true
       has_and_belongs_to_many :prerequisites,
                               class_name: "Section",
