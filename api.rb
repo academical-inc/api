@@ -54,6 +54,15 @@ module Academical
       Mongoid.load!('config/mongoid.yml')
     end
 
+    Bugsnag.configure do |config|
+      config.release_stage = ENV['BUGSNAG_RELEASE_STAGE']
+      config.notify_release_stages = ["production", "staging"]
+    end
+
+    configure do
+      newrelic_ignore "/status"
+    end
+
     configure :development do
       register Sinatra::Reloader
     end

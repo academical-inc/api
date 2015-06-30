@@ -46,6 +46,7 @@ module Academical
 
       error do
         dump_errors! env['sinatra.error']
+        Bugsnag.auto_notify($!)
         json_error 500
       end
 

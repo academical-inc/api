@@ -22,6 +22,8 @@ gem 'searchkick'
 gem 'oj'
 gem 'activejob_backport'
 gem 'mongoid-cached-json'
+gem 'newrelic_rpm'
+gem 'bugsnag'
 
 group :development, :test do
   gem 'thin'
