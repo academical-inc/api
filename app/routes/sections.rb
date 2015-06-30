@@ -20,10 +20,11 @@ module Academical
         filters = extract(:filters)
         filters = MultiJson.load filters if not filters.blank?
 
-        json_response(
-          Section.autocompl_search(query, school, term, filters),
-          options: {properties: :public}
-        )
+        sections = Section.autocompl_search(query, school, term, filters)
+        sections.each do |section|
+          section.expand_events
+        end
+        json_response(sections, options: {properties: :public})
       end
 
       post "/sections" do
