@@ -20,7 +20,7 @@ describe Student do
         student.save!
         expect(student.schedules.count).to eq(1)
         expect(student.schedules.first.name).to  \
-          eq(I18n.t("schedule.default_name"))
+          eq(I18n.t("schedule.default_name", locale: student.school.locale))
       end
     end
   end

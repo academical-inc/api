@@ -75,6 +75,8 @@ module Academical
           is_admin? or (is_student? and student_id == current_student.id.to_s)
         end
 
+        max_reached = current_student.schedules.length == Student::MAX_SCHEDULES
+        json_error 422,message: "Max number of schedules reached" if max_reached
         schedule = create_resource data
         schedule = apply_options schedule
         json_response schedule, code: 201
