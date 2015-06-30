@@ -23,6 +23,9 @@ module Academical
         sections = Section.autocompl_search(query, school, term, filters)
         sections.each do |section|
           section.expand_events
+          if section.corequisites.count > 0
+            section.corequisites.each { |coreq| coreq.expand_events }
+          end
         end
         json_response(sections, options: {properties: :public})
       end
