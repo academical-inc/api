@@ -12,20 +12,9 @@ module Academical
 
       def apply_options(schedule)
         inc_secs   = contains? :include_sections
-        expand_evs = contains? :expand_events
 
         if inc_secs
           schedule.include_sections = true
-          if expand_evs
-            schedule.sections.each do |section|
-              section.expand_events
-            end
-          end
-        end
-        if expand_evs
-          schedule.events.each do |event|
-            event.expand
-          end
         end
         schedule
       end
@@ -89,6 +78,7 @@ module Academical
         end
 
         schedule = update_resource
+        schedule.events.each { |ev| ev.save! }
         schedule = apply_options schedule
         json_response schedule
       end

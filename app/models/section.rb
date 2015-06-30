@@ -142,12 +142,6 @@ module Academical
         self.teacher_names = teachers.map { |teacher| teacher.full_name }
       end
 
-      def expand_events
-        events.each do |event|
-          event.expand
-        end
-      end
-
       def students
         # TODO
       end
@@ -177,10 +171,6 @@ module Academical
           threads << Thread.new do
             batch.each_with_index do |section, i|
               actual = i + (idx*batch_size)
-              section.expand_events
-              section.corequisites.each do |corequisite|
-                corequisite.expand_events
-              end
               sections[actual] = CommonHelpers.camelize_hash_keys(
                 section.as_json
               )

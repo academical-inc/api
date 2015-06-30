@@ -11,16 +11,18 @@ module Academical
       field :location, type: String
       field :timezone, type: String
       field :color, type: String
-      embeds_one :recurrence, class_name: "EventRecurrence",
-        cascade_callbacks: true
+      embeds_one :recurrence, class_name: "EventRecurrence", cascade_callbacks: true
+      embeds_many :expanded, class_name: "ExpandedEvent", cascade_callbacks: true
       embedded_in :section
       embedded_in :schedule
+
+      before_save :expand
 
       validates_presence_of :start_dt, :end_dt, :name, :timezone
       validate :recurrence_end_date_is_valid, :timezone_is_valid
 
       def expand
-        @expanded ||= generate_instances
+        self.expanded = generate_instances
       end
 
       def start_dt
@@ -46,9 +48,7 @@ module Academical
         else
           options[:methods] = [:id]
         end
-        attrs = super(options)
-        attrs["expanded"] = @expanded.as_json if not @expanded.blank?
-        attrs
+        super(options)
       end
 
       def recurrence_end_date_is_valid
@@ -127,10 +127,10 @@ module Academical
       end
 
       def build_instance_from_self(sdt, edt)
-        clone = self.dup
-        clone.start_dt = sdt
-        clone.end_dt   = edt
-        clone
+        ExpandedEvent.new(
+          start_dt: sdt, end_dt: edt, location: self.location,
+          timezone: self.timezone
+        )
       end
 
     end
