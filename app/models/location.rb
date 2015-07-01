@@ -1,6 +1,5 @@
 module Academical
   module Models
-
     class Location
 
       include Mongoid::Document
@@ -13,9 +12,9 @@ module Academical
 
       validates_presence_of :address, :city, :country
 
+      embedded_in :student
       embedded_in :school
 
     end
-
   end
 end

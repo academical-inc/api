@@ -1,6 +1,24 @@
+production:
+  sessions:
+    default:
+      uri: <%= ENV['MONGO_URI_PROD'] %>
+      options:
+        pool_size: 50
+
 development:
   sessions:
     default:
-      database: academical
+      uri: <%= ENV['MONGO_URI_STAGING'] %>
+      options:
+        pool_size: 50
+        pool_timeout: 15
+        retry_interval: 1
+        timeout: 60
+        max_retries: 20
+        refresh_interval: 30
+test:
+  sessions:
+    default:
+      database: academical_test
       hosts:
         - localhost:27017

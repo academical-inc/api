@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+ENV['RACK_ENV'] = ARGV[0] || "development"
+
+require 'pry'
+require File.expand_path '../../api.rb', __FILE__
+
+require 'factory_girl'
+
+FactoryGirl.find_definitions
+binding.pry

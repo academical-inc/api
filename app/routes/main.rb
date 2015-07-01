@@ -1,9 +1,15 @@
 module Academical
-  class Api < Sinatra::Application
+  module Routes
+    class Main < Base
 
-    get '/' do
-      haml :index
+      get '/' do
+        authorize! do
+          is_admin?
+        end
+
+        haml :index
+      end
+
     end
-
   end
 end

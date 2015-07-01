@@ -1,11 +1,6 @@
-module Academical
-  module Helpers
-
-    def create_school(params)
-      @school = School.create! params
-    rescue Mongoid::Errors::Validations
-      halt 400, json({:status => "failed"})
-    end
-
-  end
+helpers = Dir[File.expand_path('../helpers/**/*.rb', __FILE__)]
+helpers.each do |helper|
+  require helper
 end
+
+include Academical::Helpers

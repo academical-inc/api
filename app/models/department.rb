@@ -11,6 +11,7 @@ module Academical
       validates_presence_of :name
 
       embedded_in :school
+      embedded_in :section
 
     end
 

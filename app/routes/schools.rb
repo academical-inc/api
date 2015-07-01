@@ -1,14 +1,21 @@
 module Academical
-  class Api < Sinatra::Application
+  module Routes
+    class Schools < Base
 
-    get '/schools/:id' do
-      json 'school' => params[:id]
+      before "/schools*" do
+        authorize! do
+          is_admin?
+        end
+      end
+
+      include ModelRoutes
+
+      def resource(id=extract!(:resource_id))
+        self.class.model.find_by({nickname: id})
+      rescue
+        super(id)
+      end
+
     end
-
-    post '/schools' do
-      puts params[:json]
-      json create_school(params[:json])
-    end
-
   end
 end
