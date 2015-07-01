@@ -42,7 +42,11 @@ module Academical
       included do
 
         get "/#{model_collection}" do
-          json_response resources
+          if contains? :q
+            json_response resources(where: MultiJson.load(extract(:q)))
+          else
+            json_response resources
+          end
         end
 
         get model_base_route do
