@@ -23,6 +23,7 @@ gem 'oj'
 gem 'activejob_backport'
 gem 'mongoid-cached-json'
 gem 'newrelic_rpm'
+gem 'newrelic_moped'
 gem 'bugsnag'
 
 group :development, :test do

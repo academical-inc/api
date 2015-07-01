@@ -79,6 +79,9 @@ GEM
       optionable (~> 0.2.0)
     multi_json (1.10.1)
     multipart-post (2.0.0)
+    newrelic_moped (1.0.1)
+      moped
+      newrelic_rpm (~> 3.11)
     newrelic_rpm (3.12.1.298)
     nokogiri (1.6.5)
       mini_portile (~> 0.6.0)
@@ -167,6 +170,7 @@ DEPENDENCIES
   mongoid
   mongoid-cached-json
   multi_json
+  newrelic_moped
   newrelic_rpm
   oj
   pry
