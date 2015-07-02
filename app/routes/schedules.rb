@@ -57,6 +57,7 @@ module Academical
         end
       end
 
+      # TODO Test
       post "/schedules" do
         data = extract! :data
         student_id = extract :student_id, data

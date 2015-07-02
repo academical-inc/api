@@ -16,6 +16,7 @@ module Academical
       field :total_sections, type: Integer, default: 0
       field :section_colors, type: Hash, default: {}
       field :public, type: Boolean, default: true
+      # TODO Test
       field :term, type: String
       embeds_many :events, cascade_callbacks: true
       belongs_to  :school, index: true
@@ -25,6 +26,7 @@ module Academical
       validates_presence_of :name, :total_credits, :total_sections, :term,
                             :school, :student
       validates_length_of :name, minimum: 1, maximum: MAX_NAME_LENGTH
+      # TODO Test
       validate :same_school, :term_valid
 
       index({name: 1})

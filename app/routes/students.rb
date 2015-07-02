@@ -31,6 +31,7 @@ module Academical
       end
 
       # TODO Improve this
+      # TODO Test
       get "/students/:resource_id/schedules" do
         inc_secs = contains? :include_sections
 

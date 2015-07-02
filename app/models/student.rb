@@ -17,6 +17,7 @@ module Academical
       belongs_to :school, index: true
       belongs_to :registered_schedule, class_name: "Schedule", inverse_of: nil
       has_many   :schedules, order: :created_at.asc, dependent: :destroy do
+        # TODO Test
         def latest
           term = @base.school.terms.latest.name
           @target.select { |schedule| schedule.term.name == term }
