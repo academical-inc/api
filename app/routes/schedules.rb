@@ -65,7 +65,7 @@ module Academical
         end
 
         if not is_admin?
-          max_reached = current_student.schedules.length == Student::MAX_SCHEDULES
+          max_reached = current_student.schedules.latest.length == Student::MAX_SCHEDULES
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
         schedule = create_resource data

@@ -21,7 +21,7 @@ module Academical
       embeds_one :app_ui
       embeds_many :departments
       embeds_many :terms, class_name: "SchoolTerm", order: :start_date.desc  do
-        def latest_term
+        def latest
           desc(:start_date).limit(1).first
         end
       end

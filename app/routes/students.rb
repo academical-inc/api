@@ -32,9 +32,9 @@ module Academical
 
       # TODO Improve this
       get "/students/:resource_id/schedules" do
-        inc_secs   = contains? :include_sections
+        inc_secs = contains? :include_sections
 
-        schedules = resource_rel :schedules
+        schedules = resource.schedules.latest
         if inc_secs
           schedules.each do |schedule|
             schedule.include_sections = true

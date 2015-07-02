@@ -11,12 +11,12 @@ describe School do
     end
   end
 
-  describe '#terms.latest_term' do
+  describe '#terms.latest' do
     let(:school) { build(:school) }
 
     it 'should return the most recent (latest) term' do
-      latest_term = school.terms.latest_term
-      expect(latest_term.start_date).to eq(Date.new(2015, 1, 15))
+      latest = school.terms.latest
+      expect(latest.start_date).to eq(Date.new(2015, 1, 15))
     end
   end
 

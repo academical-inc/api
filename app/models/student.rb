@@ -16,15 +16,19 @@ module Academical
       field :picture, type: String
       belongs_to :school, index: true
       belongs_to :registered_schedule, class_name: "Schedule", inverse_of: nil
-      has_many   :schedules, order: :created_at.asc, dependent: :destroy
+      has_many   :schedules, order: :created_at.asc, dependent: :destroy do
+        def latest
+          term = @base.school.terms.latest.name
+          @target.select { |schedule| schedule.term.name == term }
+        end
+      end
 
       index({auth0_user_id: 1}, {unique: true, name: "auth0_user_id_index"})
       index({email: 1}, {name: "email_index"})
 
       validates_presence_of :auth0_user_id, :email, :school
       validates_format_of :email, :with => /\A[^@]+@([^@\.]+\.)+[^@\.]+\z/
-      validates_length_of :schedules, maximum: MAX_SCHEDULES,
-        too_long: "is too long (max number of schedules is #{MAX_SCHEDULES})"
+      validate :schedules_within_limit
 
       after_create :create_default_schedule
 
@@ -34,8 +38,15 @@ module Academical
             name: I18n.t("schedule.default_name", locale: school.locale),
             student: self,
             school: school,
-            term: school.terms.latest_term
+            term: school.terms.latest.name
           )
+        end
+      end
+
+      def schedules_within_limit
+        if schedules.latest.count > MAX_SCHEDULES
+          errors.add("schedules",
+                     "number for current term should not exceed #{MAX_SCHEDULES}")
         end
       end
 
