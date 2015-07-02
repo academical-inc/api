@@ -54,6 +54,16 @@ module Academical
       Mongoid.load!('config/mongoid.yml')
     end
 
+    configure :production, :staging do
+      Mongoid::CachedJson.configure do |config|
+        config.cache = Dalli::Client.new(
+          ENV['MEMCACHE_SERVERS'],
+          namespace: "#{ENV['MEMCACHE_NAMESPACE']}-#{environment}",
+          expires_in: 1.day
+        )
+      end
+    end
+
     Bugsnag.configure do |config|
       config.release_stage = ENV['BUGSNAG_RELEASE_STAGE']
       config.notify_release_stages = ["production", "staging"]
