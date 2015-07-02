@@ -10,6 +10,10 @@ module Academical
         haml :index
       end
 
+      get "/status" do
+        status = "Ok!"
+        json_response status
+      end
     end
   end
 end

@@ -69,6 +69,12 @@ module Academical
       config.notify_release_stages = ["production", "staging", "development"]
     end
 
+    configure :production, :staging do
+      Bugsnag.configure do |config|
+        config.project_root = "/var/app/current"
+      end
+    end
+
     configure do
       newrelic_ignore "/status"
     end

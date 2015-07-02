@@ -29,13 +29,11 @@ module Academical
       helpers ResourceHelpers
       helpers AuthHelpers
 
-      get "/status" do
-        status = "Ok!"
-        json_response status
-      end
-
       before do
         halt 200 if request.options?
+        Bugsnag.before_notify_callbacks << lambda {|notif|
+          notif.add_tab(:env, request.env)
+        }
         if request.post? or request.put?
           if !request.content_type.include? settings.api_content_type
             json_error 400,
