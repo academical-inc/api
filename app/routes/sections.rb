@@ -18,6 +18,7 @@ module Academical
         school  = extract(:school)
         term    = extract(:term)
         filters = extract(:filters)
+        filters ||= []
         filters = MultiJson.load filters if not filters.blank?
 
         json_response(
