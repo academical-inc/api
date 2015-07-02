@@ -16,7 +16,7 @@ module Academical
       field :total_sections, type: Integer, default: 0
       field :section_colors, type: Hash, default: {}
       field :public, type: Boolean, default: true
-      embeds_one  :term, class_name: "SchoolTerm"
+      field :term, type: String
       embeds_many :events, cascade_callbacks: true
       belongs_to  :school, index: true
       belongs_to  :student, index: true, inverse_of: :schedules
@@ -25,15 +25,19 @@ module Academical
       validates_presence_of :name, :total_credits, :total_sections, :term,
                             :school, :student
       validates_length_of :name, minimum: 1, maximum: MAX_NAME_LENGTH
+      validate :same_school, :term_valid
 
       index({name: 1})
       index({total_credits: 1})
       index({total_sections: 1})
-      index({share_id: 1})
+      index({"term" => 1})
       index({school: 1, name:1})
       index({school: 1, total_credits: 1})
       index({school: 1, total_sections: 1})
-      index({:school=>1, "events.name"=>1}, {sparse: true})
+      index({:student=>1, "term"=>1})
+      index({:school=>1, :student=>1, "term"=>1})
+      index({:school=>1, "term"=>1})
+      index({:school=>1, "events"=>1}, {sparse: true})
 
       def as_json(options=nil)
         options ||= {}
@@ -45,6 +49,18 @@ module Academical
           end
         end
         super options
+      end
+
+      def same_school
+        if school != student.school
+          errors.add("school", "must be the same as student's")
+        end
+      end
+
+      def term_valid
+        if not school.terms.index { |t| t.name == term }
+          errors.add("term", "must be one of the school's terms")
+        end
       end
 
       # TODO Test
