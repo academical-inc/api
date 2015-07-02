@@ -20,7 +20,7 @@ module Academical
         # TODO Test
         def latest
           term = @base.school.terms.latest.name
-          @target.select { |schedule| schedule.term.name == term }
+          @target.select { |schedule| schedule.term == term }
         end
       end
 
