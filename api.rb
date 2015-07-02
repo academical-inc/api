@@ -66,7 +66,7 @@ module Academical
 
     Bugsnag.configure do |config|
       config.release_stage = ENV['BUGSNAG_RELEASE_STAGE']
-      config.notify_release_stages = ["production", "staging"]
+      config.notify_release_stages = ["production", "staging", "development"]
     end
 
     configure do

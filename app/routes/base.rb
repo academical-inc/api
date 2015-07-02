@@ -55,42 +55,51 @@ module Academical
       end
 
       error ParameterMissingError do
+        Bugsnag.notify env['sinatra.error']
         json_error 400, message: env['sinatra.error'].message
       end
 
       error InvalidParameterError do
+        Bugsnag.notify env['sinatra.error']
         json_error 400, message: env['sinatra.error'].message
       end
 
       error InvalidTokenError do
+        Bugsnag.notify env['sinatra.error']
         json_error 401, message: env['sinatra.error'].message
       end
 
       error NotAuthorizedError do
+        Bugsnag.notify env['sinatra.error']
         error = env['sinatra.error']
         json_error error.code, message: error.message
       end
 
       error Mongoid::Errors::DocumentNotFound do
+        Bugsnag.notify env['sinatra.error']
         json_error 404, message: "The resource was not found"
       end
 
       error Mongoid::Errors::DocumentsNotFound do
         ex = env['sinatra.error']
+        Bugsnag.notify ex
         json_error 404, message: ex.message, data: ex.found
       end
 
       error Mongoid::Errors::DuplicateKey do
+        Bugsnag.notify env['sinatra.error']
         json_error 422, message: env['sinatra.error'].message
       end
 
       error Mongoid::Errors::UnknownAttribute do
+        Bugsnag.notify env['sinatra.error']
         field = env['sinatra.error'].attr_name
         json_error 422,
           message: "The resource contains an unknown field: #{field}"
       end
 
       error Mongoid::Errors::Validations do
+        Bugsnag.notify env['sinatra.error']
         errors = env['sinatra.error'].document.errors.full_messages
         json_error 422,
           message: "The data for the resource is incomplete or invalid",
