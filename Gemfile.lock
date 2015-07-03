@@ -161,6 +161,7 @@ DEPENDENCIES
   aws-sdk
   bugsnag
   byebug
+  connection_pool
   dalli
   database_cleaner
   dotenv
@@ -189,3 +190,6 @@ DEPENDENCIES
   typhoeus
   unicorn
   webmock
+
+BUNDLED WITH
+   1.10.5

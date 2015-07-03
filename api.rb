@@ -60,7 +60,9 @@ module Academical
       set :cache, ActiveSupport::Cache::DalliStore.new(
         *servers,
         namespace: "academical-api-#{environment}",
-        expires_in: ENV['MEMCACHE_EXPIRES'].to_i.minutes
+        expires_in: ENV['MEMCACHE_EXPIRES'].to_i.minutes,
+        pool_size: 50,
+        pool_timeout: 5
       )
     end
 
