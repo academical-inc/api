@@ -56,8 +56,9 @@ module Academical
     end
 
     configure do
+      servers = ENV['MEMCACHE_SERVERS'].split(',')
       set :cache, ActiveSupport::Cache::DalliStore.new(
-        ENV['MEMCACHE_SERVERS'],
+        *servers,
         namespace: "academical-api-#{environment}",
         expires_in: ENV['MEMCACHE_EXPIRES'].to_i.minutes
       )
