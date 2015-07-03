@@ -81,6 +81,8 @@ module Academical
         end
 
         schedule = update_resource
+        # TODO Hackish, fix and test
+        # https://github.com/mongoid/mongoid/issues/3611
         schedule.events.each { |ev| ev.save! }
         schedule = apply_options schedule
         json_response schedule

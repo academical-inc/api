@@ -34,7 +34,8 @@ module Academical
       embeds_many :departments
       has_many :corequisites,
                class_name: "Section",
-               inverse_of: :corequisite_of
+               inverse_of: :corequisite_of,
+               dependent: :nullify
       belongs_to :corequisite_of,
                  class_name: "Section",
                  inverse_of: :corequisites,

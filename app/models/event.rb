@@ -16,6 +16,7 @@ module Academical
       embedded_in :section
       embedded_in :schedule
 
+      # TODO Test
       before_save :expand
 
       validates_presence_of :start_dt, :end_dt, :name, :timezone

@@ -42,6 +42,9 @@ module Academical
       post "/sections" do
         clean_hash_default_proc!
         res, code = upsert_resource
+        # TODO Hackish, fix and test
+        # https://github.com/mongoid/mongoid/issues/3611
+        res.events.each { |ev| ev.save! }
         json_response res, options: {properties: :all}, code: code
       end
 
