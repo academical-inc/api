@@ -13,18 +13,20 @@ module Academical
         authorize! do
           is_admin? or is_student?
         end
-        query   = extract(:q)
-        query   = "*" if query.blank?
-        school  = extract(:school)
-        term    = extract(:term)
-        filters = extract(:filters)
-        filters ||= []
-        filters = MultiJson.load filters if not filters.blank?
+        qs = "-search-#{request.env["rack.request.query_string"]}"
+        json_response settings.cache.fetch(qs) do
+          query   = extract(:q)
+          query   = "*" if query.blank?
+          school  = extract(:school)
+          term    = extract(:term)
+          filters = extract(:filters)
+          filters ||= []
+          filters = MultiJson.load filters if not filters.blank?
 
-        json_response(
-          Section.autocompl_search(query, school, term, filters),
-          options: {properties: :public}
-        )
+          Section.autocompl_search(query, school, term, filters).as_json(
+            options: {properties: :public}
+          )
+        end
       end
 
       post "/sections" do

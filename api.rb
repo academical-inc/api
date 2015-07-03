@@ -55,13 +55,17 @@ module Academical
       Mongoid.load!('config/mongoid.yml')
     end
 
+    configure do
+      set :cache, ActiveSupport::Cache::DalliStore.new(
+        ENV['MEMCACHE_SERVERS'],
+        namespace: "#{ENV['MEMCACHE_NAMESPACE']}-#{environment}",
+        expires_in: 10.minutes
+      )
+    end
+
     configure :production, :staging do
       Mongoid::CachedJson.configure do |config|
-        config.cache = ActiveSupport::Cache::DalliStore.new(
-          ENV['MEMCACHE_SERVERS'],
-          namespace: "#{ENV['MEMCACHE_NAMESPACE']}-#{environment}",
-          expires_in: 1.day
-        )
+        config.cache = settings.cache
       end
     end
 
@@ -82,6 +86,10 @@ module Academical
 
     configure :development do
       register Sinatra::Reloader
+    end
+
+    def self.global_cache
+      settings.cache
     end
 
   end

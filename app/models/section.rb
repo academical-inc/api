@@ -4,7 +4,7 @@ module Academical
 
       AWS_BUCKET = ENV['AWS_BUCKET']
       NUM_THREADS = ENV['NUM_THREADS_DUMP'].to_i
-      SEARCH_LIMIT = 50
+      SEARCH_LIMIT = 30
 
       include Mongoid::Document
       include Mongoid::Timestamps

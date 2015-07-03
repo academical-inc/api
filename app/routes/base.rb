@@ -7,6 +7,7 @@ module Academical
         set :views, 'app/views'
         set :api_content_type, 'application/json'
         set :api_charset, 'utf-8'
+        set :cache, Api.global_cache
 
         disable :dump_errors
         disable :show_exceptions
