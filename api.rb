@@ -58,8 +58,8 @@ module Academical
     configure do
       set :cache, ActiveSupport::Cache::DalliStore.new(
         ENV['MEMCACHE_SERVERS'],
-        namespace: "#{ENV['MEMCACHE_NAMESPACE']}-#{environment}",
-        expires_in: 10.minutes
+        namespace: "academical-api-#{environment}",
+        expires_in: ENV['MEMCACHE_EXPIRES'].to_i.minutes
       )
     end
 

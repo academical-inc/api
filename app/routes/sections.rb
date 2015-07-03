@@ -2,6 +2,10 @@ module Academical
   module Routes
     class Sections < Base
 
+      configure do
+        set :search_expiration, ENV['MEMCACHE_EXPIRES_SEARCH'].to_i.minutes
+      end
+
       before "/sections*" do
         pass if request.get? and request.path_info == "/sections/search"
         authorize! do
@@ -13,8 +17,12 @@ module Academical
         authorize! do
           is_admin? or is_student?
         end
-        qs = "-search-#{request.env["rack.request.query_string"]}"
-        res = settings.cache.fetch(qs) do
+
+        qs         = "-search-#{request.env["rack.request.query_string"]}"
+        cache      = settings.cache
+        expires_in = settings.search_expiration
+
+        res = cache.fetch(qs, expires_in: expires_in) do
           query   = extract(:q)
           query   = "*" if query.blank?
           school  = extract(:school)
@@ -27,6 +35,7 @@ module Academical
             options: {properties: :public}
           )
         end
+
         json_response res
       end
 
