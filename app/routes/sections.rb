@@ -14,7 +14,7 @@ module Academical
           is_admin? or is_student?
         end
         qs = "-search-#{request.env["rack.request.query_string"]}"
-        json_response settings.cache.fetch(qs) do
+        res = settings.cache.fetch(qs) do
           query   = extract(:q)
           query   = "*" if query.blank?
           school  = extract(:school)
@@ -27,6 +27,7 @@ module Academical
             options: {properties: :public}
           )
         end
+        json_response res
       end
 
       post "/sections" do
