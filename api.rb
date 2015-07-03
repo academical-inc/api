@@ -15,6 +15,7 @@ require 'active_support/core_ext/numeric'
 require 'active_support/core_ext/array'
 require 'active_support/core_ext/hash'
 require 'active_support/json'
+require 'active_support/cache/dalli_store'
 require 'i18n/backend/fallbacks'
 require 'logger'
 
@@ -56,7 +57,7 @@ module Academical
 
     configure :production, :staging do
       Mongoid::CachedJson.configure do |config|
-        config.cache = Dalli::Client.new(
+        config.cache = ActiveSupport::Cache::DalliStore.new(
           ENV['MEMCACHE_SERVERS'],
           namespace: "#{ENV['MEMCACHE_NAMESPACE']}-#{environment}",
           expires_in: 1.day
