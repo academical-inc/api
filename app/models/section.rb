@@ -54,6 +54,7 @@ module Academical
       before_validation :init_fields
 
       index({course_name: 1})
+      index({section_id: 1})
       index({school: 1, course_name: 1})
       index({school: 1, course_code: 1})
       index({school: 1, corequisite_of: 1})
