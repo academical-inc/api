@@ -10,15 +10,6 @@ module Academical
         is_admin? or (is_student? and schedule.student == current_student)
       end
 
-      def apply_options(schedule)
-        inc_secs   = contains? :include_sections
-
-        if inc_secs
-          schedule.include_sections = true
-        end
-        schedule
-      end
-
       get "/schedules" do
         authorize! do
           is_admin?
@@ -41,7 +32,6 @@ module Academical
         if format == 'ics'
           json_response schedule.to_ical
         else
-          schedule = apply_options schedule
           json_response schedule
         end
       end
@@ -70,7 +60,6 @@ module Academical
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
         schedule = create_resource data
-        schedule = apply_options schedule
         json_response schedule, code: 201
       end
 
@@ -84,7 +73,6 @@ module Academical
         # TODO Hackish, fix and test
         # https://github.com/mongoid/mongoid/issues/3611
         schedule.events.each { |ev| ev.save! }
-        schedule = apply_options schedule
         json_response schedule
       end
 
