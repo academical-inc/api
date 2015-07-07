@@ -87,7 +87,10 @@ module Academical
         halt code, json(response_hash)
       end
 
-      def json_response(data, options: nil, code: 200)
+      def json_response(data, options: {}, code: 200)
+        if not options.key? :version
+          options[:version] = "v#{current_school.nickname}".to_sym
+        end
         response_hash = success_hash data, options
         halt code, json(response_hash)
       end
