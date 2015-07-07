@@ -69,6 +69,7 @@ module Academical
     configure :production, :staging do
       Mongoid::CachedJson.configure do |config|
         config.cache = settings.cache
+        config.disable_caching = ENV['DISABLE_JSON_CACHING'] == 'true'
       end
     end
 
