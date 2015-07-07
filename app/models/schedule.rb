@@ -6,6 +6,7 @@ module Academical
 
       include Mongoid::Document
       include Mongoid::Timestamps
+      include Mongoid::CachedJson
       include IndexedDocument
       include Linkable
 
@@ -41,17 +42,19 @@ module Academical
       index({:school=>1, :student=>1, :term=>1})
       index({:school=>1, :term=>1})
 
-      def as_json(options=nil)
-        options ||= {}
-        if @include_sections == true
-          if options[:methods].is_a? Array
-            options[:methods].push :sections
-          else
-            options[:methods] = [:sections]
-          end
-        end
-        super options
-      end
+      json_fields \
+        id: {},
+        name: {},
+        total_credits: {},
+        total_sections: {},
+        section_colors: {},
+        public: {},
+        term: {},
+        events: { type: :reference },
+        school_id: {},
+        student_id: {},
+        section_ids: {},
+        sections: { type: :reference, properties: :short, reference_properties: :short }
 
       def same_school
         if school != student.school
