@@ -6,6 +6,13 @@ module Academical
         Schedule
       end
 
+      # TODO Test
+      def json_versioned(data, code=200)
+        json_response data, code: code, options: {
+          version: "v#{current_school.nickname}".to_sym
+        }
+      end
+
       def owns_schedule?(schedule)
         is_admin? or (is_student? and schedule.student == current_student)
       end
@@ -15,7 +22,7 @@ module Academical
           is_admin?
         end
 
-        json_response resources
+        json_versioned resources
       end
 
       get "/schedules/:resource_id" do
@@ -32,7 +39,7 @@ module Academical
         if format == 'ics'
           json_response schedule.to_ical
         else
-          json_response schedule
+          json_versioned schedule
         end
       end
 
@@ -43,7 +50,7 @@ module Academical
             owns_schedule? schedule
           end
 
-          json_response get_result(schedule.send(field.to_sym))
+          json_versioned get_result(schedule.send(field.to_sym))
         end
       end
 
@@ -60,7 +67,7 @@ module Academical
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
         schedule = create_resource data
-        json_response schedule, code: 201
+        json_versioned schedule, 201
       end
 
       put "/schedules/:resource_id" do
@@ -73,7 +80,7 @@ module Academical
         # TODO Hackish, fix and test
         # https://github.com/mongoid/mongoid/issues/3611
         schedule.events.each { |ev| ev.save! }
-        json_response schedule
+        json_versioned schedule
       end
 
       delete "/schedules/:resource_id" do
@@ -88,6 +95,3 @@ module Academical
     end
   end
 end
-
-
-

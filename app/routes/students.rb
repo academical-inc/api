@@ -34,7 +34,9 @@ module Academical
       # TODO Test
       get "/students/:resource_id/schedules" do
         schedules = resource.schedules.latest
-        json_response schedules
+        json_response schedules, options: {
+          version: "v#{current_school.nickname}".to_sym
+        }
       end
 
       post "/students" do
