@@ -32,6 +32,14 @@ module Academical
         @current_student ||= Student.find_by auth0_user_id: @decoded_token["sub"] if logged_in?
       end
 
+      def current_school
+        if is_admin?
+          params[:school]
+        else
+          current_student.school
+        end
+      end
+
       def roles
         return @decoded_token["app_metadata"]["roles"] if logged_in?
         []

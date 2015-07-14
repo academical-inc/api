@@ -32,7 +32,8 @@ module Academical
           filters = MultiJson.load filters if not filters.blank?
 
           Section.autocompl_search(query, school, term, filters).as_json(
-            properties: :public
+            properties: :public,
+            version: "v#{school}".to_sym
           )
         end
 

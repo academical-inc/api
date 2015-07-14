@@ -8,7 +8,7 @@ module Academical
       field :description, type: String
       field :start_dt, type: Time
       field :end_dt, type: Time
-      field :location, type: String
+      field :location, type: String, default: ""
       field :timezone, type: String
       field :color, type: String
       embeds_one :recurrence, class_name: "EventRecurrence", cascade_callbacks: true

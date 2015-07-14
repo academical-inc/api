@@ -12,7 +12,7 @@ module Academical
 
       get "/status" do
         status = "Ok!"
-        json_response status
+        halt 200, {status: status}.to_json
       end
     end
   end

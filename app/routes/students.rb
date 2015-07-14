@@ -33,15 +33,10 @@ module Academical
       # TODO Improve this
       # TODO Test
       get "/students/:resource_id/schedules" do
-        inc_secs = contains? :include_sections
-
         schedules = resource.schedules.latest
-        if inc_secs
-          schedules.each do |schedule|
-            schedule.include_sections = true
-          end
-        end
-        json_response schedules
+        json_response schedules, options: {
+          version: "v#{current_school.nickname}".to_sym
+        }
       end
 
       post "/students" do
