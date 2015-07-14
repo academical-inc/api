@@ -34,6 +34,7 @@ module Academical
         halt 200 if request.options?
         Bugsnag.before_notify_callbacks << lambda {|notif|
           notif.add_tab(:env, request.env)
+          notif.add_tab(:user, current_student.as_json)
         }
         if request.post? or request.put?
           if !request.content_type.include? settings.api_content_type

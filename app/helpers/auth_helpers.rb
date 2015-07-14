@@ -29,7 +29,11 @@ module Academical
       end
 
       def current_student
-        @current_student ||= Student.find_by auth0_user_id: @decoded_token["sub"] if logged_in?
+        if is_admin?
+          {user: "admin"}
+        else
+          @current_student ||= Student.find_by auth0_user_id: @decoded_token["sub"] if logged_in?
+        end
       end
 
       def current_school
