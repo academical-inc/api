@@ -32,7 +32,7 @@ module Academical
         if is_admin?
           {user: "admin"}
         else
-          Student.find_by auth0_user_id: @decoded_token["sub"] if logged_in?
+          @current_student ||= Student.find_by auth0_user_id: @decoded_token["sub"] if logged_in?
         end
       end
 
