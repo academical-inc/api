@@ -7,9 +7,9 @@ module Academical
       end
 
       # TODO Test
-      def json_versioned(data, code=200)
+      def json_versioned(data, school: current_school.nickname, code: 200)
         json_response data, code: code, options: {
-          version: "v#{current_school.nickname}".to_sym
+          version: "v#{school}".to_sym
         }
       end
 
@@ -39,7 +39,7 @@ module Academical
         if format == 'ics'
           json_response schedule.to_ical
         else
-          json_versioned schedule
+          json_versioned schedule, school: schedule.school.nickname
         end
       end
 
@@ -67,7 +67,7 @@ module Academical
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
         schedule = create_resource data
-        json_versioned schedule, 201
+        json_versioned schedule, code: 201
       end
 
       put "/schedules/:resource_id" do
