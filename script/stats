@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'csv'
+
+ENV['RACK_ENV'] = "development"
+nickname        = ARGV[0]
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: script/stats <school_nickname> [options]"
+
+  opts.on("-e", "--env=val", String, "Set env") do |e|
+    ENV['RACK_ENV'] = e
+  end
+end.parse!
+
+raise OptionParser::MissingArgument.new("<school_nickname>") if nickname.nil?
+
+require File.expand_path '../../api.rb', __FILE__
+
+school = School.find_by nickname: nickname
+latest_term = school.terms.latest.name
+
+users     = school.students.select { |st| not st.schedules.latest.empty? }
+schedules = Schedule.where(school: school, term: latest_term)
+events    = schedules.flat_map { |sch| sch.events }
+added_section_count = schedules.inject(0) do |mem, sch|
+  mem + sch.sections.count
+end
+
+
+puts "Generating csv files..."
+
+# cursos_inscritos.csv
+CSV.open("./tmp/cursos_inscritos.csv", "w") do |csv|
+  school.sections.where("term.name" => latest_term).each do |s|
+    csv << [s.course_code, s.course_name, s.section_number, s.students.count]
+  end
+end
+
+# usuarios.csv
+CSV.open("./tmp/usuarios.csv", "w") do |csv|
+  users.each do |user|
+    csv << [user.name, user.email, user.created_at]
+  end
+end
+
+# horarios.csv
+CSV.open("./tmp/horarios.csv", "w") do |csv|
+  schedules.each do |sch|
+    csv << [sch.name, sch.created_at, sch.total_sections]
+  end
+end
+
+# eventos.csv
+CSV.open("./tmp/eventos.csv", "w") do |csv|
+  events.each do |ev|
+    days = ev.recurrence.days_of_week.join(" ")
+    duration = (ev.end_dt - ev.start_dt) / 60
+    csv << [ev.name, days, ev.start_dt, ev.end_dt, duration]
+  end
+end
+
+
+puts "Usuarios: #{users.count}"
+puts "Horarios: #{schedules.count}"
+puts "Eventos: #{events.count}"
+puts "Cursos agregados totales: #{added_section_count}"
+
