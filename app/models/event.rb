@@ -12,12 +12,8 @@ module Academical
       field :timezone, type: String
       field :color, type: String
       embeds_one :recurrence, class_name: "EventRecurrence", cascade_callbacks: true
-      embeds_many :expanded, class_name: "ExpandedEvent", cascade_callbacks: true
       embedded_in :section
       embedded_in :schedule
-
-      # TODO Test
-      before_save :expand
 
       validates_presence_of :start_dt, :end_dt, :name, :timezone
       validate :recurrence_end_date_is_valid, :timezone_is_valid
