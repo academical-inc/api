@@ -38,7 +38,7 @@ module Academical
 
       def current_school
         if is_admin?
-          params[:school]
+          School.find_by nickname: params[:school]
         else
           current_student.school
         end
