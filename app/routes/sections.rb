@@ -2,8 +2,24 @@ module Academical
   module Routes
     class Sections < Base
 
+      def search
+        query   = extract(:q)
+        query   = "*" if query.blank?
+        school  = extract(:school)
+        term    = extract(:term)
+        filters = extract(:filters)
+        filters ||= []
+        filters = MultiJson.load filters if not filters.blank?
+
+        Section.autocompl_search(query, school, term, filters).as_json(
+          properties: :public,
+          version: "v#{school}".to_sym
+        )
+      end
+
       configure do
         set :search_expiration, ENV['MEMCACHE_EXPIRES_SEARCH'].to_i.minutes
+        set :disable_search_caching, ENV['DISABLE_SEARCH_CACHING'] == 'true'
       end
 
       before "/sections*" do
@@ -18,23 +34,13 @@ module Academical
           is_admin? or is_student?
         end
 
-        qs         = "-search-#{request.env["rack.request.query_string"]}"
-        cache      = settings.cache
-        expires_in = settings.search_expiration
-
-        res = cache.fetch(qs, expires_in: expires_in) do
-          query   = extract(:q)
-          query   = "*" if query.blank?
-          school  = extract(:school)
-          term    = extract(:term)
-          filters = extract(:filters)
-          filters ||= []
-          filters = MultiJson.load filters if not filters.blank?
-
-          Section.autocompl_search(query, school, term, filters).as_json(
-            properties: :public,
-            version: "v#{school}".to_sym
-          )
+        res = if settings.disable_search_caching
+          search
+        else
+          qs         = "-search-#{request.env["rack.request.query_string"]}"
+          cache      = settings.cache
+          expires_in = settings.search_expiration
+          cache.fetch(qs, expires_in: expires_in) { search }
         end
 
         json_response res
