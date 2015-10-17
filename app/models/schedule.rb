@@ -10,8 +10,6 @@ module Academical
       include IndexedDocument
       include Linkable
 
-      attr_accessor :include_sections
-
       field :name, type: String
       field :total_credits,  type: Float, default: 0
       field :total_sections, type: Integer, default: 0
