@@ -51,6 +51,13 @@ module Academical
         end
       end
 
+      def has_section?(section)
+        self.schedules.each do |schedule|
+          return true if schedule.section_ids.include? section.id
+        end
+        false
+      end
+
       def self.linked_fields
         [:schedules, :registered_schedule]
       end

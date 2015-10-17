@@ -67,6 +67,9 @@ module Academical
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
         schedule = create_resource data
+        schedule.sections.each { |sec|
+          incr_section_demand(sec.id.to_s, current_student.id.to_s)
+        }
         json_versioned schedule, code: 201
       end
 
@@ -76,11 +79,12 @@ module Academical
           owns_schedule? schedule
         end
 
-        schedule = update_resource
+        update_section_demands(schedule, extract!(:data))
+        updated = update_resource
         # TODO Hackish, fix and test
         # https://github.com/mongoid/mongoid/issues/3611
-        schedule.events.each { |ev| ev.save! }
-        json_versioned schedule
+        updated.events.each { |ev| ev.save! }
+        json_versioned updated
       end
 
       delete "/schedules/:resource_id" do
@@ -89,7 +93,15 @@ module Academical
           owns_schedule? schedule
         end
 
-        json_response delete_resource
+        sections = schedule.sections
+        response = delete_resource
+        current_student.reload
+        sections.each { |sec|
+          if not current_student.has_section? sec
+            decr_section_demand(sec.id.to_s, current_student.id.to_s)
+          end
+        }
+        json_response response
       end
 
     end
