@@ -40,11 +40,6 @@ module Academical
                  class_name: "Section",
                  inverse_of: :corequisites,
                  index: true
-      has_and_belongs_to_many :schedules, dependent: :nullify, index: true do
-        def students
-          @target.map { |sch| sch.student }.uniq
-        end
-      end
       has_and_belongs_to_many :teachers, index: true
       has_and_belongs_to_many :prerequisites,
                               class_name: "Section",
@@ -91,7 +86,7 @@ module Academical
         term: { type: :reference },
         events: { type: :reference },
         departments: { type: :reference },
-        demand: { definition: lambda{ |ins| ins.students.count }, type: :reference, properties: :short, versions: [:vcesa] },
+        demand: { definition: lambda{ |ins| ins.student_ids.count }, properties: :short, versions: [:vcesa] },
         corequisites: { type: :reference, properties: :public, reference_properties: :short },
         corequisite_of_id: { properties: :all },
         corequisite_ids: { properties: :all },
@@ -150,8 +145,9 @@ module Academical
       end
 
       # TODO Test
-      def students
-        self.schedules.students
+      def student_ids
+        model = SectionDemand.where(section_id: self.id).first
+        if model.blank? then [] else model.student_ids end
       end
 
       def self.autocompl_search(query, school, term, filters=[])
@@ -203,7 +199,7 @@ module Academical
       end
 
       def self.linked_fields
-        [:teachers, :students, :schedules]
+        [:teachers, :schedules]
       end
 
     end
