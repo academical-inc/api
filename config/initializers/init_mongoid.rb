@@ -45,11 +45,7 @@ module Mongoid::Errors
     end
 
     def is_duplicate_key_error?
-      if @ex.respond_to? :details
-        [11000, 11001].include?(@ex.details['code'])
-      else
-        false
-      end
+      @ex.message =~ /^11000/
     end
 
     def to_s

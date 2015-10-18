@@ -21,7 +21,6 @@ module Academical
         else
           SectionDemand.create!(section_id: section_id, student_ids: [student_id])
         end
-
       end
 
       def decr_section_demand(section_id, student_id)

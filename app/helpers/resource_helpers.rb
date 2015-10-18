@@ -46,7 +46,7 @@ module Academical
       def create_resource(data=extract!(:data))
         data = remove_key :id, data
         self.class.model.create! data
-      rescue Moped::Errors::OperationFailure => ex
+      rescue Mongo::Error::OperationFailure => ex
         raise Mongoid::Errors::DuplicateKey.new(
           ex, self.class.model.uniq_field_groups
         )
@@ -57,7 +57,7 @@ module Academical
         r = resource id
         r.update_attributes! data
         r
-      rescue Moped::Errors::OperationFailure => ex
+      rescue Mongo::Error::OperationFailure => ex
         raise Mongoid::Errors::DuplicateKey.new(
           ex, self.class.model.uniq_field_groups
         )
