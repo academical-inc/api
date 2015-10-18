@@ -45,7 +45,7 @@ module Mongoid::Errors
     end
 
     def is_duplicate_key_error?
-      @ex.message =~ /^11000/
+      @ex.message =~ /^E11000/
     end
 
     def to_s
