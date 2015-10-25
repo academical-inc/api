@@ -30,7 +30,7 @@ module Academical
 
       def current_student
         if is_admin?
-          {user: "admin"}
+          Student.find_by nickname: params[:student_id]
         else
           @current_student ||= Student.find_by auth0_user_id: @decoded_token["sub"] if logged_in?
         end
