@@ -3,14 +3,14 @@ production:
     default:
       uri: <%= ENV['MONGO_URI_PROD'] %>
       options:
-        min_pool_size: 200
-        max_pool_size: 500
+        min_pool_size: 25
+        max_pool_size: 100
 staging:
   clients:
     default:
       uri: <%= ENV['MONGO_URI_STAGING'] %>
       options:
-        max_pool_size: 50
+        pool_size: 50
         pool_timeout: 15
         retry_interval: 1
         timeout: 60
