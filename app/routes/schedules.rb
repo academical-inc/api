@@ -66,15 +66,10 @@ module Academical
           max_reached = current_student.schedules.latest.length == Student::MAX_SCHEDULES
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
-        schedule = nil
-        Benchmark.bm(8) do |x|
-          x.report("create:") { schedule = create_resource data }
-          x.report("demand:") {
-            schedule.sections.each { |sec|
-              incr_section_demand(sec.id.to_s, current_student.id.to_s)
-            }
-          }
-        end
+        schedule = create_resource data
+        # schedule.sections.each { |sec|
+        #   incr_section_demand(sec.id.to_s, current_student.id.to_s)
+        # }
         json_versioned schedule, code: 201
       end
 
