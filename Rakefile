@@ -18,6 +18,7 @@ def remove_indexes
   School.remove_indexes
   Teacher.remove_indexes
   Schedule.remove_indexes
+  SectionDemand.remove_indexes
 end
 
 namespace :db do
@@ -45,6 +46,7 @@ task :remove_indexes, :environment do |t, args|
       Section.create_indexes
       Schedule.create_indexes
       Teacher.create_indexes
+      SectionDemand.create_indexes
       puts "Successfully created indexes"
     end
   end
