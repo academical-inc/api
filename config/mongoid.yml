@@ -5,8 +5,6 @@ production:
       options:
         min_pool_size: 25
         max_pool_size: 100
-        read:
-          mode: :secondary_preferred
 staging:
   clients:
     default:
@@ -14,11 +12,7 @@ staging:
       options:
         min_pool_size: 25
         max_pool_size: 50
-        pool_timeout: 15
-        retry_interval: 1
-        timeout: 60
-        max_retries: 20
-        refresh_interval: 30
+        connect_timeout: 15
 development:
   clients:
     default:
