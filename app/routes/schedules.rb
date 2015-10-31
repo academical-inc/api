@@ -58,8 +58,9 @@ module Academical
       post "/schedules" do
         data = extract! :data
         student_id = extract :student_id, data
+        cur_student_id = current_student.id.to_s
         authorize! 403 do
-          is_admin? or (is_student? and student_id == current_student.id.to_s)
+          is_admin? or (is_student? and student_id == cur_student_id)
         end
 
         if not is_admin?
@@ -67,8 +68,8 @@ module Academical
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
         schedule = create_resource data
-        schedule.sections.each { |sec|
-          incr_section_demand(sec.id.to_s, current_student.id.to_s)
+        schedule.section_ids.each { |sec_id|
+          incr_section_demand(sec_id.to_s, cur_student_id)
         }
         json_versioned schedule, code: 201
       end
@@ -93,12 +94,13 @@ module Academical
           owns_schedule? schedule
         end
 
-        sections = schedule.sections
+        section_ids = schedule.section_ids
+        cur_student_id = current_student.id.to_s
         response = delete_resource
         current_student.reload
-        sections.each { |sec|
+        section_ids.each { |sec_id|
           if not current_student.has_section? sec
-            decr_section_demand(sec.id.to_s, current_student.id.to_s)
+            decr_section_demand(sec_id.to_s, cur_student_id)
           end
         }
         json_response response

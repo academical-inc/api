@@ -13,20 +13,18 @@ module Academical
       end
 
       def incr_section_demand(section_id, student_id)
-        criteria = SectionDemand.where(section_id: section_id)
-        if criteria.count > 0
-          model = criteria.first
+        begin
+          model = SectionDemand.find_by section_id: section_id
           model.add_to_set(student_ids: student_id)
           model.save!
-        else
+        rescue Mongoid::Errors::DocumentNotFound
           SectionDemand.create!(section_id: section_id, student_ids: [student_id])
         end
       end
 
       def decr_section_demand(section_id, student_id)
-        criteria = SectionDemand.where(section_id: section_id)
-        if criteria.count > 0
-          model = criteria.first
+        model = SectionDemand.where(section_id: section_id).first
+        if not model.blank?
           model.student_ids.delete(student_id)
           model.save!
         end
