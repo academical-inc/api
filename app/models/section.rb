@@ -146,8 +146,13 @@ module Academical
 
       # TODO Test
       def student_ids
-        model = SectionDemand.where(section_id: self.id).first
-        if model.blank? then [] else model.student_ids end
+        @student_ids ||= begin
+          model = SectionDemand.find_by section_id: self.id
+          model.student_ids
+        rescue Mongoid::Errors::DocumentNotFound
+          []
+        end
+        @student_ids
       end
 
       def self.autocompl_search(query, school, term, filters=[])
