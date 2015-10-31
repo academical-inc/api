@@ -20,7 +20,7 @@ module Academical
       embeds_many :events, cascade_callbacks: true
       belongs_to  :school, index: true
       belongs_to  :student, index: true, inverse_of: :schedules
-      has_and_belongs_to_many :sections, index: true
+      has_and_belongs_to_many :sections, index: true, inverse_of: nil
 
       validates_presence_of :name, :total_credits, :total_sections, :term,
                             :school, :student
