@@ -99,7 +99,7 @@ module Academical
         response = delete_resource
         current_student.reload
         section_ids.each { |sec_id|
-          if not current_student.has_section? sec
+          if not current_student.has_section? sec_id
             decr_section_demand(sec_id.to_s, cur_student_id)
           end
         }
