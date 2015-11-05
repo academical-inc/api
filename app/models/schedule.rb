@@ -10,8 +10,6 @@ module Academical
       include IndexedDocument
       include Linkable
 
-      attr_accessor :include_sections
-
       field :name, type: String
       field :total_credits,  type: Float, default: 0
       field :total_sections, type: Integer, default: 0
@@ -22,7 +20,7 @@ module Academical
       embeds_many :events, cascade_callbacks: true
       belongs_to  :school, index: true
       belongs_to  :student, index: true, inverse_of: :schedules
-      has_and_belongs_to_many :sections, index: true
+      has_and_belongs_to_many :sections, index: true, inverse_of: nil
 
       validates_presence_of :name, :total_credits, :total_sections, :term,
                             :school, :student

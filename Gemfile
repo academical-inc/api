@@ -25,7 +25,6 @@ gem 'mongoid-cached-json'
 gem 'dalli'
 gem 'connection_pool'
 gem 'newrelic_rpm'
-gem 'newrelic_moped'
 gem 'bugsnag'
 
 group :development, :test do

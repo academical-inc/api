@@ -29,6 +29,7 @@ module Academical
       helpers CommonHelpers
       helpers ResourceHelpers
       helpers AuthHelpers
+      helpers SectionDemandHelpers
 
       before do
         halt 200 if request.options?

@@ -53,6 +53,7 @@ module Academical
 
     configure do
       Mongoid.load!('config/mongoid.yml')
+      Mongo::Logger.logger.level = Logger::INFO
     end
 
     configure do

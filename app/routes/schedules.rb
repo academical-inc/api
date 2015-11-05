@@ -58,8 +58,9 @@ module Academical
       post "/schedules" do
         data = extract! :data
         student_id = extract :student_id, data
+        cur_student_id = current_student.id.to_s
         authorize! 403 do
-          is_admin? or (is_student? and student_id == current_student.id.to_s)
+          is_admin? or (is_student? and student_id == cur_student_id)
         end
 
         if not is_admin?
@@ -67,6 +68,9 @@ module Academical
           json_error 422,message: "Max number of schedules reached" if max_reached
         end
         schedule = create_resource data
+        schedule.section_ids.each { |sec_id|
+          incr_section_demand(sec_id.to_s, cur_student_id)
+        }
         json_versioned schedule, code: 201
       end
 
@@ -76,11 +80,12 @@ module Academical
           owns_schedule? schedule
         end
 
-        schedule = update_resource
+        update_section_demands(schedule, extract!(:data))
+        updated = update_resource
         # TODO Hackish, fix and test
         # https://github.com/mongoid/mongoid/issues/3611
-        schedule.events.each { |ev| ev.save! }
-        json_versioned schedule
+        updated.events.each { |ev| ev.save! }
+        json_versioned updated
       end
 
       delete "/schedules/:resource_id" do
@@ -89,7 +94,16 @@ module Academical
           owns_schedule? schedule
         end
 
-        json_response delete_resource
+        section_ids = schedule.section_ids
+        cur_student_id = current_student.id.to_s
+        response = delete_resource
+        current_student.reload
+        section_ids.each { |sec_id|
+          if not current_student.has_section? sec_id
+            decr_section_demand(sec_id.to_s, cur_student_id)
+          end
+        }
+        json_response response
       end
 
     end
