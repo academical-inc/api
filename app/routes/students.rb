@@ -22,7 +22,7 @@ module Academical
         end
       end
 
-      get "/students/:resource_id" do
+      get "/students/:resource_id/?" do
         student = resource
         authorize! do
           is_current_student? student
@@ -32,14 +32,14 @@ module Academical
 
       # TODO Improve this
       # TODO Test
-      get "/students/:resource_id/schedules" do
+      get "/students/:resource_id/schedules/?" do
         schedules = resource.schedules.latest
         json_response schedules, options: {
           version: "v#{current_school.nickname}".to_sym
         }
       end
 
-      post "/students" do
+      post "/students/?" do
         data = extract! :data
         id            = extract :id, data
         auth0_user_id = extract :auth0_user_id, data

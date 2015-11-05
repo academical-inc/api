@@ -41,7 +41,7 @@ module Academical
 
       included do
 
-        get "/#{model_collection}" do
+        get "/#{model_collection}/?" do
           if contains? :q
             json_response resources(where: MultiJson.load(extract(:q)))
           else
@@ -54,12 +54,12 @@ module Academical
         end
 
         model.linked_fields.each do |field|
-          get "#{model_base_route}/#{field}" do
+          get "#{model_base_route}/#{field}/?" do
             json_response resource_rel(field)
           end
         end
 
-        post "/#{model_collection}" do
+        post "/#{model_collection}/?" do
           res, code = upsert_resource
           json_response res, code: code
         end
@@ -94,7 +94,7 @@ module Academical
         end
 
         def model_base_route
-          @model_base_route ||= "/#{model_collection}/:resource_id"
+          @model_base_route ||= "/#{model_collection}/:resource_id/?"
         end
 
       end

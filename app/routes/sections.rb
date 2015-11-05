@@ -29,7 +29,7 @@ module Academical
         end
       end
 
-      get "/sections/search" do
+      get "/sections/search/?" do
         authorize! do
           is_admin? or is_student?
         end
@@ -46,7 +46,7 @@ module Academical
         json_response res
       end
 
-      post "/sections" do
+      post "/sections/?" do
         clean_hash_default_proc!
         res, code = upsert_resource
         # TODO Hackish, fix and test
