@@ -17,7 +17,7 @@ module Academical
         is_admin? or (is_student? and schedule.student == current_student)
       end
 
-      get "/schedules" do
+      get "/schedules/?" do
         authorize! do
           is_admin?
         end
@@ -25,7 +25,7 @@ module Academical
         json_versioned resources
       end
 
-      get "/schedules/:resource_id" do
+      get "/schedules/:resource_id/?" do
         schedule = resource
         authorize! do
           if schedule.public == true
@@ -44,7 +44,7 @@ module Academical
       end
 
       Schedule.linked_fields.each do |field|
-        get "/schedules/:resource_id/#{field}" do
+        get "/schedules/:resource_id/#{field}/?" do
           schedule = resource
           authorize! do
             owns_schedule? schedule
@@ -55,7 +55,7 @@ module Academical
       end
 
       # TODO Test
-      post "/schedules" do
+      post "/schedules/?" do
         data = extract! :data
         student_id = extract :student_id, data
         cur_student_id = current_student.id.to_s
@@ -74,7 +74,7 @@ module Academical
         json_versioned schedule, code: 201
       end
 
-      put "/schedules/:resource_id" do
+      put "/schedules/:resource_id/?" do
         schedule = resource
         authorize! do
           owns_schedule? schedule
@@ -88,7 +88,7 @@ module Academical
         json_versioned updated
       end
 
-      delete "/schedules/:resource_id" do
+      delete "/schedules/:resource_id/?" do
         schedule = resource
         authorize! do
           owns_schedule? schedule
