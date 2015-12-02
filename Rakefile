@@ -61,6 +61,7 @@ task :remove_indexes, :environment do |t, args|
     Section.delete_all
     Schedule.delete_all
     Teacher.delete_all
+    SectionDemand.delete_all
     puts "Successfully deleted all documents in database"
   end
 end
