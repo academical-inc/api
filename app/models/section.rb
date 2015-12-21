@@ -88,8 +88,8 @@ module Academical
         departments: { type: :reference },
         demand: { definition: lambda{ |ins| ins.student_ids.count }, properties: :short, versions: [:vcesa] },
         corequisites: { type: :reference, properties: :public, reference_properties: :short },
-        corequisite_of_id: { properties: :all },
-        corequisite_ids: { properties: :all },
+        corequisite_of_id: {},
+        corequisite_ids: {},
         teacher_ids: { properties: :all },
         school_id: { properties: :all }
 
