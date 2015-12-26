@@ -45,6 +45,11 @@ module Academical
         end
       end
 
+      after do
+        # Properly clear any before_notify_callbacks set before handling the request
+        Bugsnag.before_notify_callbacks.clear
+      end
+
       error do
         dump_errors! env['sinatra.error']
         Bugsnag.auto_notify($!)
