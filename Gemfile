@@ -1,6 +1,6 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-ruby "2.1.5"
+ruby '2.1.5'
 gem 'sinatra', require: 'sinatra/base'
 gem 'sinatra-contrib'
 gem 'rack-parser', require: 'rack/parser'
@@ -36,7 +36,8 @@ group :development, :test do
   gem 'rack-test'
   gem 'database_cleaner'
   gem 'factory_girl'
-  gem 'webmock', :require => false
+  gem 'webmock', require: false
+  gem 'simplecov'
   # gem 'better_errors'
   # gem 'simplecov'
   # gem 'ffaker'

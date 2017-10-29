@@ -85,7 +85,7 @@ module Academical
       end
     end
 
-    configure do
+    configure :production, :staging do
       newrelic_ignore "/status"
     end
 
