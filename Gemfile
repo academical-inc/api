@@ -27,6 +27,7 @@ gem 'connection_pool'
 gem 'newrelic_rpm'
 gem 'bugsnag'
 gem 'rbtrace'
+gem 'json-jwt'
 
 group :development, :test do
   gem 'thin'
