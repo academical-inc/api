@@ -58,8 +58,7 @@ module Academical
       Mongo::Logger.logger.level = Logger::INFO
     end
 
-    # TODO: Add default definition of cache.
-    configure do
+    configure :production, :staging do
       servers = ENV['MEMCACHE_SERVERS'].split(',')
       set :cache, ActiveSupport::Cache::DalliStore.new(
         *servers,
@@ -68,6 +67,10 @@ module Academical
         pool_size: 50,
         pool_timeout: 5
       )
+    end
+
+    configure :development, :test do
+      set :cache, ActiveSupport::Cache::MemoryStore.new
     end
 
     configure :production, :staging do
@@ -99,7 +102,6 @@ module Academical
     def self.global_cache
       settings.cache
     end
-
   end
 end
 

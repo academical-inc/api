@@ -30,6 +30,7 @@ RSpec.configure do |config|
   end
 
   config.before :each do
+    Academical::Api.cache.clear
     DatabaseCleaner.start
   end
 
