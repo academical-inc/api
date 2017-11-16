@@ -43,64 +43,6 @@ describe Academical::Routes::Base do
         end
       end
     end
-
-    it 'should return 401 error when token not provided' do
-      get "/"
-      expect_invalid_auth_error
-    end
-
-    it 'should return 401 error when invalid auth token provided' do
-      get "/", {}, {"HTTP_AUTHORIZATION" => "12345"}
-      expect_invalid_auth_error
-    end
-
-    it 'should return 401 error when request from invalid client' do
-      allow(JWT).to receive(:decode) { [{"aud"=>"12345"}] }
-      get "/", {}, {"HTTP_AUTHORIZATION" => "12345"}
-      expect_invalid_auth_error
-    end
-
-    it 'should return 403 error when not authorized to access' do
-      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
-        {"app_metadata" => {"roles" => []}}
-      }
-      get "/admin"
-      expect_not_authorized_error
-      get "/student"
-      expect_not_authorized_error
-    end
-
-    it 'should return 403 error when student and not authorized to access' do
-      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
-        {"app_metadata" => {"roles" => ["student"]}}
-      }
-      get "/admin"
-      expect_not_authorized_error
-      get "/student"
-      json_response
-    end
-
-    it 'should return 403 error when admin and not authorized to access' do
-      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
-        {"app_metadata" => {"roles" => ["admin"]}}
-      }
-      get "/admin"
-      json_response
-      get "/student"
-      expect_not_authorized_error
-    end
-
-    it 'should succeed when appropriate roles granted' do
-      allow_any_instance_of(Academical::Routes::Base).to receive(:validate_token) {
-        {"app_metadata" => {"roles" => ["admin", "student"]}}
-      }
-      get "/"
-      json_response
-      get "/admin"
-      json_response
-      get "/student"
-      json_response
-    end
   end
 
   describe 'error handlers' do

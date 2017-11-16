@@ -3,6 +3,10 @@ module Helpers
   HEADERS = { 'CONTENT_TYPE' => 'application/json',
               'ACCEPT' => 'application/json' }.freeze
 
+  def authorization_header(token)
+    { 'HTTP_AUTHORIZATION' => "Bearer #{token}" }
+  end
+
   def payload(hash, root: :data)
     if root
       {"#{root}" => hash}.to_json
@@ -252,8 +256,8 @@ module Helpers
   end
 
   def expect_content_type_error
-    expect(json_error(400)).to eq(
-      "The request Content-Type must be application/json"
+    expect(json_error(400)).to include(
+      'The request Content-Type must be application/json'
     )
   end
 

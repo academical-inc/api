@@ -1,10 +1,10 @@
 module Academical
   module Helpers
     module JWTUtils
-      # The token validator provides methods to decode and validate JWT tokens.
-      # It will perform the necessary queries to retrieve JWK keys from the
-      # providers if necessary. A cache store must be given to store the
-      # JWK keys after retrieval.
+      # The token validator provides methods to decode and validate JWTs. It
+      # will perform the necessary queries to retrieve JWK keys from the
+      # providers if necessary. A cache store must be given to store the JWK
+      # keys after retrieval.
       class TokenValidator
         # Initialize a token validator.
         #
@@ -17,11 +17,11 @@ module Academical
 
         # Decodes and validates a JWT.
         #
-        # The function validates a JWT token regardless of the algorithm needed
+        # The function validates a JWT regardless of the algorithm needed
         # for it's verification. If the secret is nil, an option with the name
         # jwks_uri must be provided. This URL will be requested for the keys.
         #
-        # token - The JWT token to be decoded and validated.
+        # token - The JWT to be decoded and validated.
         # secret - Secret to be used on validation, if any.
         # options - Hash with options indicating which verifications to be done.
         #           See ruby-jwt:lib/jwt/default_options.rb
@@ -45,13 +45,13 @@ module Academical
           raise TokenValidationError, e.message
         end
 
-        # Decodes the JWT token without validation.
+        # Decodes the JWT without validation.
         #
         # WARNING: Although this function returns the header and payload of the
         # token, their contents shouldn't be relied upon until the signature
         # has been verified.
         #
-        # token - The JWT token to be decoded.
+        # token - The JWT to be decoded.
         #
         # Returns payload, header of the decoded token.
         #

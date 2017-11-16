@@ -3,7 +3,7 @@ module Academical
     class Main < Base
 
       get '/' do
-        authorize! do
+        authorize! 403 do
           is_admin?
         end
 

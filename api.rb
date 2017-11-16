@@ -18,6 +18,7 @@ require 'active_support/json'
 require 'active_support/cache/dalli_store'
 require 'i18n/backend/fallbacks'
 require 'logger'
+require 'open-uri'
 
 # Initializers
 require 'config/initializers'
@@ -38,6 +39,7 @@ module Academical
       disable :sessions
     end
 
+
     configure do
       Time.zone = "UTC"
     end
@@ -56,6 +58,7 @@ module Academical
       Mongo::Logger.logger.level = Logger::INFO
     end
 
+    # TODO: Add default definition of cache.
     configure do
       servers = ENV['MEMCACHE_SERVERS'].split(',')
       set :cache, ActiveSupport::Cache::DalliStore.new(
@@ -108,3 +111,5 @@ require 'app/helpers'
 require 'app/models'
 require 'app/routes'
 
+# Require authentication handlers
+require 'app/auth/handlers'
