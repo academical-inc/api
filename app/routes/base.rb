@@ -9,6 +9,8 @@ module Academical
         set :api_charset, 'utf-8'
         set :cache, Api.global_cache
 
+        enable :logging
+
         disable :dump_errors
         disable :show_exceptions
         disable :protection
