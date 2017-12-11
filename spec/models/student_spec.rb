@@ -25,6 +25,23 @@ describe Student do
     end
   end
 
+  describe 'defaults' do
+    # These tests avoid using FactoryGirl build/create methods.
+    # To understand why see http://bit.ly/2BRVr21
+
+    it 'creates a default picture if none given' do
+      expected_picture = 'https://s.gravatar.com/avatar/1aedb8d9dc4751e229a335e371db8058?s=480&r=pg&d=mm'
+      student = Student.new email: 'test@gmail.com'
+      expect(student.picture).to eq(expected_picture)
+    end
+
+    it 'does not assign a default picture if one is provided' do
+      picture = 'https://something.url.com'
+      student = Student.new email: 'test@gmail.com', picture: picture
+      expect(student.picture).to eq(picture)
+    end
+  end
+
   describe 'validations' do
     let!(:student) { build(:student) }
 

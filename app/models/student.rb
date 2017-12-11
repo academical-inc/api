@@ -13,7 +13,9 @@ module Academical
       field :auth0_user_id, type: String
       field :email, type:String
       field :student_number, type: String
-      field :picture, type: String
+      field :picture, type: String,
+                      default: -> { Student.default_picture(email) }
+
       belongs_to :school, index: true
       belongs_to :registered_schedule, class_name: "Schedule", inverse_of: nil
       has_many   :schedules, order: :created_at.asc, dependent: :destroy do
@@ -62,6 +64,11 @@ module Academical
         [:schedules, :registered_schedule]
       end
 
+      def self.default_picture(email = nil)
+        md5 = ''
+        md5 = Digest::MD5.hexdigest email unless email.nil?
+        "https://s.gravatar.com/avatar/#{md5}?s=480&r=pg&d=mm"
+      end
     end
   end
 end
